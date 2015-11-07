@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_add_faliyu"
+    android:background="@drawable/round_corner_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.mcts.app.customview.MyTextView
+            style="@style/LabelText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_5"
+            android:layout_weight="4"
+            android:text="@string/street_name" />
+
+        <EditText
+            android:id="@+id/ed_street_name"
+            style="@style/ValueText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_5"
+            android:layout_weight="6"
+            android:hint="@string/street_name"
+            android:singleLine="true"></EditText>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.mcts.app.customview.MyTextView
+            style="@style/LabelText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_5"
+            android:layout_weight="4"
+            android:text="@string/risky_area" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rdb_risky_area_yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/ValueText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:text="@string/family_yes" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rdb_risky_area_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/ValueText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:text="@string/family_no" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bt_faliyu_save"
+            style="@style/ButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_10"
+            android:layout_weight="1"
+            android:padding="@dimen/scale_10"
+            android:text="@string/save" />
+
+        <Button
+            android:id="@+id/bt_faliyu_cancel"
+            style="@style/ButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_10"
+            android:layout_weight="1"
+            android:padding="@dimen/scale_10"
+            android:text="@string/Cancel" />
+    </LinearLayout>
+</LinearLayout>

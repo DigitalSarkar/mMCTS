@@ -1,0 +1,174 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_family_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/custom_toolbar_with_home"></include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/scale_5"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_weight="7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/LabelText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/scale_5"
+                android:gravity="center_horizontal"
+                android:padding="@dimen/scale_5"
+                android:text="@string/village_name" />
+
+            <TextView
+                android:id="@+id/txt_village"
+                style="@style/ValueText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/scale_5"
+                android:background="@drawable/black_border_bg"
+                android:gravity="center_horizontal"
+                android:padding="@dimen/scale_5"
+                android:text="@string/village_name" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/bt_add_family"
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/button_selector"
+            android:padding="@dimen/scale_10"
+            android:text="@string/add_family" />
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/scale_5"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_5"
+            android:layout_weight="3"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <Spinner
+                android:id="@+id/sp_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/years"
+                android:spinnerMode="dialog"></Spinner>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/ed_family_number"
+                style="@style/ValueText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/scale_5"
+                android:hint="@string/family_search_number"
+                android:singleLine="true"></EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/bt_family_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_selector"
+                android:padding="@dimen/scale_10"
+                android:text="@string/search" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <com.mcts.app.customview.MyTextView
+            style="@style/LabelText"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_5"
+            android:gravity="center_horizontal"
+            android:text="Image" />
+
+        <com.mcts.app.customview.MyTextView
+            style="@style/LabelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_5"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="@string/family_search_number" />
+
+        <com.mcts.app.customview.MyTextView
+            style="@style/LabelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_5"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="@string/main_member_name" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/fab_button_margin_bottom"
+            android:layout_marginRight="@dimen/fab_button_margin_right"
+            android:src="@drawable/ic_launcher"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp" />
+
+        <ListView
+            android:id="@+id/list_members"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/white"></ListView>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

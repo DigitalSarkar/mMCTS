@@ -1,0 +1,116 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/custom_toolbar"></include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_startup_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/medium_font"
+            android:layout_margin="@dimen/normal_font"
+            android:text="@string/startup_note"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/bt_login"
+            android:layout_margin="5dp"
+            android:layout_width="0dp"
+            android:textColor="@color/black"
+            android:background="@drawable/button_selector"
+            android:layout_height="wrap_content"
+            android:text="@string/login"/>
+
+        <Button
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:id="@+id/bt_today_schedule"
+            android:background="@drawable/button_selector"
+            android:textColor="@color/black"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/today_schedule"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/header_dark"></View>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/header"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/header_dark"></View>
+
+        <TextView
+            android:id="@+id/txt_yojana"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:padding="@dimen/normal_padding"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="@string/yojnao"/>
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/header_dark"></View>
+
+        <TextView
+            android:id="@+id/txt_sansth_visit"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:textColor="@color/black"
+            android:padding="@dimen/normal_padding"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_height="wrap_content"
+            android:text="@string/sansth_visit"/>
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/header_dark"></View>
+
+        <TextView
+            android:id="@+id/txt_new_abhigam"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:textColor="@color/black"
+            android:padding="@dimen/normal_padding"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_height="wrap_content"
+            android:text="@string/new_abhigam"/>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/header_dark"></View>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/header_dark"></View>
+</LinearLayout>
