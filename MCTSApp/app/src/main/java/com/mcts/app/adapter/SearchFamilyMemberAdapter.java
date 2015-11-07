@@ -79,7 +79,7 @@ public class SearchFamilyMemberAdapter extends BaseAdapter implements View.OnCli
         viewHolder.txt_fm_member.setText(familyArrayList.get(position).getMemberName());
         viewHolder.txt_fmhealth_number.setText(familyArrayList.get(position).getMemberId());
         viewHolder.txt_fm_number.setText(familyArrayList.get(position).getEmamtaFamilyId());
-        viewHolder.txt_edit.setTag(familyArrayList.get(position).getMemberId());
+        viewHolder.txt_edit.setTag(familyArrayList.get(position).getMemberId()+","+familyArrayList.get(position).getEmamtaFamilyId());
 
         if(familyArrayList.get(position).getUserImageArray()!=null) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(familyArrayList.get(position).getUserImageArray(), 0, familyArrayList.get(position).getUserImageArray().length);
@@ -108,7 +108,10 @@ public class SearchFamilyMemberAdapter extends BaseAdapter implements View.OnCli
             case R.id.txt_edit:
                 TextView textView=(TextView)v;
                 Intent intent=new Intent(context, UpdateFamilyMemberActivity.class);
-                intent.putExtra("MemberId",textView.getTag().toString());
+                String str=textView.getTag().toString();
+                String value[]=str.split(",");
+                intent.putExtra("MemberId",value[0]);
+                intent.putExtra("emamtaFamilyId",value[1]);
                 intent.putExtra("villageId",villageId);
                 intent.putExtra("villageName",villageName);
                 context.startActivity(intent);

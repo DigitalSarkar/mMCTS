@@ -418,14 +418,14 @@
                     android:layout_weight="4"
                     android:text="@string/Whos_wife" />
 
-                <EditText
-                    android:id="@+id/ed_Whos_wife"
+                <Spinner
+                    android:id="@+id/sp_Whos_wife"
                     android:layout_width="0dp"
                     style="@style/ValueText"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="6"
-                    android:hint="@string/Whos_wife"></EditText>
+                    android:hint="@string/Whos_wife"></Spinner>
             </LinearLayout>
 
             <LinearLayout
@@ -442,14 +442,13 @@
                     android:layout_weight="4"
                     android:text="@string/Whos_sun_daughter" />
 
-                <EditText
-                    android:id="@+id/ed_Whos_sun_daughter"
+                <Spinner
+                    android:id="@+id/sp_Whos_sun_daughter"
                     android:layout_width="0dp"
-                    style="@style/ValueText"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="6"
-                    android:hint="@string/Whos_sun_daughter"></EditText>
+                    android:hint="@string/Whos_sun_daughter"></Spinner>
             </LinearLayout>
 
 

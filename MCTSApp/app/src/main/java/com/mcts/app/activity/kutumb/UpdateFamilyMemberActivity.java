@@ -53,15 +53,14 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
     private Toolbar mToolbar;
     private TextView mTitle, txt_family_number, txt_health_number, txt_take_image;
     private EditText ed_Name, ed_husband_name, ed_Sir_Name, ed_Birth_date, ed_Mobile_number;
-    private EditText ed_Whos_sun_daughter, ed_Whos_wife;
     private RadioButton rdb_yes, rdb_no, rdb_sex_Male, rdb_sex_Female, rdb_second_child_yes, rdb_second_child_no, rdb_Current_Status_yes, rdb_Current_Status_no;
-    private Spinner sp_family_head_relation, sp_Marital_status,sp_Family_welfare,sp_Family_welfare_user,sp_periods_status;
+    private Spinner sp_family_head_relation, sp_Marital_status,sp_Family_welfare,sp_Family_welfare_user,sp_periods_status,sp_Whos_sun_daughter,sp_Whos_wife;
     private Button bt_family_identity, bt_bank_detail, bt_Please_Modern, bt_Cancel, bt_Please_migration;
     DatabaseHelper databaseHelper;
     int FamilyNumber;
     private int familyHealthNumber;
-    private String isAns, familyHeadRelation;
-    private String gender, secondChild, isLiving, maritalStatus;
+    private String isAns="1", familyHeadRelation;
+    private String gender="M", secondChild, isLiving, maritalStatus;
     private LinearLayout ll_masik,ll_isPregnant,ll_Family_welfare_user,ll_Want_Family_welfare,ll_Family_welfare,ll_whose_wife,ll_secong_child;
 
     //    Image Capture
@@ -74,6 +73,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
     private int width, height;
     private byte[] userImagebyteArray;
     private String villageId,villageName,MemberId;
+    private String emamtaFamilyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +98,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
         villageId=intent.getStringExtra("villageId");
         villageName=intent.getStringExtra("villageName");
         MemberId=intent.getStringExtra("MemberId");
+        emamtaFamilyId=intent.getStringExtra("emamtaFamilyId");
 
         Typeface type = Typeface.createFromAsset(getAssets(), "SHRUTI.TTF");
         mToolbar = (Toolbar) findViewById(R.id.anim_toolbar);
@@ -151,8 +152,8 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
         sp_periods_status = (Spinner) findViewById(R.id.sp_periods_status);
         sp_Marital_status = (Spinner) findViewById(R.id.sp_Marital_status);
         sp_Family_welfare_user = (Spinner) findViewById(R.id.sp_Family_welfare_user);
-        ed_Whos_sun_daughter = (EditText) findViewById(R.id.ed_Whos_sun_daughter);
-        ed_Whos_wife = (EditText) findViewById(R.id.ed_Whos_wife);
+        sp_Whos_sun_daughter = (Spinner) findViewById(R.id.sp_Whos_sun_daughter);
+        sp_Whos_wife = (Spinner) findViewById(R.id.sp_Whos_wife);
         bt_family_identity = (Button) findViewById(R.id.bt_family_identity);
         bt_bank_detail = (Button) findViewById(R.id.bt_bank_detail);
         bt_Please_Modern = (Button) findViewById(R.id.bt_Please_Modern);
@@ -212,6 +213,20 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
             sp_family_head_relation.setAdapter(relationAdapter);
             sp_family_head_relation.setOnItemSelectedListener(this);
         }
+
+        ArrayList<MaritalStatus> sunOfArrayList=databaseHelper.getParentList(emamtaFamilyId);
+        if(sunOfArrayList!=null){
+            StatusAdapter sunDaughterAdapter = new StatusAdapter(thisActivity, sunOfArrayList);
+            sp_Whos_sun_daughter.setAdapter(sunDaughterAdapter);
+            sp_Whos_sun_daughter.setOnItemSelectedListener(this);
+        }
+
+        ArrayList<MaritalStatus> wifeOfArrayList=databaseHelper.getWifeList(emamtaFamilyId);
+        if(sunOfArrayList!=null){
+            StatusAdapter sunDaughterAdapter = new StatusAdapter(thisActivity, wifeOfArrayList);
+            sp_Whos_wife.setAdapter(sunDaughterAdapter);
+            sp_Whos_wife.setOnItemSelectedListener(this);
+        }
     }
 
 
@@ -228,8 +243,6 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                 String marStatus = maritalStatus;
                 String bDate = ed_Birth_date.getText().toString();
                 String moNumber = ed_Mobile_number.getText().toString();
-                String whosWife = ed_Whos_wife.getText().toString();
-                String sun_daughter = ed_Whos_sun_daughter.getText().toString();
 //                String Family_welfare = ed_Family_welfare.getText().toString();
 //                String Family_welfare_use = ed_Family_welfare_user.getText().toString();
                 String secChild = secondChild;

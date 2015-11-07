@@ -888,4 +888,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase.releaseMemory();
         return maritalStatusArrayList;
     }
+
+    public ArrayList<MaritalStatus> getParentList(String emamtaID) {
+
+        ArrayList<MaritalStatus> memberArrayList=new ArrayList<>();
+        readDatabase();
+        try {
+            String selectQuery="Select emamtahealthId,firstName,middleName,lastName " +
+                    "from tbl_member " +
+                    "where gender='F' and maritalStatus!='1' and emamtafamilyId='"+emamtaID+"'";
+
+            Log.v("MemberDetail Query", selectQuery);
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    MaritalStatus member=new MaritalStatus();
+                    member.setId(cursor.getString(cursor.getColumnIndex("emamtahealthId")));
+                    member.setStatus(cursor.getString(cursor.getColumnIndex("firstName")) + " " + cursor.getString(cursor.getColumnIndex("middleName")) + " " + cursor.getString(cursor.getColumnIndex("lastName")));
+                    memberArrayList.add(member);
+                }while (cursor.moveToNext());
+            }
+        }catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return memberArrayList;
+    }
+
+    public ArrayList<MaritalStatus> getWifeList(String emamtaFamilyId) {
+
+        ArrayList<MaritalStatus> memberArrayList=new ArrayList<>();
+        readDatabase();
+        try {
+            String selectQuery="Select emamtahealthId,firstName,middleName,lastName " +
+                    "from tbl_member " +
+                    "where gender='M' and maritalStatus!='1' and emamtafamilyId='"+emamtaFamilyId+"'";
+
+            Log.v("MemberDetail Query", selectQuery);
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    MaritalStatus member=new MaritalStatus();
+                    member.setId(cursor.getString(cursor.getColumnIndex("emamtahealthId")));
+                    member.setStatus(cursor.getString(cursor.getColumnIndex("firstName")) + " " + cursor.getString(cursor.getColumnIndex("middleName")) + " " + cursor.getString(cursor.getColumnIndex("lastName")));
+                    memberArrayList.add(member);
+                }while (cursor.moveToNext());
+            }
+        }catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return memberArrayList;
+    }
 }
