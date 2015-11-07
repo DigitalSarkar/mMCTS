@@ -150,9 +150,11 @@
     <string name="Mobile_number">મોબાઇલ નંબર</string>
     <string name="Whos_wife">કોની પત્ની છે?</string>
     <string name="Whos_sun_daughter">કોનો પુત્ર કે પુત્રી છે? </string>
-    <string name="Family_welfare">કુટુુંબ કલ્યાણની કઇ પધ્ધતિ અપનાવેલ છે? </string>
-    <string name="Family_welfare_user">કુટુુંબ કલ્યાણની કઇ પધ્ધતિ અપનાવવા માગે  છે? </string>
+    <string name="Family_welfare">કુટુુંબ કલ્યાણની કઇ પધ્ધતિ અપનાવેલ છે?</string>
+    <string name="Family_welfare_user">કુટુુંબ કલ્યાણની કઇ પધ્ધતિ અપનાવવા માગો છે?</string>
+    <string name="Want_Family_welfare">કુટુુંબ કલ્યાણની પધ્ધતિ અપનાવવા માગો છે?</string>
     <string name="second_child">બીજા બાળકની ઇચ્છા ધરાવે છે? </string>
+    <string name="isPregnent">હાલમાં સગર્ભા છે?</string>
     <string name="Current_Status">હાલની સ્થિતી</string>
     <string name="periods_status">માસિકની સ્થિતી</string>
     <string name="Please_Modern">અધતન કરો</string>
@@ -199,4 +201,5 @@
         <item>FM/2020/</item>
     </string-array>
     <string name="title_activity_new_family">NewFamilyActivity</string>
+    <string name="title_activity_update_family_member">UpdateFamilyMemberActivity</string>
 </resources>

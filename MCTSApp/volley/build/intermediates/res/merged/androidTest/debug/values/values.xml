@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/F:/Pritesh/MCTSApp/volley/build/intermediates/bundles/debug/res/values/values.xml -->
+    <!-- From: file:/F:/Pritesh/MCTS_Project_Git/mMCTS/MCTSApp/volley/build/intermediates/bundles/debug/res/values/values.xml -->
     <eat-comment/>
     <color name="photo_crop_dim_color">#cc000000</color>
     <color name="photo_crop_highlight_color">#fff</color>

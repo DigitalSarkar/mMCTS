@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mcts.app.R;
+import com.mcts.app.activity.kutumb.UpdateFamilyMemberActivity;
 import com.mcts.app.activity.kutumb.UpdateKutumbActivity;
 import com.mcts.app.model.Family;
 import com.mcts.app.utils.Utils;
@@ -106,7 +107,7 @@ public class SearchFamilyMemberAdapter extends BaseAdapter implements View.OnCli
         switch (v.getId()){
             case R.id.txt_edit:
                 TextView textView=(TextView)v;
-                Intent intent=new Intent(context, UpdateKutumbActivity.class);
+                Intent intent=new Intent(context, UpdateFamilyMemberActivity.class);
                 intent.putExtra("MemberId",textView.getTag().toString());
                 intent.putExtra("villageId",villageId);
                 intent.putExtra("villageName",villageName);

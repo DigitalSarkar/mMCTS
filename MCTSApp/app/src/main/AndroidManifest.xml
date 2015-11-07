@@ -100,6 +100,10 @@
             android:name=".activity.kutumb.NewFamilyActivity"
             android:label="@string/title_activity_new_family" >
         </activity>
+        <activity
+            android:name=".activity.kutumb.UpdateFamilyMemberActivity"
+            android:label="@string/title_activity_update_family_member" >
+        </activity>
     </application>
 
 </manifest>

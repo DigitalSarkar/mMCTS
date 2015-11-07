@@ -513,13 +513,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<MaritalStatus> maritalStatusArrayList = new ArrayList<>();
         readDatabase();
         try {
-            String selectQuery = "SELECT  * FROM relation_with_head";
+            String selectQuery = "SELECT  relationwithheadId,relationwithHead FROM tbl_relationwithhead";
             Cursor cursor = mDataBase.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
                 do {
                     MaritalStatus maritalStatus = new MaritalStatus();
-                    maritalStatus.setId(cursor.getString(cursor.getColumnIndex("relation_with_head_id")));
-                    maritalStatus.setStatus(cursor.getString(cursor.getColumnIndex("relation_with_head")));
+                    maritalStatus.setId(cursor.getString(cursor.getColumnIndex("relationwithheadId")));
+                    maritalStatus.setStatus(cursor.getString(cursor.getColumnIndex("relationwithHead")));
                     maritalStatusArrayList.add(maritalStatus);
                 } while (cursor.moveToNext());
             }
@@ -784,5 +784,108 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         closeDataBase();
         SQLiteDatabase.releaseMemory();
         return familyArrayList;
+    }
+
+    public Member getFamilyMember(String memberId) {
+
+        Member member=new Member();
+        readDatabase();
+        try {
+            String selectQuery="select m.memberId,m.familyId,m.emamtafamilyId,m.villageId,m.firstName,m.middleName,m.lastName,m.isHead,m.gender," +
+                    "m.maritalStatus,m.birthDate,m.mobileNo,f.houseNumber,m.childof," +
+                    "f.faliyaId,f.landmark,f.religionId,f.racialId,f.isBpl,f.lattitudes,f.longitude,f.bplNumber,f.rationcardNrumber," +
+                    "f.rsbycardNumber, f.macardNumber " +
+                    "from tbl_member as m inner join tbl_family as f on f.emamtafamilyId=m.emamtafamilyId " +
+                    "where memberId='"+memberId+"'";
+            Log.v("MemberDetail Query", selectQuery);
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    member.setMemberId(cursor.getString(cursor.getColumnIndex("memberId")));
+                    member.setFamilyId(cursor.getString(cursor.getColumnIndex("familyId")));
+                    member.setEmamtafamilyId(cursor.getString(cursor.getColumnIndex("emamtafamilyId")));
+                    member.setVillageId(cursor.getString(cursor.getColumnIndex("villageId")));
+                    member.setFirstName(cursor.getString(cursor.getColumnIndex("firstName")));
+                    member.setMiddleName(cursor.getString(cursor.getColumnIndex("middleName")));
+                    member.setLastName(cursor.getString(cursor.getColumnIndex("lastName")));
+                    member.setIsHead(cursor.getString(cursor.getColumnIndex("isHead")));
+                    member.setGender(cursor.getString(cursor.getColumnIndex("gender")));
+                    member.setMaritalStatus(cursor.getString(cursor.getColumnIndex("maritalStatus")));
+                    member.setBirthDate(cursor.getString(cursor.getColumnIndex("birthDate")));
+                    member.setMobileNo(cursor.getString(cursor.getColumnIndex("mobileNo")));
+                    member.setHouseNumber(cursor.getString(cursor.getColumnIndex("houseNumber")));
+                    member.setFaliyu(cursor.getString(cursor.getColumnIndex("faliyaId")));
+                    member.setLandmark(cursor.getString(cursor.getColumnIndex("landmark")));
+                    member.setReligionId(cursor.getString(cursor.getColumnIndex("religionId")));
+                    member.setRaciald(cursor.getString(cursor.getColumnIndex("racialId")));
+                    member.setIsBpl(cursor.getString(cursor.getColumnIndex("isBpl")));
+                    member.setLattitudes(cursor.getString(cursor.getColumnIndex("lattitudes")));
+                    member.setLongitude(cursor.getString(cursor.getColumnIndex("longitude")));
+                    member.setChildof(cursor.getString(cursor.getColumnIndex("childof")));
+                    member.setBplNumber(cursor.getString(cursor.getColumnIndex("bplNumber")));
+                    member.setRationcardNrumber(cursor.getString(cursor.getColumnIndex("rationcardNrumber")));
+                    member.setRsbycardNumber(cursor.getString(cursor.getColumnIndex("rsbycardNumber")));
+                    member.setMacardNumber(cursor.getString(cursor.getColumnIndex("macardNumber")));
+
+                }while (cursor.moveToNext());
+            }
+        }catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return member;
+    }
+
+    public ArrayList<MaritalStatus> getFamilyPlanningData() {
+        ArrayList<MaritalStatus> maritalStatusArrayList = new ArrayList<>();
+        readDatabase();
+        try {
+            String selectQuery = "SELECT  familyplanningmethodId,familyplanningMethod FROM tbl_familyplanningmethod";
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    MaritalStatus maritalStatus = new MaritalStatus();
+                    maritalStatus.setId(cursor.getString(cursor.getColumnIndex("familyplanningmethodId")));
+                    maritalStatus.setStatus(cursor.getString(cursor.getColumnIndex("familyplanningMethod")));
+                    maritalStatusArrayList.add(maritalStatus);
+                } while (cursor.moveToNext());
+            }
+
+
+        }catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return maritalStatusArrayList;
+    }
+
+    public ArrayList<MaritalStatus> getPeriodeData() {
+
+        ArrayList<MaritalStatus> maritalStatusArrayList = new ArrayList<>();
+        readDatabase();
+        try {
+            String selectQuery = "SELECT  menstruationstatusId,menstruationStatus FROM tbl_menstruationStatus";
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    MaritalStatus maritalStatus = new MaritalStatus();
+                    maritalStatus.setId(cursor.getString(cursor.getColumnIndex("menstruationstatusId")));
+                    maritalStatus.setStatus(cursor.getString(cursor.getColumnIndex("menstruationStatus")));
+                    maritalStatusArrayList.add(maritalStatus);
+                } while (cursor.moveToNext());
+            }
+
+
+        }catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return maritalStatusArrayList;
     }
 }
