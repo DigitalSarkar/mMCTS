@@ -404,6 +404,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_whose_wife"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -417,14 +418,14 @@
                     android:layout_weight="4"
                     android:text="@string/Whos_wife" />
 
-                <EditText
-                    android:id="@+id/ed_Whos_wife"
+                <Spinner
+                    android:id="@+id/sp_Whos_wife"
                     android:layout_width="0dp"
                     style="@style/ValueText"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="6"
-                    android:hint="@string/Whos_wife"></EditText>
+                    android:hint="@string/Whos_wife"></Spinner>
             </LinearLayout>
 
             <LinearLayout
@@ -441,45 +442,19 @@
                     android:layout_weight="4"
                     android:text="@string/Whos_sun_daughter" />
 
-                <EditText
-                    android:id="@+id/ed_Whos_sun_daughter"
+                <Spinner
+                    android:id="@+id/sp_Whos_sun_daughter"
                     android:layout_width="0dp"
-                    style="@style/ValueText"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="6"
-                    android:hint="@string/Whos_sun_daughter"></EditText>
+                    android:hint="@string/Whos_sun_daughter"></Spinner>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/bt_family_identity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/scale_5"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_selector"
-                    android:padding="@dimen/scale_10"
-                    android:text="@string/family_identity" />
-
-                <Button
-                    android:id="@+id/bt_bank_detail"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/scale_5"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_selector"
-                    android:padding="@dimen/scale_10"
-                    android:text="@string/bank_detail" />
-            </LinearLayout>
 
             <LinearLayout
-
+                android:id="@+id/ll_Family_welfare"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -504,7 +479,68 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_Want_Family_welfare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/Want_Family_welfare" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rdb_adopt_planning_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <com.mcts.app.customview.MyTextView
+                            style="@style/ValueText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/scale_5"
+                            android:text="@string/family_yes" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rdb_adopt_planning_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <com.mcts.app.customview.MyTextView
+                            style="@style/ValueText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/scale_5"
+                            android:text="@string/family_no" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_Family_welfare_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -529,6 +565,68 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_isPregnant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/isPregnent" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rdb_isPregnent_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <com.mcts.app.customview.MyTextView
+                            style="@style/ValueText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/scale_5"
+                            android:text="@string/family_yes" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rdb_isPregnent_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <com.mcts.app.customview.MyTextView
+                            style="@style/ValueText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/scale_5"
+                            android:text="@string/family_no" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_secong_child"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -679,6 +777,33 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/bt_family_identity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_selector"
+                    android:padding="@dimen/scale_10"
+                    android:text="@string/family_identity" />
+
+                <Button
+                    android:id="@+id/bt_bank_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_selector"
+                    android:padding="@dimen/scale_10"
+                    android:text="@string/bank_detail" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <Button
                     android:id="@+id/bt_Please_Modern"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -686,7 +811,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_selector"
                     android:padding="@dimen/scale_10"
-                    android:text="@string/Please_Modern" />
+                    android:text="@string/add_family_member" />
 
                 <Button
                     android:id="@+id/bt_Cancel"

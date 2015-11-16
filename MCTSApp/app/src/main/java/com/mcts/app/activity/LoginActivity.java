@@ -199,8 +199,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         Editable strPin = ed_pin.getText();
         switch (id) {
             case R.id.bt_login_submit:
-                Intent intent = new Intent(thisActivity, DataOperationActivity.class);
+//                Intent intent = new Intent(thisActivity, DataOperationActivity.class);
+//                startActivity(intent);
+                Intent intent = new Intent(thisActivity, HealthSevaActivity.class);
                 startActivity(intent);
+                thisActivity.finish();
                 break;
             case R.id.bt_one:
                 strPin = strPin.append(bt_one.getText());

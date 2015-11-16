@@ -3,6 +3,7 @@ package com.mcts.app.activity.kutumb;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.mcts.app.db.DatabaseHelper;
 import com.mcts.app.model.Family;
 import com.mcts.app.utils.Messages;
 import com.mcts.app.utils.Utils;
+import com.mcts.app.volley.CustomLoaderDialog;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -97,6 +99,10 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         bt_family_search.setOnClickListener(this);
         bt_add_family.setOnClickListener(this);
 
+        if(isFamily!=0) {
+            bt_add_family.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -115,28 +121,13 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     Utils.hideSoftKeyboard(thisActivity);
                     if(isFamily==0) {
                         String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
-                        ArrayList<Family> familyArrayList = databaseHelper.searchFamily(searchString, strVillageId);
-                        if (familyArrayList.size() != 0) {
-                            SearchMemberAdapter searchMemberAdapter = new SearchMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName);
-                            list_members.setAdapter(searchMemberAdapter);
-                        } else {
-                            SearchMemberAdapter searchMemberAdapter = new SearchMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName);
-                            list_members.setAdapter(searchMemberAdapter);
-                            CustomToast customToast = new CustomToast(thisActivity, Messages.NO_MATCH_DATA);
-                            customToast.show();
-                        }
+                        new GetFamilyDetails().execute(searchString,strVillageId);
+
                     }else{
+
                         String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
-                        ArrayList<Family> familyArrayList = databaseHelper.searchFamilyMember(searchString, strVillageId);
-                        if (familyArrayList.size() != 0) {
-                            SearchFamilyMemberAdapter searchFamilyMemberAdapter = new SearchFamilyMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName);
-                            list_members.setAdapter(searchFamilyMemberAdapter);
-                        } else {
-                            SearchFamilyMemberAdapter searchFamilyMemberAdapter = new SearchFamilyMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName);
-                            list_members.setAdapter(searchFamilyMemberAdapter);
-                            CustomToast customToast = new CustomToast(thisActivity, Messages.NO_MATCH_DATA);
-                            customToast.show();
-                        }
+                        new GetFamilyMember().execute(searchString,strVillageId);
+
                     }
                 }else{
                     CustomToast customToast=new CustomToast(thisActivity,Messages.MINIMUM_CHARACTER);
@@ -163,5 +154,80 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 
         return super.onOptionsItemSelected(item);
         // Handle your other action bar items...
+    }
+
+    private class GetFamilyDetails extends AsyncTask<String,String,String>{
+
+        ArrayList<Family> familyArrayList;
+        CustomLoaderDialog cm;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            cm=new CustomLoaderDialog(thisActivity);
+            cm.show(true);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            familyArrayList = databaseHelper.searchFamily(params[0], params[1]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            cm.hide();
+
+            if (familyArrayList.size() != 0) {
+                String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
+                SearchMemberAdapter searchMemberAdapter = new SearchMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName,searchString);
+                list_members.setAdapter(searchMemberAdapter);
+            } else {
+                String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
+                SearchMemberAdapter searchMemberAdapter = new SearchMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName,searchString);
+                list_members.setAdapter(searchMemberAdapter);
+                CustomToast customToast = new CustomToast(thisActivity, Messages.NO_MATCH_DATA);
+                customToast.show();
+            }
+        }
+
+    }
+
+    private class GetFamilyMember extends AsyncTask<String,String,String>{
+
+        ArrayList<Family> familyArrayList;
+        CustomLoaderDialog cm;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            cm=new CustomLoaderDialog(thisActivity);
+            cm.show(true);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            familyArrayList = databaseHelper.searchFamilyMember(params[0], params[1]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            cm.hide();
+            String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
+            if (familyArrayList.size() != 0) {
+                SearchFamilyMemberAdapter searchFamilyMemberAdapter = new SearchFamilyMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName,searchString);
+                list_members.setAdapter(searchFamilyMemberAdapter);
+            } else {
+                SearchFamilyMemberAdapter searchFamilyMemberAdapter = new SearchFamilyMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName,searchString);
+                list_members.setAdapter(searchFamilyMemberAdapter);
+                CustomToast customToast = new CustomToast(thisActivity, Messages.NO_MATCH_DATA);
+                customToast.show();
+            }
+        }
+
     }
 }

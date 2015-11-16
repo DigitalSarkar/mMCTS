@@ -2,12 +2,15 @@ package com.mcts.app.activity.kutumb;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
@@ -21,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -54,17 +59,21 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
     private TextView mTitle, txt_family_number, txt_health_number, txt_take_image;
     private EditText ed_Name, ed_husband_name, ed_Sir_Name, ed_Birth_date, ed_Mobile_number;
     private RadioButton rdb_yes, rdb_no, rdb_sex_Male, rdb_sex_Female, rdb_second_child_yes, rdb_second_child_no, rdb_Current_Status_yes, rdb_Current_Status_no;
+    private RadioButton rdb_adopt_planning_yes,rdb_adopt_planning_no,rdb_isPregnent_yes,rdb_isPregnent_no;
     private Spinner sp_family_head_relation, sp_Marital_status,sp_Family_welfare,sp_Family_welfare_user,sp_periods_status,sp_Whos_sun_daughter,sp_Whos_wife;
     private Button bt_family_identity, bt_bank_detail, bt_Please_Modern, bt_Cancel, bt_Please_migration;
     DatabaseHelper databaseHelper;
     int FamilyNumber;
     private int familyHealthNumber;
     private String isAns="1", familyHeadRelation;
-    private String gender="M", secondChild, isLiving, maritalStatus;
+    private String gender="M", secondChild="1", isLiving="1", maritalStatus,isAdoptPlanning="0",isPregnent="0";
+    String electionNo, panNo, drivingNo, passportNo;
+    String bankName,branchName,acNumber,IFSCCode,aadharNumber;
     private LinearLayout ll_masik,ll_isPregnant,ll_Family_welfare_user,ll_Want_Family_welfare,ll_Family_welfare,ll_whose_wife,ll_secong_child;
+    private Member member,familyMember;
 
     //    Image Capture
-    ImageView userImage;
+    ImageView imgUserImage;
     private String imageName = "item_picture";
     public static final int TAKE_PICTURE = 1;
     private String imageRealPath = null;
@@ -74,6 +83,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
     private byte[] userImagebyteArray;
     private String villageId,villageName,MemberId;
     private String emamtaFamilyId;
+    private String wifeOf,sunOf,familyWalfare,familyWalfareUser,periodeStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +92,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
 
         setToolBar();
         init();
-//        getMemberData();
+        getMemberData();
         setDropDownValue();
 
         Utils.findAllTextView(thisActivity, (ViewGroup) findViewById(R.id.ll_add_memmber));
@@ -117,6 +127,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
         width = size.x;
         height = size.y;
 
+        familyMember=new Member();
         Intent intent = getIntent();
         FamilyNumber = intent.getIntExtra("FamilyNumber", 0);
         databaseHelper = new DatabaseHelper(thisActivity);
@@ -132,7 +143,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
         ll_secong_child=(LinearLayout)findViewById(R.id.ll_secong_child);
 
         txt_take_image = (TextView) findViewById(R.id.txt_take_image);
-        userImage = (ImageView) findViewById(R.id.imgUserImage);
+        imgUserImage = (ImageView) findViewById(R.id.imgUserImage);
         txt_health_number = (TextView) findViewById(R.id.txt_health_number);
         ed_Name = (EditText) findViewById(R.id.ed_Name);
         ed_husband_name = (EditText) findViewById(R.id.ed_husband_name);
@@ -148,6 +159,10 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
         rdb_second_child_no = (RadioButton) findViewById(R.id.rdb_second_child_no);
         rdb_Current_Status_yes = (RadioButton) findViewById(R.id.rdb_Current_Status_yes);
         rdb_Current_Status_no = (RadioButton) findViewById(R.id.rdb_Current_Status_no);
+        rdb_adopt_planning_yes = (RadioButton) findViewById(R.id.rdb_adopt_planning_yes);
+        rdb_adopt_planning_no = (RadioButton) findViewById(R.id.rdb_adopt_planning_no);
+        rdb_isPregnent_yes = (RadioButton) findViewById(R.id.rdb_isPregnent_yes);
+        rdb_isPregnent_no = (RadioButton) findViewById(R.id.rdb_isPregnent_no);
         sp_family_head_relation = (Spinner) findViewById(R.id.sp_family_head_relation);
         sp_periods_status = (Spinner) findViewById(R.id.sp_periods_status);
         sp_Marital_status = (Spinner) findViewById(R.id.sp_Marital_status);
@@ -170,17 +185,124 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
         rdb_second_child_no.setOnClickListener(this);
         rdb_Current_Status_yes.setOnClickListener(this);
         rdb_Current_Status_no.setOnClickListener(this);
+        rdb_adopt_planning_yes.setOnClickListener(this);
+        rdb_adopt_planning_no.setOnClickListener(this);
+        rdb_isPregnent_yes.setOnClickListener(this);
+        rdb_isPregnent_no.setOnClickListener(this);
         bt_family_identity.setOnClickListener(this);
         bt_bank_detail.setOnClickListener(this);
         ed_Birth_date.setOnClickListener(this);
-        userImage.setOnClickListener(this);
+        imgUserImage.setOnClickListener(this);
         txt_take_image.setOnClickListener(this);
     }
 
     private void getMemberData() {
 
         DatabaseHelper databaseHelper=new DatabaseHelper(thisActivity);
-        Member member=databaseHelper.getFamilyMember(MemberId);
+        member=databaseHelper.getFamilyMember(MemberId);
+
+        if(member!=null){
+
+            txt_family_number.setText(member.getEmamtafamilyId());
+            txt_health_number.setText(member.getEmamtahealthId());
+            ed_Name.setText(member.getFirstName());
+            ed_husband_name.setText(member.getMiddleName());
+            ed_Sir_Name.setText(member.getLastName());
+            ed_Birth_date.setText(member.getBirthDate());
+            ed_Mobile_number.setText(member.getMobileNo());
+
+            if(member.getUserImageArray()!=null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(member.getUserImageArray(), 0, member.getUserImageArray().length);
+                imgUserImage.setImageBitmap(bitmap);
+                txt_take_image.setVisibility(View.GONE);
+                imgUserImage.setVisibility(View.VISIBLE);
+            }
+
+            if(member.getIsHead()!=null) {
+                if (member.getIsHead().equals("1")) {
+                    rdb_yes.setChecked(true);
+                    rdb_no.setChecked(false);
+                    isAns = "1";
+                } else {
+                    rdb_yes.setChecked(false);
+                    rdb_no.setChecked(true);
+                    isAns = "0";
+                }
+            }
+
+            if(member.getWantadoptedfpMethod()!=null){
+                if(member.getWantadoptedfpMethod().equals("1")){
+                    isAdoptPlanning="1";
+                    rdb_adopt_planning_yes.setChecked(true);
+                    rdb_adopt_planning_no.setChecked(false);
+                    ll_Family_welfare_user.setVisibility(View.VISIBLE);
+                }else{
+                    isAdoptPlanning="0";
+                    rdb_adopt_planning_yes.setChecked(false);
+                    rdb_adopt_planning_no.setChecked(true);
+                    ll_Family_welfare_user.setVisibility(View.GONE);
+                }
+            }
+            if(member.getIsPregnant().equals("1")){
+                isPregnent="1";
+                rdb_isPregnent_yes.setChecked(true);
+                rdb_isPregnent_no.setChecked(false);
+                ll_secong_child.setVisibility(View.GONE);
+            }else{
+                isPregnent="0";
+                rdb_isPregnent_yes.setChecked(false);
+                rdb_isPregnent_no.setChecked(true);
+                ll_secong_child.setVisibility(View.VISIBLE);
+            }
+
+            if(member.getWantChild()!=null) {
+                if (member.getWantChild().equals("1")) {
+                    secondChild = "1";
+                    rdb_second_child_yes.setChecked(true);
+                    rdb_second_child_no.setChecked(false);
+                } else {
+                    secondChild = "0";
+                    rdb_second_child_yes.setChecked(false);
+                    rdb_second_child_no.setChecked(true);
+                }
+            }
+
+            if(member.getMemberStatus()!=null) {
+                if(member.getMemberStatus().equals("1")){
+                    rdb_Current_Status_yes.setChecked(true);
+                    rdb_Current_Status_no.setChecked(false);
+                    isLiving = "1";
+                }else{
+                    rdb_Current_Status_yes.setChecked(false);
+                    rdb_Current_Status_no.setChecked(true);
+                    isLiving = "0";
+                }
+            }
+
+            if(member.getGender().equals("M")){
+                rdb_sex_Male.setChecked(true);
+                rdb_sex_Female.setChecked(false);
+                gender = "M";
+                ll_masik.setVisibility(View.GONE);
+                ll_isPregnant.setVisibility(View.GONE);
+                ll_Family_welfare.setVisibility(View.GONE);
+                ll_Family_welfare_user.setVisibility(View.GONE);
+                ll_Want_Family_welfare.setVisibility(View.GONE);
+                ll_whose_wife.setVisibility(View.GONE);
+                ll_secong_child.setVisibility(View.GONE);
+            }else{
+                rdb_sex_Male.setChecked(false);
+                rdb_sex_Female.setChecked(true);
+                ll_masik.setVisibility(View.VISIBLE);
+                ll_isPregnant.setVisibility(View.VISIBLE);
+                ll_Family_welfare.setVisibility(View.VISIBLE);
+                ll_Family_welfare_user.setVisibility(View.VISIBLE);
+                ll_Want_Family_welfare.setVisibility(View.VISIBLE);
+                ll_whose_wife.setVisibility(View.VISIBLE);
+                ll_secong_child.setVisibility(View.VISIBLE);
+                gender = "F";
+            }
+        }
     }
 
     private void setDropDownValue() {
@@ -189,6 +311,27 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
         if(maritalStatusArrayList!=null) {
             StatusAdapter statusAdapter = new StatusAdapter(thisActivity, maritalStatusArrayList);
             sp_Marital_status.setAdapter(statusAdapter);
+
+            if(member.getMaritalStatus()!=null){
+//                int faliyaId = Integer.parseInt(member.getFamilyId());
+                for(int i=0;i<maritalStatusArrayList.size();i++){
+                    if(member.getMaritalStatus().equalsIgnoreCase(maritalStatusArrayList.get(i).getId())){
+                        sp_Marital_status.setSelection(i);
+//                        if(maritalStatusArrayList.get(i).getId().equals("1")){
+//                            ll_masik.setVisibility(View.VISIBLE);
+//                            ll_isPregnant.setVisibility(View.VISIBLE);
+//                            ll_Family_welfare.setVisibility(View.VISIBLE);
+//                            ll_Family_welfare_user.setVisibility(View.VISIBLE);
+//                            ll_Want_Family_welfare.setVisibility(View.VISIBLE);
+//                            ll_whose_wife.setVisibility(View.VISIBLE);
+//                            ll_secong_child.setVisibility(View.VISIBLE);
+//                        }
+                    }
+                }
+            }else{
+                sp_Marital_status.setSelection(0);
+            }
+
             sp_Marital_status.setOnItemSelectedListener(this);
         }
 
@@ -197,13 +340,49 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
             StatusAdapter familyWalfareAdapter = new StatusAdapter(thisActivity, familyWalfareList);
             sp_Family_welfare.setAdapter(familyWalfareAdapter);
             sp_Family_welfare_user.setAdapter(familyWalfareAdapter);
+
+            if(member.getPlannedfpMethod()!=null){
+//                int faliyaId = Integer.parseInt(member.getFamilyId());
+                for(int i=0;i<familyWalfareList.size();i++){
+                    if(member.getPlannedfpMethod().equalsIgnoreCase(familyWalfareList.get(i).getId())){
+                        sp_Family_welfare_user.setSelection(i);
+                    }
+                }
+            }else{
+                sp_Family_welfare_user.setSelection(0);
+            }
+
+            if(member.getAdoptedfpMethod()!=null){
+//                int faliyaId = Integer.parseInt(member.getFamilyId());
+                for(int i=0;i<familyWalfareList.size();i++){
+                    if(member.getAdoptedfpMethod().equalsIgnoreCase(familyWalfareList.get(i).getId())){
+                        sp_Family_welfare.setSelection(i);
+                    }
+                }
+            }else{
+                sp_Family_welfare.setSelection(0);
+            }
+
             sp_Family_welfare.setOnItemSelectedListener(this);
+            sp_Family_welfare_user.setOnItemSelectedListener(this);
         }
 
         ArrayList<MaritalStatus> periodStatusArray=databaseHelper.getPeriodeData();
         if(periodStatusArray!=null){
             StatusAdapter masikAdapter=new StatusAdapter(thisActivity,periodStatusArray);
             sp_periods_status.setAdapter(masikAdapter);
+
+            if(member.getMenstruationStatus()!=null){
+//                int faliyaId = Integer.parseInt(member.getFamilyId());
+                for(int i=0;i<periodStatusArray.size();i++){
+                    if(member.getMenstruationStatus().equalsIgnoreCase(periodStatusArray.get(i).getId())){
+                        sp_periods_status.setSelection(i);
+                    }
+                }
+            }else{
+                sp_periods_status.setSelection(0);
+            }
+
             sp_periods_status.setOnItemSelectedListener(this);
         }
 
@@ -211,6 +390,18 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
         if(relationArrayList!=null) {
             StatusAdapter relationAdapter = new StatusAdapter(thisActivity, relationArrayList);
             sp_family_head_relation.setAdapter(relationAdapter);
+
+            if(member.getRelationwithheadId()!=null){
+//                int faliyaId = Integer.parseInt(member.getFamilyId());
+                for(int i=0;i<relationArrayList.size();i++){
+                    if(member.getRelationwithheadId().equalsIgnoreCase(relationArrayList.get(i).getId())){
+                        sp_family_head_relation.setSelection(i);
+                    }
+                }
+            }else{
+                sp_family_head_relation.setSelection(0);
+            }
+
             sp_family_head_relation.setOnItemSelectedListener(this);
         }
 
@@ -218,6 +409,18 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
         if(sunOfArrayList!=null){
             StatusAdapter sunDaughterAdapter = new StatusAdapter(thisActivity, sunOfArrayList);
             sp_Whos_sun_daughter.setAdapter(sunDaughterAdapter);
+
+            if(member.getChildof()!=null){
+//                int faliyaId = Integer.parseInt(member.getFamilyId());
+                for(int i=0;i<sunOfArrayList.size();i++){
+                    if(member.getChildof().equalsIgnoreCase(sunOfArrayList.get(i).getId())){
+                        sp_Whos_sun_daughter.setSelection(i);
+                    }
+                }
+            }else{
+                sp_Whos_sun_daughter.setSelection(0);
+            }
+
             sp_Whos_sun_daughter.setOnItemSelectedListener(this);
         }
 
@@ -225,6 +428,18 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
         if(sunOfArrayList!=null){
             StatusAdapter sunDaughterAdapter = new StatusAdapter(thisActivity, wifeOfArrayList);
             sp_Whos_wife.setAdapter(sunDaughterAdapter);
+
+            if(member.getWifeof()!=null){
+//                int faliyaId = Integer.parseInt(member.getFamilyId());
+                for(int i=0;i<wifeOfArrayList.size();i++){
+                    if(member.getWifeof().equalsIgnoreCase(wifeOfArrayList.get(i).getId())){
+                        sp_Whos_wife.setSelection(i);
+                    }
+                }
+            }else{
+                sp_Whos_wife.setSelection(0);
+            }
+
             sp_Whos_wife.setOnItemSelectedListener(this);
         }
     }
@@ -235,19 +450,49 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
         switch (v.getId()) {
             case R.id.bt_Please_Modern:
                 String name = ed_Name.getText().toString();
+                familyMember.setMemberId(MemberId);
+                familyMember.setFirstName(name);
                 String husband_name = ed_husband_name.getText().toString();
+                familyMember.setMiddleName(husband_name);
                 String Sir_Name = ed_Sir_Name.getText().toString();
+                familyMember.setLastName(Sir_Name);
                 String isHead = isAns;
+                familyMember.setIsHead(isHead);
                 String headRelation = familyHeadRelation;
+                familyMember.setRelationwithheadId(headRelation);
                 String sex = gender;
+                familyMember.setGender(sex);
                 String marStatus = maritalStatus;
+                familyMember.setMaritalStatus(marStatus);
                 String bDate = ed_Birth_date.getText().toString();
+                familyMember.setBirthDate(bDate);
                 String moNumber = ed_Mobile_number.getText().toString();
-//                String Family_welfare = ed_Family_welfare.getText().toString();
-//                String Family_welfare_use = ed_Family_welfare_user.getText().toString();
-                String secChild = secondChild;
-                String live = isLiving;
-//                String periods_status = ed_periods_status.getText().toString();
+                familyMember.setMobileNo(moNumber);
+                String wife=wifeOf;
+                familyMember.setWifeof(wife);
+                String sun=sunOf;
+                familyMember.setChildof(sun);
+                String Walfare=familyWalfare;
+                familyMember.setAdoptedfpMethod(Walfare);
+                String wantFamilyWalfare=isAdoptPlanning;
+                familyMember.setWantadoptedfpMethod(wantFamilyWalfare);
+                String WalfareUser=familyWalfareUser;
+                familyMember.setPlannedfpMethod(WalfareUser);
+                String pragnent=isPregnent;
+                familyMember.setIsPregnant(pragnent);
+                String child=secondChild;
+                familyMember.setWantChild(child);
+                String memStatus=isLiving;
+                familyMember.setMemberStatus(memStatus);
+                String prdStatus=periodeStatus;
+                familyMember.setMenstruationStatus(prdStatus);
+                if(userImagebyteArray!=null){
+                    familyMember.setUserImageArray(userImagebyteArray);
+                }
+                boolean flag=databaseHelper.updateFamilyMemberDetails(familyMember);
+                if(flag){
+                    thisActivity.finish();
+                }
                 break;
             case R.id.rdb_yes:
                 rdb_yes.setChecked(true);
@@ -296,31 +541,166 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
             case R.id.rdb_Current_Status_yes:
                 rdb_Current_Status_yes.setChecked(true);
                 rdb_Current_Status_no.setChecked(false);
-                isLiving = "y";
+                isLiving = "1";
                 break;
             case R.id.rdb_Current_Status_no:
                 rdb_Current_Status_yes.setChecked(false);
                 rdb_Current_Status_no.setChecked(true);
-                isLiving = "n";
+                isLiving = "0";
+                break;
+            case R.id.rdb_adopt_planning_yes:
+                isAdoptPlanning="1";
+                rdb_adopt_planning_yes.setChecked(true);
+                rdb_adopt_planning_no.setChecked(false);
+                ll_Family_welfare_user.setVisibility(View.VISIBLE);
+                break;
+            case R.id.rdb_adopt_planning_no:
+                isAdoptPlanning="0";
+                rdb_adopt_planning_yes.setChecked(false);
+                rdb_adopt_planning_no.setChecked(true);
+                ll_Family_welfare_user.setVisibility(View.GONE);
+                break;
+            case R.id.rdb_isPregnent_yes:
+                isPregnent="1";
+                rdb_isPregnent_yes.setChecked(true);
+                rdb_isPregnent_no.setChecked(false);
+                ll_secong_child.setVisibility(View.GONE);
+                break;
+            case R.id.rdb_isPregnent_no:
+                isPregnent="0";
+                rdb_isPregnent_yes.setChecked(false);
+                rdb_isPregnent_no.setChecked(true);
+                ll_secong_child.setVisibility(View.VISIBLE);
                 break;
             case R.id.bt_family_identity:
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(thisActivity);
-                LayoutInflater layoutInflater
-                        = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View view = layoutInflater.inflate(R.layout.family_identity_layout, null);
+                final Dialog dialog = new Dialog(thisActivity);
+                LayoutInflater mInflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View view=mInflater.inflate(R.layout.family_identity_member_layout, null);
                 Utils.findAllTextView(thisActivity, ((ViewGroup) view.findViewById(R.id.ll_alert)));
-                alertDialogBuilder.setView(view);
-                alertDialogBuilder.show();
+                final EditText ed_election_no=(EditText)view.findViewById(R.id.ed_election_no);
+                final EditText ed_pan_no=(EditText)view.findViewById(R.id.ed_pan_no);
+                final EditText ed_driving_no=(EditText)view.findViewById(R.id.ed_driving_no);
+                final EditText ed_passport_no=(EditText)view.findViewById(R.id.ed_passport_no);
+                Button bt_save=(Button)view.findViewById(R.id.bt_save);
+                Button bt_identity_cancel=(Button)view.findViewById(R.id.bt_identity_cancel);
+
+                if(member!=null) {
+                    ed_election_no.setText(member.getElectioncardNumber());
+                    ed_pan_no.setText(member.getPancardNumber());
+                    ed_driving_no.setText(member.getDrivingcardNumer());
+                    ed_passport_no.setText(member.getPassportcardNumber());
+                }
+
+                bt_identity_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+
+                        electionNo =ed_election_no.getText().toString();
+                        panNo =ed_pan_no.getText().toString();
+                        drivingNo =ed_driving_no.getText().toString();
+                        passportNo =ed_passport_no.getText().toString();
+
+                        if(!electionNo.equalsIgnoreCase(member.getElectioncardNumber())){
+                            familyMember.setElectioncardNumber(electionNo);
+                        }
+                        if(!panNo.equalsIgnoreCase(member.getPancardNumber())) {
+                            familyMember.setPancardNumber(panNo);
+                        }
+                        if(!drivingNo.equalsIgnoreCase(member.getDrivingcardNumer())) {
+                            familyMember.setDrivingcardNumer(drivingNo);
+                        }
+                        if(!passportNo.equalsIgnoreCase(member.getPassportcardNumber())) {
+                            familyMember.setPassportcardNumber(passportNo);
+                        }
+                    }
+                });
+                bt_save.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        electionNo =ed_election_no.getText().toString();
+                        panNo =ed_pan_no.getText().toString();
+                        drivingNo =ed_driving_no.getText().toString();
+                        passportNo =ed_passport_no.getText().toString();
+                        familyMember.setElectioncardNumber(electionNo);
+                        familyMember.setPancardNumber(panNo);
+                        familyMember.setDrivingcardNumer(drivingNo);
+                        familyMember.setPassportcardNumber(passportNo);
+                    }
+                });
+
+
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.setContentView(view);
+
+                WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE); // for activity use context instead of getActivity()
+                Display display = wm.getDefaultDisplay(); // getting the screen size of device
+                Point size = new Point();
+                display.getSize(size);
+                int width1 = WindowManager.LayoutParams.WRAP_CONTENT;
+                int height1 = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                int tempValue = 0;
+                tempValue = ((size.x) * 200) / 1440;
+                int width = size.x - tempValue;  // Set your widths
+                int height = height1; // set your heights
+
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+
+                lp.width = width;
+                lp.height = height;
+                dialog.getWindow().setAttributes(lp);
+                dialog.setCancelable(false);
+                dialog.show();
                 break;
             case R.id.bt_bank_detail:
-                AlertDialog.Builder bankAlertDialog = new AlertDialog.Builder(thisActivity);
-                LayoutInflater layoutBankInflater
-                        = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View bankView = layoutBankInflater.inflate(R.layout.bank_detail_layout, null);
+//                AlertDialog.Builder bankAlertDialog = new AlertDialog.Builder(thisActivity);
+//                LayoutInflater layoutBankInflater
+//                        = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                View bankView = layoutBankInflater.inflate(R.layout.bank_detail_layout, null);
+//                Utils.findAllTextView(thisActivity, ((ViewGroup) bankView.findViewById(R.id.ll_alert)));
+//                bankAlertDialog.setView(bankView);
+//                bankAlertDialog.show();
+                final Dialog bankDialog = new Dialog(thisActivity);
+                LayoutInflater bankInflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View bankView=bankInflater.inflate(R.layout.bank_detail_layout, null);
                 Utils.findAllTextView(thisActivity, ((ViewGroup) bankView.findViewById(R.id.ll_alert)));
-                bankAlertDialog.setView(bankView);
-                bankAlertDialog.show();
+                final EditText ed_branch_name=(EditText)bankView.findViewById(R.id.ed_branch_name);
+                final EditText ed_ac_number=(EditText)bankView.findViewById(R.id.ed_ac_number);
+                final EditText ed_IFSC_Code=(EditText)bankView.findViewById(R.id.ed_IFSC_Code);
+                final EditText ed_aadhar_no=(EditText)bankView.findViewById(R.id.ed_aadhar_no);
+                Button bt_save_bank=(Button)bankView.findViewById(R.id.bt_save_bank);
+                Button bt_cancel_bank=(Button)bankView.findViewById(R.id.bt_cancel_bank);
+
+                bankDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                bankDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                bankDialog.setContentView(bankView);
+
+                WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE); // for activity use context instead of getActivity()
+                Display bankDisplay = windowManager.getDefaultDisplay(); // getting the screen size of device
+                Point bankSize = new Point();
+                bankDisplay.getSize(bankSize);
+                int bankwidth1 = WindowManager.LayoutParams.WRAP_CONTENT;
+                int bankheight1 = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                int bankTempValue = 0;
+                tempValue = ((bankSize.x) * 200) / 1440;
+                int bankwidth = bankSize.x - bankTempValue;  // Set your widths
+                int bankheight = bankheight1; // set your heights
+
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                layoutParams.copyFrom(bankDialog.getWindow().getAttributes());
+
+                layoutParams.width = bankwidth;
+                layoutParams.height = bankheight;
+                bankDialog.getWindow().setAttributes(layoutParams);
+                bankDialog.setCancelable(false);
+                bankDialog.show();
                 break;
+
             case R.id.ed_Birth_date:
                 showDatePicker();
                 break;
@@ -374,6 +754,31 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                 textView = (TextView) linearLayout.getChildAt(0);
                 maritalStatus = textView.getTag().toString();
                 break;
+            case R.id.sp_Whos_wife:
+                linearLayout = (LinearLayout) view;
+                textView = (TextView) linearLayout.getChildAt(0);
+                wifeOf = textView.getTag().toString();
+                break;
+            case R.id.sp_Whos_sun_daughter:
+                linearLayout = (LinearLayout) view;
+                textView = (TextView) linearLayout.getChildAt(0);
+                sunOf = textView.getTag().toString();
+                break;
+            case R.id.sp_Family_welfare:
+                linearLayout = (LinearLayout) view;
+                textView = (TextView) linearLayout.getChildAt(0);
+                familyWalfare = textView.getTag().toString();
+                break;
+            case R.id.sp_Family_welfare_user:
+                linearLayout = (LinearLayout) view;
+                textView = (TextView) linearLayout.getChildAt(0);
+                familyWalfareUser = textView.getTag().toString();
+                break;
+            case R.id.sp_periods_status:
+                linearLayout = (LinearLayout) view;
+                textView = (TextView) linearLayout.getChildAt(0);
+                periodeStatus = textView.getTag().toString();
+                break;
         }
     }
 
@@ -407,10 +812,10 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                         imageName + ".png").getPath();
                 compressFile = new File(imageRealPath);
                 txt_take_image.setVisibility(View.GONE);
-                userImage.setVisibility(View.VISIBLE);
+                imgUserImage.setVisibility(View.VISIBLE);
                 receipt_bitmap = TakePictureUtils.decodeFile(compressFile);
-                receipt_bitmap = Bitmap.createScaledBitmap(receipt_bitmap, width, height, true);
-                userImage.setImageBitmap(receipt_bitmap);
+//                receipt_bitmap = Bitmap.createScaledBitmap(receipt_bitmap, width, height, true);
+                imgUserImage.setImageBitmap(receipt_bitmap);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 receipt_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 userImagebyteArray= stream.toByteArray();

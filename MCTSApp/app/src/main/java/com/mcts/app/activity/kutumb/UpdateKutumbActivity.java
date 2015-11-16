@@ -75,7 +75,7 @@ public class UpdateKutumbActivity extends BaseActivity implements View.OnClickLi
     private TextView lbl_house_number,bt_family_location,txt_add_street,txt_take_image,txt_add_location;
     private Spinner sp_family_cast,sp_family_dharm,sp_street_name,sp_Marital_status;
     private RadioButton rdb_yes,rdb_no,rdb_sex_Male,rdb_sex_Female;
-    private Button bt_family_identity,bt_add_family;
+    private Button bt_family_identity,bt_add_family,bt_family_add_member;
     private ArrayList<Religion> castArrayList;
     private ArrayList<Religion> religionArrayList;
     private ArrayList<Religion> faliyaArrayList;
@@ -184,6 +184,7 @@ public class UpdateKutumbActivity extends BaseActivity implements View.OnClickLi
         rdb_sex_Female=(RadioButton)findViewById(R.id.rdb_sex_Female);
 
         bt_family_identity=(Button)findViewById(R.id.bt_family_identity);
+        bt_family_add_member=(Button)findViewById(R.id.bt_family_add_member);
         bt_family_location=(TextView)findViewById(R.id.bt_family_location);
         bt_add_family=(Button)findViewById(R.id.bt_add_family);
         imgUserImage=(ImageView)findViewById(R.id.imgUserImage);
@@ -211,6 +212,7 @@ public class UpdateKutumbActivity extends BaseActivity implements View.OnClickLi
         bt_family_identity.setOnClickListener(this);
         txt_add_location.setOnClickListener(this);
         bt_add_family.setOnClickListener(this);
+        bt_family_add_member.setOnClickListener(this);
         rdb_yes.setOnClickListener(this);
         rdb_no.setOnClickListener(this);
         rdb_no.setOnClickListener(this);
@@ -654,6 +656,12 @@ public class UpdateKutumbActivity extends BaseActivity implements View.OnClickLi
                     rdb_yes.setEnabled(false);
                     thisActivity.finish();
                 }
+                break;
+            case R.id.bt_family_add_member:
+                Intent intent=new Intent(thisActivity,AddFamilyMemberActivity.class);
+                intent.putExtra("emamtafamilyId",ed_family_number.getText().toString());
+                intent.putExtra("villageId",villageId);
+                startActivity(intent);
                 break;
 
         }

@@ -18,6 +18,7 @@ public class Family {
     String memberName;
     String memberId;
     byte[] userImageArray;
+    String emamtahealthId;
 
 
     public byte[] getUserImageArray() {
@@ -122,5 +123,13 @@ public class Family {
 
     public void setMemberName(String memberName) {
         this.memberName = memberName;
+    }
+
+    public String getEmamtahealthId() {
+        return emamtahealthId;
+    }
+
+    public void setEmamtahealthId(String emamtahealthId) {
+        this.emamtahealthId = emamtahealthId;
     }
 }

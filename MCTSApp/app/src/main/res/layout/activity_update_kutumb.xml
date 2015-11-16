@@ -681,14 +681,15 @@
 
                 <Button
                     android:id="@+id/bt_add_family"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_margin="@dimen/scale_5"
                     android:background="@drawable/button_selector"
                     android:padding="@dimen/scale_10"
                     android:text="@string/edit_family" />
 
-               <!-- <Button
+                <Button
                     android:id="@+id/bt_family_add_member"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -696,7 +697,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_selector"
                     android:padding="@dimen/scale_10"
-                    android:text="@string/family_add_member" />-->
+                    android:text="@string/family_add_member" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

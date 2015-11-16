@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/scale_5"
+    android:background="@drawable/round_corner_bg"
     android:orientation="vertical">
 
     <ScrollView
@@ -28,42 +29,16 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="4"
-                    android:text="@string/bank_name" />
-
-                <Spinner
-                    android:id="@+id/sp_select_bank"
-                    style="@style/ValueText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/scale_5"
-                    android:layout_weight="6"
-                    android:hint="@string/bpl_number"
-                    android:singleLine="true"></Spinner>
-            </LinearLayout>
-
-            <LinearLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <com.mcts.app.customview.MyTextView
-                    style="@style/LabelText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/scale_5"
-                    android:layout_weight="4"
-                    android:text="@string/branch_name" />
+                    android:text="@string/election_no" />
 
                 <EditText
-                    android:id="@+id/ed_branch_name"
+                    android:id="@+id/ed_election_no"
                     style="@style/ValueText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="6"
-                    android:hint="@string/branch_name"
+                    android:hint="@string/election_no"
                     android:singleLine="true"></EditText>
             </LinearLayout>
 
@@ -81,16 +56,16 @@
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="4"
                     android:singleLine="true"
-                    android:text="@string/ac_number" />
+                    android:text="@string/pan_no" />
 
                 <EditText
-                    android:id="@+id/ed_ac_number"
+                    android:id="@+id/ed_pan_no"
                     style="@style/ValueText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="6"
-                    android:hint="@string/ac_number"></EditText>
+                    android:hint="@string/pan_no"></EditText>
             </LinearLayout>
 
             <LinearLayout
@@ -106,16 +81,16 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="4"
-                    android:text="@string/IFSC_Code" />
+                    android:text="@string/driving_no" />
 
                 <EditText
-                    android:id="@+id/ed_IFSC_Code"
+                    android:id="@+id/ed_driving_no"
                     style="@style/ValueText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="6"
-                    android:hint="@string/IFSC_Code"
+                    android:hint="@string/driving_no"
                     android:singleLine="true"></EditText>
             </LinearLayout>
 
@@ -132,16 +107,16 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="4"
-                    android:text="@string/aadhar_no" />
+                    android:text="@string/passport_no" />
 
                 <EditText
-                    android:id="@+id/ed_aadhar_no"
+                    android:id="@+id/ed_passport_no"
                     style="@style/ValueText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="6"
-                    android:hint="@string/aadhar_no"
+                    android:hint="@string/passport_no"
                     android:singleLine="true"></EditText>
             </LinearLayout>
 
@@ -152,7 +127,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/bt_save_bank"
+                    android:id="@+id/bt_save"
                     style="@style/ButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -162,7 +137,7 @@
                     android:text="@string/save" />
 
                 <Button
-                    android:id="@+id/bt_cancel_bank"
+                    android:id="@+id/bt_identity_cancel"
                     style="@style/ButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

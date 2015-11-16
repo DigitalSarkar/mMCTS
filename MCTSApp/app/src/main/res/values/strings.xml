@@ -169,6 +169,10 @@
     <string name="ac_number">એકાઉન્ટ નબંર</string>
     <string name="IFSC_Code">IFSC Code</string>
     <string name="aadhar_no">આધાર નબંર</string>
+    <string name="election_no">ચૂંટણી કાર્ડ નં</string>
+    <string name="pan_no">પાન નં</string>
+    <string name="driving_no">ડ્રાઇવિંગ નં</string>
+    <string name="passport_no">પાસપોર્ટ નં</string>
     <string name="family_head_name">મુખ્ય સભ્યનું નામ</string>
     <string-array name="family_walfare">
         <item>એનએસવી (NSV)</item>
