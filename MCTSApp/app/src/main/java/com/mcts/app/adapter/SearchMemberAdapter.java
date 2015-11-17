@@ -15,10 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mcts.app.R;
@@ -27,6 +31,7 @@ import com.mcts.app.activity.kutumb.UpdateKutumbActivity;
 import com.mcts.app.customview.CustomToast;
 import com.mcts.app.db.DatabaseHelper;
 import com.mcts.app.model.Family;
+import com.mcts.app.model.MaritalStatus;
 import com.mcts.app.utils.Messages;
 import com.mcts.app.utils.Utils;
 
@@ -36,11 +41,14 @@ import java.util.ArrayList;
 /**
  * Created by Raj on 10/11/2015.
  */
-public class SearchMemberAdapter extends BaseAdapter implements View.OnClickListener {
+public class SearchMemberAdapter extends BaseAdapter implements View.OnClickListener{
 
     private Context context;
     private ArrayList<Family> familyArrayList;
     private String villageId,villageName,searchString;
+    private String isParmenant = "0";
+    private String talukaID,villageID,dirstID;
+
     public SearchMemberAdapter(Context mContext, ArrayList<Family> mFamilyArrayList, String strVillageId, String strVillageName,String mSearchString){
         this.context=mContext;
         this.familyArrayList=mFamilyArrayList;
@@ -66,7 +74,9 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         ViewHolder viewHolder;
+
         if(convertView==null){
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             convertView = inflater.inflate(R.layout.custom_search_member_list_layout, parent, false);
@@ -103,6 +113,7 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
 
         return convertView;
     }
+
 
 
 
@@ -202,13 +213,148 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
             case R.id.txt_migrate:
 
                 TextView eMamta=(TextView)v;
-                intent=new Intent(context,AddFamilyMemberActivity.class);
-                String eMamtaId=eMamta.getTag().toString();
-                intent.putExtra("emamtafamilyId", eMamtaId);
-                intent.putExtra("villageId", villageId);
-                context.startActivity(intent);
+                final String eMamtaId=eMamta.getTag().toString();
+                final Dialog migrateDialog = new Dialog(context);
+                LayoutInflater migrateInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View migrateView=migrateInflater.inflate(R.layout.custom_migration_layout, null);
+                Utils.findAllTextView(context, ((ViewGroup) migrateView.findViewById(R.id.ll_migrate)));
+                Spinner sp_dirst=(Spinner)migrateView.findViewById(R.id.sp_dirst);
+                final Spinner sp_taluka=(Spinner)migrateView.findViewById(R.id.sp_taluka);
+                final Spinner sp_migrate_village=(Spinner)migrateView.findViewById(R.id.sp_migrate_village);
+                final RadioButton rdb_parmenant=(RadioButton)migrateView.findViewById(R.id.rdb_parmenant);
+                final RadioButton rdb_temp=(RadioButton)migrateView.findViewById(R.id.rdb_temp);
+                Button bt_migrate=(Button)migrateView.findViewById(R.id.bt_migrate);
+                Button bt_cancel=(Button)migrateView.findViewById(R.id.bt_cancel);
+
+                DatabaseHelper databaseHelper=new DatabaseHelper(context);
+                ArrayList<MaritalStatus> districtArray=databaseHelper.getDistrictData();
+                StatusAdapter districtAdapter=new StatusAdapter(context,districtArray);
+                sp_dirst.setAdapter(districtAdapter);
+                sp_dirst.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                    LinearLayout linearLayout;
+                    TextView textView;
+
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        linearLayout = (LinearLayout) view;
+                        textView = (TextView) linearLayout.getChildAt(0);
+                        dirstID = textView.getTag().toString();
+
+                        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+                        ArrayList<MaritalStatus> districtArray = databaseHelper.getTaluka(dirstID);
+                        StatusAdapter districtAdapter = new StatusAdapter(context, districtArray);
+                        sp_taluka.setAdapter(districtAdapter);
+                        sp_taluka.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                linearLayout = (LinearLayout) view;
+                                textView = (TextView) linearLayout.getChildAt(0);
+                                talukaID = textView.getTag().toString();
+
+                                DatabaseHelper databaseHelper = new DatabaseHelper(context);
+                                ArrayList<MaritalStatus> districtArray = databaseHelper.getVillages(talukaID);
+                                StatusAdapter districtAdapter = new StatusAdapter(context, districtArray);
+                                sp_migrate_village.setAdapter(districtAdapter);
+
+                                sp_migrate_village.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                        linearLayout = (LinearLayout) view;
+                                        textView = (TextView) linearLayout.getChildAt(0);
+                                        villageID = textView.getTag().toString();
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> parent) {
+
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
+                rdb_parmenant.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isParmenant = "0";
+                        rdb_parmenant.setChecked(true);
+                        rdb_temp.setChecked(false);
+                    }
+                });
+                rdb_temp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isParmenant ="1";
+                        rdb_parmenant.setChecked(false);
+                        rdb_temp.setChecked(true);
+                    }
+                });
+
+                bt_migrate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+                        boolean flag=databaseHelper.migrateFamily(eMamtaId,villageID,isParmenant);
+                        if(!flag){
+                            CustomToast customToast=new CustomToast((Activity) context,"Invalid operation");
+                            customToast.show();
+                            migrateDialog.dismiss();
+                        }else{
+                            migrateDialog.dismiss();
+                            familyArrayList = databaseHelper.searchFamily(searchString, villageId);
+                            notifyDataSetChanged();
+                        }
+
+                    }
+                });
+
+                bt_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        migrateDialog.dismiss();
+                    }
+                });
+                migrateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                migrateDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                migrateDialog.setContentView(migrateView);
+
+                WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE); // for activity use context instead of getActivity()
+                Display migrateDisplay = windowManager.getDefaultDisplay(); // getting the screen size of device
+                Point migrateSize = new Point();
+                migrateDisplay.getSize(migrateSize);
+                int migratewidth1 = WindowManager.LayoutParams.WRAP_CONTENT;
+                int migrateheight1 = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                int migrateTempValue = 0;
+                migrateTempValue = ((migrateSize.x) * 200) / 1440;
+                int migrateWidth = migrateSize.x - migrateTempValue;  // Set your widths
+                int migrateheight = migrateheight1; // set your heights
+
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                layoutParams.copyFrom(migrateDialog.getWindow().getAttributes());
+
+                layoutParams.width = migrateWidth;
+                layoutParams.height = migrateheight;
+                migrateDialog.getWindow().setAttributes(layoutParams);
+                migrateDialog.setCancelable(false);
+                migrateDialog.show();
 
                 break;
         }
     }
+
+
 }

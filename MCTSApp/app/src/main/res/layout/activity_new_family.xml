@@ -284,14 +284,13 @@
                     android:layout_weight="4"
                     android:text="@string/aaganvadi_no" />
 
-                <EditText
-                    android:id="@+id/ed_aganvali_no"
+                <Spinner
+                    android:id="@+id/sp_aganvali"
                     style="@style/ValueText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
-                    android:layout_weight="6"
-                    android:hint="@string/aaganvadi_no"></EditText>
+                    android:layout_weight="6"></Spinner>
             </LinearLayout>
 
             <LinearLayout

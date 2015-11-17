@@ -22,7 +22,7 @@ public class Constants {
     public static final String USER_LOGIN_PREF="user";
     public static final String USER_ID="userId";
 
-    public static final String BASE_URL="http://digitalrecord.in/Webservice.asmx/";
+    public static final String BASE_URL="http://careforall.in/Webservice.asmx/";
     public static final String MEMBER_DETAIL="memberdetails";
     public static final String FAMILY_DETAIL="familydetails";
     public static final String USER_LOGIN="userlogin";

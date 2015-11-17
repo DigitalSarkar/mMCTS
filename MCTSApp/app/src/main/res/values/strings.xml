@@ -206,4 +206,13 @@
     </string-array>
     <string name="title_activity_new_family">NewFamilyActivity</string>
     <string name="title_activity_update_family_member">UpdateFamilyMemberActivity</string>
+
+    <string name="dist">જિલ્લો પસંદ કરો</string>
+    <string name="taluko">તાલુકો પસંદ કરો</string>
+    <string name="select_village">ગામ પસંદ કરો</string>
+    <string name="migrate_type">સ્થળાંતરનો પ્રકાર </string>
+    <string name="parmenant">કાયમી/સાસરી</string>
+    <string name="temp">બિનકાયમી</string>
 </resources>
+
+

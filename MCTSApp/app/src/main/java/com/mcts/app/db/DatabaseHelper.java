@@ -184,34 +184,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return religionArrayList;
     }
 
-    /* Family*/
-    public boolean saveFamilyDetails(String familyHeadName, String husbandName, String sirName, String familyNumber, String houseNumber, String address, String strCast, String strReligion, String isAns, String lat, String lng) {
+    public ArrayList<MaritalStatus> getAganvadi(String villageId, String subCenterId) {
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("family_number", familyNumber);
-        contentValues.put("religion", strReligion);
-        contentValues.put("racial", strCast);
-        contentValues.put("is_bpl", isAns);
-        contentValues.put("created", dateFormat.format(date));
-        contentValues.put("location_id", 123);
-        contentValues.put("sc_id", 1);
-        contentValues.put("migrated_location_id", 1);
-        contentValues.put("added_by_user_id", 123);
-        contentValues.put("home_number", houseNumber);
-        contentValues.put("address", address);
-        contentValues.put("address1", "address");
-        contentValues.put("migration_type_id", 123);
-        contentValues.put("lattitude", lat);
-        contentValues.put("longitude", lng);
-        contentValues.put("family_head_name", familyHeadName);
-        contentValues.put("head_father_name", husbandName);
-        contentValues.put("head_sir_name", sirName);
-        db.insert("tbl_family", null, contentValues);
-        return true;
+        ArrayList<MaritalStatus> maritalStatusArrayList = new ArrayList<>();
+        readDatabase();
+        try {
+            String selectQuery = "SELECT  * FROM tbl_anganwadi WHERE villageId='" + villageId + "' and subcentreId='" + subCenterId + "'";
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+
+            // looping through all rows and adding to list
+            if (cursor.moveToFirst()) {
+                do {
+                    MaritalStatus maritalStatus = new MaritalStatus();
+                    maritalStatus.setId(cursor.getString(cursor.getColumnIndex("anganwadiId")));
+                    maritalStatus.setStatus(cursor.getString(cursor.getColumnIndex("anganwadi")));
+                    maritalStatusArrayList.add(maritalStatus);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return maritalStatusArrayList;
     }
+
 
     public boolean updateFamilyDetails(Member member) {
 
@@ -227,6 +225,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             contentValues.put("racialId", member.getRaciald());
             contentValues.put("isBpl", member.getIsBpl());
             contentValues.put("bplNumber", member.getBplNumber());
+            contentValues.put("anganwadiId", member.getAnganwadiId());
             contentValues.put("rationcardNrumber", member.getRationcardNrumber());
             contentValues.put("rsbycardNumber", member.getRsbycardNumber());
             contentValues.put("macardNumber", member.getMacardNumber());
@@ -256,8 +255,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             String sql = "Insert into " + DBConstant.FAMILY_TABLE + "(emamtafamilyId,villageId,subcentreId," +
                     "houseNumber,faliyaId,landmark,racialId,religionId,isBpl,bplNumber,rationcardNrumber,rsbycardNumber," +
-                    "macardNumber,lattitudes,longitude,createdbyuserId,createdDate,isActive" +
-                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    "macardNumber,lattitudes,longitude,createdbyuserId,createdDate,isActive,anganwadiId" +
+                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             SQLiteStatement insert = mDataBase.compileStatement(sql);
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -295,6 +294,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             insert.bindString(16, member.getUserId());
             insert.bindString(17, dateFormat.format(date));
             insert.bindString(18, "1");
+            if(member.getAnganwadiId()!=null) {
+                insert.bindString(19, member.getAnganwadiId());
+            }
             insert.execute();
             mDataBase.setTransactionSuccessful();
         } catch (Exception e) {
@@ -394,11 +396,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<Family> familyArrayList = new ArrayList<>();
         readDatabase();
         try {
+           /* String selectQuery = "SELECT m.memberId,fm.familyId,fm.emamtafamilyId,m.emamtafamilyId,m.firstName,m.middleName,m.lastName,m.photo\n" +
+                    "FROM tbl_member m inner join tbl_family fm " +
+                    "on m.emamtafamilyId=fm.emamtafamilyId " +
+                    "WHERE m.emamtafamilyId LIKE '%" + number + "%' and m.isHead='1' and fm.isActive=1 and fm.villageId='" + villageId + "'";*/
             String selectQuery = "SELECT m.memberId,fm.familyId,fm.emamtafamilyId,m.emamtafamilyId,m.firstName,m.middleName,m.lastName,m.photo\n" +
                     "FROM tbl_member m inner join tbl_family fm " +
                     "on m.emamtafamilyId=fm.emamtafamilyId " +
-                    "WHERE m.emamtafamilyId LIKE '%" + number + "%' and m.isHead='1' and fm.isActive=1 and fm.villageId='" + villageId + "'";
-            Log.e("Member Search", selectQuery);
+                    "WHERE m.emamtafamilyId LIKE '%" + number + "%' and m.isHead='1' and fm.villageId='" + villageId + "'";
+            Log.e("searchFamily", selectQuery);
 
             Cursor cursor = mDataBase.rawQuery(selectQuery, null);
             Log.e("Member Search Count", "" + cursor.getCount());
@@ -431,10 +437,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String selectQuery = "select m.memberId,m.familyId,m.emamtafamilyId,m.villageId,m.firstName,m.middleName,m.lastName,m.isHead,m.gender," +
                     "m.maritalStatus,m.birthDate,m.mobileNo,f.houseNumber,m.childof," +
                     "f.faliyaId,f.landmark,f.religionId,f.racialId,f.isBpl,f.lattitudes,f.longitude,f.bplNumber,f.rationcardNrumber," +
-                    "f.rsbycardNumber, f.macardNumber " +
+                    "f.rsbycardNumber, f.macardNumber, f.anganwadiId " +
                     "from tbl_member as m inner join tbl_family as f on f.emamtafamilyId=m.emamtafamilyId " +
                     "where memberId='" + MemberId + "'";
-            Log.v("MemberDetail Query", selectQuery);
+            Log.v("getMemberDetail", selectQuery);
             Cursor cursor = mDataBase.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
                 do {
@@ -463,6 +469,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     member.setRationcardNrumber(cursor.getString(cursor.getColumnIndex("rationcardNrumber")));
                     member.setRsbycardNumber(cursor.getString(cursor.getColumnIndex("rsbycardNumber")));
                     member.setMacardNumber(cursor.getString(cursor.getColumnIndex("macardNumber")));
+                    member.setAnganwadiId(cursor.getString(cursor.getColumnIndex("anganwadiId")));
 
                 } while (cursor.moveToNext());
             }
@@ -734,11 +741,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<Family> familyArrayList = new ArrayList<>();
         readDatabase();
         try {
+            /*String selectQuery = "SELECT m.memberId,fm.familyId,fm.emamtafamilyId,m.emamtafamilyId,m.emamtahealthId,m.firstName,m.middleName,m.lastName,m.photo\n" +
+                    "FROM tbl_member m inner join tbl_family fm " +
+                    "on m.emamtafamilyId=fm.emamtafamilyId " +
+                    "WHERE m.emamtafamilyId LIKE '%" + searchString + "%' and m.isActive=1 and fm.villageId='" + strVillageId + "'";*/
             String selectQuery = "SELECT m.memberId,fm.familyId,fm.emamtafamilyId,m.emamtafamilyId,m.emamtahealthId,m.firstName,m.middleName,m.lastName,m.photo\n" +
                     "FROM tbl_member m inner join tbl_family fm " +
                     "on m.emamtafamilyId=fm.emamtafamilyId " +
-                    "WHERE m.emamtafamilyId LIKE '%" + searchString + "%' and m.isActive=1 and fm.villageId='" + strVillageId + "'";
-            Log.e("Member Search", selectQuery);
+                    "WHERE m.emamtafamilyId LIKE '%" + searchString + "%' and fm.villageId='" + strVillageId + "'";
+            Log.e("searchFamilyMember", selectQuery);
 
             Cursor cursor = mDataBase.rawQuery(selectQuery, null);
             Log.e("Member Search Count", "" + cursor.getCount());
@@ -776,7 +787,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "m.adharcardNumber,m.electioncardNumber,m.pancardNumber,m.drivingcardNumer,m.passportcardNumber,m.relationwithheadId " +
                     "from tbl_member as m inner join tbl_family as f on f.emamtafamilyId=m.emamtafamilyId " +
                     "where memberId='" + memberId + "'";
-            Log.v("MemberDetail Query", selectQuery);
+            Log.v("getFamilyMember", selectQuery);
             Cursor cursor = mDataBase.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
                 do {
@@ -893,7 +904,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "from tbl_member " +
                     "where gender='F' and maritalStatus!='1' and emamtafamilyId='" + emamtaID + "'";
 
-            Log.v("MemberDetail Query", selectQuery);
+            Log.v("getParentList", selectQuery);
             Cursor cursor = mDataBase.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
                 do {
@@ -921,7 +932,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "from tbl_member " +
                     "where gender='M' and maritalStatus!='1' and emamtafamilyId='" + emamtaFamilyId + "'";
 
-            Log.v("MemberDetail Query", selectQuery);
+            Log.v("getWifeList Query", selectQuery);
             Cursor cursor = mDataBase.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
                 do {
@@ -1000,6 +1011,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "lastName,isHead,relationwithheadId,gender,maritalStatus,birthDate,mobileNo,childof,wifeof,adoptedfpMethod," +
                     "wanttoadoptfpMethod,plannedfpMethod,isPregnant,wantChild,memberStatus,menstruationStatus,electioncardNumber,pancardNumber,drivingcardNumer,passportcardNumber,createdbyuserId,createdDate,photo" +
                     ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
             SQLiteStatement insert = mDataBase.compileStatement(sql);
@@ -1103,6 +1115,125 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Date date = new Date();
             ContentValues contentValues = new ContentValues();
             contentValues.put("isActive", "0");
+            contentValues.put("updatedDate", dateFormat.format(date));
+            mDataBase.update(DBConstant.MEMBER_TABLE, contentValues, " emamtahealthId='" + eHealthId + "'", null);
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return true;
+    }
+
+    public ArrayList<MaritalStatus> getDistrictData() {
+
+        ArrayList<MaritalStatus> arrayListDistrict=new ArrayList<>();
+        readDatabase();
+        try {
+            String selectQuery = "select districtId,district from tbl_district where stateId=24";
+
+            Log.v("getDistrictData Query", selectQuery);
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    MaritalStatus member = new MaritalStatus();
+                    member.setId(cursor.getString(cursor.getColumnIndex("districtId")));
+                    member.setStatus(cursor.getString(cursor.getColumnIndex("district")));
+                    arrayListDistrict.add(member);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return arrayListDistrict;
+    }
+
+    public ArrayList<MaritalStatus> getTaluka(String dirstID) {
+
+        ArrayList<MaritalStatus> arrayListTaluka=new ArrayList<>();
+        readDatabase();
+        try {
+            String selectQuery = "select talukaId,taluka from tbl_taluka where districtId='"+ dirstID+"'";
+
+            Log.v("getTaluka Query", selectQuery);
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    MaritalStatus member = new MaritalStatus();
+                    member.setId(cursor.getString(cursor.getColumnIndex("talukaId")));
+                    member.setStatus(cursor.getString(cursor.getColumnIndex("taluka")));
+                    arrayListTaluka.add(member);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return arrayListTaluka;
+    }
+
+    public ArrayList<MaritalStatus> getVillages(String talukaID) {
+        ArrayList<MaritalStatus> arrayListVillages=new ArrayList<>();
+        readDatabase();
+        try {
+            String selectQuery = "select villageId,village from tbl_village where talukaId='"+ talukaID+"'";
+
+            Log.v("getTaluka Query", selectQuery);
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    MaritalStatus member = new MaritalStatus();
+                    member.setId(cursor.getString(cursor.getColumnIndex("villageId")));
+                    member.setStatus(cursor.getString(cursor.getColumnIndex("village")));
+                    arrayListVillages.add(member);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return arrayListVillages;
+    }
+
+    public boolean migrateFamily(String eMamtaId, String villageID, String isParmenant) {
+        writeDatabase();
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("migratedvillagId", villageID);
+            contentValues.put("migrationtypeId", isParmenant);
+            contentValues.put("updatedDate", dateFormat.format(date));
+            mDataBase.update(DBConstant.FAMILY_TABLE, contentValues, " emamtafamilyId='" + eMamtaId + "'", null);
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return true;
+    }
+
+    public boolean migrateFamilyMember(String eMamtaId,String eHealthId, String villageID, String isParmenant) {
+        writeDatabase();
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("migratedemamtafamilyId", eMamtaId);
+            contentValues.put("migratedemamtamemberId", eHealthId);
+            contentValues.put("migratedvillagId", villageID);
+            contentValues.put("migrationtypeId", isParmenant);
             contentValues.put("updatedDate", dateFormat.format(date));
             mDataBase.update(DBConstant.MEMBER_TABLE, contentValues, " emamtahealthId='" + eHealthId + "'", null);
         } catch (Exception e) {

@@ -573,6 +573,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                 ll_secong_child.setVisibility(View.VISIBLE);
                 break;
             case R.id.bt_family_identity:
+
                 final Dialog dialog = new Dialog(thisActivity);
                 LayoutInflater mInflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View view=mInflater.inflate(R.layout.family_identity_member_layout, null);
@@ -657,13 +658,6 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                 dialog.show();
                 break;
             case R.id.bt_bank_detail:
-//                AlertDialog.Builder bankAlertDialog = new AlertDialog.Builder(thisActivity);
-//                LayoutInflater layoutBankInflater
-//                        = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                View bankView = layoutBankInflater.inflate(R.layout.bank_detail_layout, null);
-//                Utils.findAllTextView(thisActivity, ((ViewGroup) bankView.findViewById(R.id.ll_alert)));
-//                bankAlertDialog.setView(bankView);
-//                bankAlertDialog.show();
                 final Dialog bankDialog = new Dialog(thisActivity);
                 LayoutInflater bankInflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View bankView=bankInflater.inflate(R.layout.bank_detail_layout, null);
@@ -687,7 +681,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                 int bankheight1 = WindowManager.LayoutParams.WRAP_CONTENT;
 
                 int bankTempValue = 0;
-                tempValue = ((bankSize.x) * 200) / 1440;
+                bankTempValue = ((bankSize.x) * 200) / 1440;
                 int bankwidth = bankSize.x - bankTempValue;  // Set your widths
                 int bankheight = bankheight1; // set your heights
 

@@ -71,37 +71,37 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
-public class NewFamilyActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,AdapterView.OnItemSelectedListener{
+public class NewFamilyActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, AdapterView.OnItemSelectedListener {
 
     Activity thisActivity;
-    private static String TAG="NewFamilyActivity";
+    private static String TAG = "NewFamilyActivity";
     private Toolbar mToolbar;
     private TextView mTitle;
-    private TextView txt_village_name,txt_lat,txt_lng,txt_lbl_village,lbl_family_number,lbl_yes,lbl_no,lbl_bpl,lbl_family_dharm,lbl_family_cast;
-    private TextView lbl_house_number,bt_family_location,txt_add_street,txt_take_image,txt_add_location;
-    private Spinner sp_family_cast,sp_family_dharm,sp_street_name,sp_Marital_status;
-    private RadioButton rdb_yes,rdb_no,rdb_sex_Male,rdb_sex_Female;
-    private Button bt_family_identity,bt_add_family;
+    private TextView txt_village_name, txt_lat, txt_lng, txt_lbl_village, lbl_family_number, lbl_yes, lbl_no, lbl_bpl, lbl_family_dharm, lbl_family_cast;
+    private TextView lbl_house_number, bt_family_location, txt_add_street, txt_take_image, txt_add_location;
+    private Spinner sp_family_cast, sp_family_dharm, sp_street_name, sp_Marital_status, sp_aganvali;
+    private RadioButton rdb_yes, rdb_no, rdb_sex_Male, rdb_sex_Female;
+    private Button bt_family_identity, bt_add_family;
     private ArrayList<Religion> castArrayList;
     private ArrayList<Religion> religionArrayList;
     private ArrayList<Religion> faliyaArrayList;
-    private EditText ed_house_number,ed_husband_name,ed_Sir_Name,ed_family_number,ed_landmark,ed_family_head_name,ed_Birth_date,ed_Mobile_number;
-    private String isAns="1",isGender="M";
+    private EditText ed_house_number, ed_husband_name, ed_Sir_Name, ed_family_number, ed_landmark, ed_family_head_name, ed_Birth_date, ed_Mobile_number;
+    private String isAns = "1", isGender = "M";
     private Location mLastLocation;
     private ImageView imgUserImage;
-    private String villageId,villageName;
+    private String villageId, villageName;
 
     // Google client to interact with Google API
     private GoogleApiClient mGoogleApiClient;
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
-    private String strReligion,strCast,strFaliyaId;
+    private String strReligion, strCast, strFaliyaId;
     DatabaseHelper databaseHelper;
     private CustomToast customToast;
     private int randomNumber;
     private String MemberId;
-    private String isRisky="1";
-    String bplNumber,rationCardNumber,rsbyNumber,maaCardNumber;
+    private String isRisky = "1";
+    String bplNumber, rationCardNumber, rsbyNumber, maaCardNumber;
     //    Image Capture
 //    ImageView userImage;
     private String imageName = "item_picture";
@@ -110,9 +110,10 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
     private File compressFile;
     private Bitmap receipt_bitmap;
     private int width, height;
-    Member familyMember=new Member();
+    Member familyMember = new Member();
     private String maritalStatus;
     private byte[] userImagebyteArray;
+    private String aaganvadiId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,10 +136,10 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
         thisActivity = NewFamilyActivity.this;
         Utils.hideSoftKeyboard(thisActivity);
 
-        Intent intent=getIntent();
-        villageId=intent.getStringExtra("villageId");
-        villageName=intent.getStringExtra("villageName");
-        MemberId=intent.getStringExtra("MemberId");
+        Intent intent = getIntent();
+        villageId = intent.getStringExtra("villageId");
+        villageName = intent.getStringExtra("villageName");
+        MemberId = intent.getStringExtra("MemberId");
 
         Typeface type = Typeface.createFromAsset(getAssets(), "SHRUTI.TTF");
         mToolbar = (Toolbar) findViewById(R.id.anim_toolbar);
@@ -151,46 +152,47 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
 
     private void init() {
 
-        databaseHelper=new DatabaseHelper(thisActivity);
-        txt_village_name=(TextView)findViewById(R.id.txt_village_name);
-        txt_lbl_village=(TextView)findViewById(R.id.txt_lbl_village);
-        txt_add_street=(TextView)findViewById(R.id.txt_add_street);
+        databaseHelper = new DatabaseHelper(thisActivity);
+        txt_village_name = (TextView) findViewById(R.id.txt_village_name);
+        txt_lbl_village = (TextView) findViewById(R.id.txt_lbl_village);
+        txt_add_street = (TextView) findViewById(R.id.txt_add_street);
         Utils.findAllTextView(thisActivity, (ViewGroup) findViewById(R.id.ll_add_family));
-        lbl_family_number=(TextView)findViewById(R.id.lbl_family_number);
-        lbl_yes=(TextView)findViewById(R.id.lbl_yes);
-        lbl_no=(TextView)findViewById(R.id.lbl_no);
-        lbl_bpl=(TextView)findViewById(R.id.lbl_bpl);
-        txt_take_image=(TextView)findViewById(R.id.txt_take_image);
-        lbl_family_dharm=(TextView)findViewById(R.id.lbl_family_dharm);
-        lbl_family_cast=(TextView)findViewById(R.id.lbl_family_cast);
-        lbl_house_number=(TextView)findViewById(R.id.lbl_house_number);
-        txt_add_location=(TextView)findViewById(R.id.txt_add_location);
-        ed_family_number=(EditText)findViewById(R.id.ed_family_number);
-        ed_family_head_name=(EditText)findViewById(R.id.ed_family_head_name);
-        ed_husband_name=(EditText)findViewById(R.id.ed_husband_name);
-        ed_Sir_Name=(EditText)findViewById(R.id.ed_Sir_Name);
-        ed_landmark=(EditText)findViewById(R.id.ed_landmark);
-        txt_lat=(TextView)findViewById(R.id.txt_lat);
-        txt_lng=(TextView)findViewById(R.id.txt_lng);
+        lbl_family_number = (TextView) findViewById(R.id.lbl_family_number);
+        lbl_yes = (TextView) findViewById(R.id.lbl_yes);
+        lbl_no = (TextView) findViewById(R.id.lbl_no);
+        lbl_bpl = (TextView) findViewById(R.id.lbl_bpl);
+        txt_take_image = (TextView) findViewById(R.id.txt_take_image);
+        lbl_family_dharm = (TextView) findViewById(R.id.lbl_family_dharm);
+        lbl_family_cast = (TextView) findViewById(R.id.lbl_family_cast);
+        lbl_house_number = (TextView) findViewById(R.id.lbl_house_number);
+        txt_add_location = (TextView) findViewById(R.id.txt_add_location);
+        ed_family_number = (EditText) findViewById(R.id.ed_family_number);
+        ed_family_head_name = (EditText) findViewById(R.id.ed_family_head_name);
+        ed_husband_name = (EditText) findViewById(R.id.ed_husband_name);
+        ed_Sir_Name = (EditText) findViewById(R.id.ed_Sir_Name);
+        ed_landmark = (EditText) findViewById(R.id.ed_landmark);
+        txt_lat = (TextView) findViewById(R.id.txt_lat);
+        txt_lng = (TextView) findViewById(R.id.txt_lng);
 
-        ed_house_number=(EditText)findViewById(R.id.ed_house_number);
-        ed_Birth_date=(EditText)findViewById(R.id.ed_Birth_date);
-        ed_Mobile_number=(EditText)findViewById(R.id.ed_Mobile_number);
+        ed_house_number = (EditText) findViewById(R.id.ed_house_number);
+        ed_Birth_date = (EditText) findViewById(R.id.ed_Birth_date);
+        ed_Mobile_number = (EditText) findViewById(R.id.ed_Mobile_number);
 
-        sp_family_cast=(Spinner)findViewById(R.id.sp_family_cast);
-        sp_family_dharm=(Spinner)findViewById(R.id.sp_family_dharm);
-        sp_street_name=(Spinner)findViewById(R.id.sp_street_name);
-        sp_Marital_status=(Spinner)findViewById(R.id.sp_Marital_status);
+        sp_family_cast = (Spinner) findViewById(R.id.sp_family_cast);
+        sp_family_dharm = (Spinner) findViewById(R.id.sp_family_dharm);
+        sp_street_name = (Spinner) findViewById(R.id.sp_street_name);
+        sp_Marital_status = (Spinner) findViewById(R.id.sp_Marital_status);
+        sp_aganvali = (Spinner) findViewById(R.id.sp_aganvali);
 
-        rdb_yes=(RadioButton)findViewById(R.id.rdb_yes);
-        rdb_no=(RadioButton)findViewById(R.id.rdb_no);
-        rdb_sex_Male=(RadioButton)findViewById(R.id.rdb_sex_Male);
-        rdb_sex_Female=(RadioButton)findViewById(R.id.rdb_sex_Female);
+        rdb_yes = (RadioButton) findViewById(R.id.rdb_yes);
+        rdb_no = (RadioButton) findViewById(R.id.rdb_no);
+        rdb_sex_Male = (RadioButton) findViewById(R.id.rdb_sex_Male);
+        rdb_sex_Female = (RadioButton) findViewById(R.id.rdb_sex_Female);
 
-        bt_family_identity=(Button)findViewById(R.id.bt_family_identity);
-        bt_family_location=(TextView)findViewById(R.id.bt_family_location);
-        bt_add_family=(Button)findViewById(R.id.bt_add_family);
-        imgUserImage=(ImageView)findViewById(R.id.imgUserImage);
+        bt_family_identity = (Button) findViewById(R.id.bt_family_identity);
+        bt_family_location = (TextView) findViewById(R.id.bt_family_location);
+        bt_add_family = (Button) findViewById(R.id.bt_add_family);
+        imgUserImage = (ImageView) findViewById(R.id.imgUserImage);
 
         Typeface type = Typeface.createFromAsset(getAssets(), "SHRUTI.TTF");
         bt_add_family.setTypeface(type, Typeface.BOLD);
@@ -213,26 +215,25 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
 
         txt_village_name.setText(villageName);
 
-        SharedPreferences sharedPreferences=thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
-        String userDetail=sharedPreferences.getString(Constants.USER_ID, null);
+        SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
+        String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
         try {
             JSONObject jsonObject = new JSONObject(userDetail);
-            String subCenterId=jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId");
-            String userId=jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
-            Random emamtaRandom=new Random();
-            int emamId=emamtaRandom.nextInt(900)+ 100;
+            String subCenterId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId");
+            String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
+            Random emamtaRandom = new Random();
+            int emamId = emamtaRandom.nextInt(900) + 100;
 
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
 
-            String strEmamtaId="FM/"+year+"/"+userId+""+emamId;
+            String strEmamtaId = "FM/" + year + "/" + userId + "" + emamId;
             ed_family_number.setText(strEmamtaId);
             ed_family_number.setEnabled(false);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
 
         bt_family_identity.setOnClickListener(this);
@@ -253,6 +254,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
         sp_family_cast.setOnItemSelectedListener(this);
         sp_street_name.setOnItemSelectedListener(this);
         sp_Marital_status.setOnItemSelectedListener(this);
+        sp_aganvali.setOnItemSelectedListener(this);
 //
 
 
@@ -260,18 +262,18 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
 
     private void getDataFromDB() {
 
-        religionArrayList= databaseHelper.getReligionData();
-        ReligionAdapter religionAdapter=new ReligionAdapter(thisActivity,religionArrayList);
+        religionArrayList = databaseHelper.getReligionData();
+        ReligionAdapter religionAdapter = new ReligionAdapter(thisActivity, religionArrayList);
         sp_family_dharm.setAdapter(religionAdapter);
 
-        castArrayList=new ArrayList<>();
-        castArrayList=databaseHelper.getCastData();
-        ReligionAdapter castAdapter=new ReligionAdapter(thisActivity,castArrayList);
+        castArrayList = new ArrayList<>();
+        castArrayList = databaseHelper.getCastData();
+        ReligionAdapter castAdapter = new ReligionAdapter(thisActivity, castArrayList);
         sp_family_cast.setAdapter(castAdapter);
 
-        faliyaArrayList=databaseHelper.getFaliyaList(villageId);
-        if(faliyaArrayList!=null){
-            ReligionAdapter faliyaAdapter=new ReligionAdapter(thisActivity,faliyaArrayList);
+        faliyaArrayList = databaseHelper.getFaliyaList(villageId);
+        if (faliyaArrayList != null) {
+            ReligionAdapter faliyaAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
             sp_street_name.setAdapter(faliyaAdapter);
         }
 
@@ -279,35 +281,47 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
         StatusAdapter statusAdapter = new StatusAdapter(thisActivity, maritalStatusArrayList);
         sp_Marital_status.setAdapter(statusAdapter);
 
+        SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
+        String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
+        try {
+            JSONObject jsonObject = new JSONObject(userDetail);
+            String subCenterId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId");
+            String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
+            ArrayList<MaritalStatus> aganvadiList = databaseHelper.getAganvadi(villageId, subCenterId);
+            StatusAdapter aganvadiAdapter = new StatusAdapter(thisActivity, aganvadiList);
+            sp_aganvali.setAdapter(aganvadiAdapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.bt_family_identity:
 
                 final Dialog dialog = new Dialog(thisActivity);
                 LayoutInflater mInflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View view=mInflater.inflate(R.layout.family_identity_layout, null);
+                View view = mInflater.inflate(R.layout.family_identity_layout, null);
                 Utils.findAllTextView(thisActivity, ((ViewGroup) view.findViewById(R.id.ll_alert)));
-                final EditText ed_bpl_number=(EditText)view.findViewById(R.id.ed_bpl_number);
-                final EditText ed_bpl_card_number=(EditText)view.findViewById(R.id.ed_bpl_card_number);
-                final EditText ed_rsby_number=(EditText)view.findViewById(R.id.ed_rsby_number);
-                final EditText ed_maa_card_number=(EditText)view.findViewById(R.id.ed_maa_card_number);
-                Button bt_save=(Button)view.findViewById(R.id.bt_save);
-                Button bt_identity_cancel=(Button)view.findViewById(R.id.bt_identity_cancel);
+                final EditText ed_bpl_number = (EditText) view.findViewById(R.id.ed_bpl_number);
+                final EditText ed_bpl_card_number = (EditText) view.findViewById(R.id.ed_bpl_card_number);
+                final EditText ed_rsby_number = (EditText) view.findViewById(R.id.ed_rsby_number);
+                final EditText ed_maa_card_number = (EditText) view.findViewById(R.id.ed_maa_card_number);
+                Button bt_save = (Button) view.findViewById(R.id.bt_save);
+                Button bt_identity_cancel = (Button) view.findViewById(R.id.bt_identity_cancel);
 
                 bt_identity_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
 
-                        bplNumber=ed_bpl_number.getText().toString();
-                        rationCardNumber=ed_bpl_card_number.getText().toString();
-                        rsbyNumber=ed_rsby_number.getText().toString();
-                        maaCardNumber=ed_maa_card_number.getText().toString();
+                        bplNumber = ed_bpl_number.getText().toString();
+                        rationCardNumber = ed_bpl_card_number.getText().toString();
+                        rsbyNumber = ed_rsby_number.getText().toString();
+                        maaCardNumber = ed_maa_card_number.getText().toString();
                         familyMember.setBplNumber(bplNumber);
                         familyMember.setRationcardNrumber(rationCardNumber);
                         familyMember.setRsbycardNumber(rsbyNumber);
@@ -318,10 +332,10 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-                        bplNumber=ed_bpl_number.getText().toString();
-                        rationCardNumber=ed_bpl_card_number.getText().toString();
-                        rsbyNumber=ed_rsby_number.getText().toString();
-                        maaCardNumber=ed_maa_card_number.getText().toString();
+                        bplNumber = ed_bpl_number.getText().toString();
+                        rationCardNumber = ed_bpl_card_number.getText().toString();
+                        rsbyNumber = ed_rsby_number.getText().toString();
+                        maaCardNumber = ed_maa_card_number.getText().toString();
                         familyMember.setBplNumber(bplNumber);
                         familyMember.setRationcardNrumber(rationCardNumber);
                         familyMember.setRsbycardNumber(rsbyNumber);
@@ -361,19 +375,19 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
 
                 final Dialog streetDialog = new Dialog(thisActivity);
                 LayoutInflater Inflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View streetView=Inflater.inflate(R.layout.add_faliyu_layout, null);
-                final EditText ed_street_name=(EditText)streetView.findViewById(R.id.ed_street_name);
-                final RadioButton rdb_risky_area_yes=(RadioButton)streetView.findViewById(R.id.rdb_risky_area_yes);
-                final RadioButton rdb_risky_area_no=(RadioButton)streetView.findViewById(R.id.rdb_risky_area_no);
-                Button bt_faliyu_save=(Button)streetView.findViewById(R.id.bt_faliyu_save);
-                Button bt_faliyu_cancel=(Button)streetView.findViewById(R.id.bt_faliyu_cancel);
+                View streetView = Inflater.inflate(R.layout.add_faliyu_layout, null);
+                final EditText ed_street_name = (EditText) streetView.findViewById(R.id.ed_street_name);
+                final RadioButton rdb_risky_area_yes = (RadioButton) streetView.findViewById(R.id.rdb_risky_area_yes);
+                final RadioButton rdb_risky_area_no = (RadioButton) streetView.findViewById(R.id.rdb_risky_area_no);
+                Button bt_faliyu_save = (Button) streetView.findViewById(R.id.bt_faliyu_save);
+                Button bt_faliyu_cancel = (Button) streetView.findViewById(R.id.bt_faliyu_cancel);
 
                 rdb_risky_area_yes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         rdb_risky_area_yes.setChecked(true);
                         rdb_risky_area_no.setChecked(false);
-                        isRisky="1";
+                        isRisky = "1";
                     }
                 });
                 rdb_risky_area_no.setOnClickListener(new View.OnClickListener() {
@@ -381,31 +395,36 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                     public void onClick(View v) {
                         rdb_risky_area_yes.setChecked(false);
                         rdb_risky_area_no.setChecked(true);
-                        isRisky="0";
+                        isRisky = "0";
                     }
                 });
                 bt_faliyu_save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String faliyaName=ed_street_name.getText().toString();
-                        SharedPreferences sharedPreferences=thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
-                        String userDetail=sharedPreferences.getString(Constants.USER_ID, null);
-                        try {
-                            JSONObject jsonObject = new JSONObject(userDetail);
-                            String userId=jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
-                            boolean flag=databaseHelper.insertFaliyu(villageId, faliyaName,isRisky,userId);
-                            if(flag){
-                                streetDialog.dismiss();
-                                faliyaArrayList=databaseHelper.getFaliyaList(villageId);
-                            }
-                            if(faliyaArrayList!=null){
-                                ReligionAdapter religionAdapter=new ReligionAdapter(thisActivity,faliyaArrayList);
-                                sp_street_name.setAdapter(religionAdapter);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        if (ed_street_name.getText().toString().length() != 0) {
 
+                            String faliyaName = ed_street_name.getText().toString();
+                            SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
+                            String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
+                            try {
+                                JSONObject jsonObject = new JSONObject(userDetail);
+                                String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
+                                boolean flag = databaseHelper.insertFaliyu(villageId, faliyaName, isRisky, userId);
+                                if (flag) {
+                                    streetDialog.dismiss();
+                                    faliyaArrayList = databaseHelper.getFaliyaList(villageId);
+                                }
+                                if (faliyaArrayList != null) {
+                                    ReligionAdapter religionAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
+                                    sp_street_name.setAdapter(religionAdapter);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            CustomToast customToast=new CustomToast(thisActivity, Messages.ADD_FALIYU);
+                            customToast.show();
+                        }
                     }
                 });
                 bt_faliyu_cancel.setOnClickListener(new View.OnClickListener() {
@@ -444,25 +463,25 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
             case R.id.rdb_yes:
                 rdb_yes.setChecked(true);
                 rdb_no.setChecked(false);
-                isAns="1";
-                Log.v("Ans","Yes");
+                isAns = "1";
+                Log.v("Ans", "Yes");
                 break;
             case R.id.rdb_no:
                 rdb_yes.setChecked(false);
                 rdb_no.setChecked(true);
-                isAns="0";
-                Log.v("Ans","No");
+                isAns = "0";
+                Log.v("Ans", "No");
                 break;
             case R.id.rdb_sex_Male:
                 rdb_sex_Male.setChecked(true);
                 rdb_sex_Female.setChecked(false);
-                isGender="M";
-                Log.v("m","m");
+                isGender = "M";
+                Log.v("m", "m");
                 break;
             case R.id.rdb_sex_Female:
                 rdb_sex_Male.setChecked(false);
                 rdb_sex_Female.setChecked(true);
-                isGender="F";
+                isGender = "F";
                 break;
             case R.id.txt_add_location:
 
@@ -473,8 +492,8 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                     double latitude = mLastLocation.getLatitude();
                     double longitude = mLastLocation.getLongitude();
 
-                    txt_lat.setText(""+latitude);
-                    txt_lng.setText(""+longitude);
+                    txt_lat.setText("" + latitude);
+                    txt_lng.setText("" + longitude);
 //                    Toast.makeText(thisActivity,latitude + ", " + longitude,Toast.LENGTH_SHORT).show();
                 } else {
                     checkLocationService();
@@ -492,14 +511,14 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
             case R.id.bt_add_family:
 
                 familyMember.setHouseNumber(ed_house_number.getText().toString());
-                String landmark=ed_landmark.getText().toString();
+                String landmark = ed_landmark.getText().toString();
                 familyMember.setLandmark(landmark);
                 familyMember.setVillageId(villageId);
-                String racial=strCast;
+                String racial = strCast;
                 familyMember.setRaciald(racial);
-                String religion=strReligion;
+                String religion = strReligion;
                 familyMember.setReligionId(religion);
-                String isBpl=isAns;
+                String isBpl = isAns;
                 familyMember.setIsBpl(isBpl);
                 familyMember.setBplNumber(bplNumber);
                 familyMember.setRationcardNrumber(rationCardNumber);
@@ -513,7 +532,8 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 familyMember.setBirthDate(ed_Birth_date.getText().toString());
                 familyMember.setMobileNo(ed_Mobile_number.getText().toString());
                 familyMember.setEmamtafamilyId(ed_family_number.getText().toString());
-                if(userImagebyteArray!=null){
+                familyMember.setAnganwadiId(aaganvadiId);
+                if (userImagebyteArray != null) {
                     familyMember.setUserImageArray(userImagebyteArray);
                 }
                 if (mLastLocation != null) {
@@ -523,25 +543,25 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                     familyMember.setLattitudes("" + latitude);
                     familyMember.setLongitude("" + longitude);
                 }
-                if(strFaliyaId!=null){
+                if (strFaliyaId != null) {
                     familyMember.setFaliyu(strFaliyaId);
                 }
 
-                SharedPreferences sharedPreferences=thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
-                String userDetail=sharedPreferences.getString(Constants.USER_ID, null);
+                SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
+                String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
                 try {
                     JSONObject jsonObject = new JSONObject(userDetail);
                     familyMember.setSubCenterId(jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId"));
-                    String userId=jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
+                    String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
                     familyMember.setUserId(userId);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                boolean isSave=databaseHelper.createNewFamily(familyMember);
-                if(isSave){
-                    boolean isMemberSave=databaseHelper.createMember(familyMember);
-                    if(isMemberSave){
-                        CustomToast customToast=new CustomToast(thisActivity, Messages.NEW_FAMILY_SAVE);
+                boolean isSave = databaseHelper.createNewFamily(familyMember);
+                if (isSave) {
+                    boolean isMemberSave = databaseHelper.createMember(familyMember);
+                    if (isMemberSave) {
+                        CustomToast customToast = new CustomToast(thisActivity, Messages.NEW_FAMILY_SAVE);
                         customToast.show();
                         ed_house_number.setEnabled(false);
                         ed_family_head_name.setEnabled(false);
@@ -601,7 +621,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
             intent.putExtra("return-data", true);
             startActivityForResult(intent, TAKE_PICTURE);
         } catch (ActivityNotFoundException e) {
-            Log.e(this  + "", "cannot take picture " + e);
+            Log.e(this + "", "cannot take picture " + e);
         } catch (Exception ex) {
             Log.e(this + "", "cannot take picture " + ex);
         }
@@ -609,7 +629,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
 
     /**
      * Creating google api client object
-     * */
+     */
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -665,21 +685,23 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    public void checkLocationService(){
+    public void checkLocationService() {
 
-        LocationManager lm = (LocationManager)thisActivity.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) thisActivity.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
 
         try {
             gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch(Exception ex) {}
+        } catch (Exception ex) {
+        }
 
         try {
             network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        } catch(Exception ex) {}
+        } catch (Exception ex) {
+        }
 
-        if(!gps_enabled && !network_enabled) {
+        if (!gps_enabled && !network_enabled) {
             // notify user
             AlertDialog.Builder dialog = new AlertDialog.Builder(thisActivity);
             dialog.setMessage("Location service not enable");
@@ -687,7 +709,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 @Override
                 public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                     // TODO Auto-generated method stub
-                    Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     thisActivity.startActivity(myIntent);
                     //get gps
                 }
@@ -709,21 +731,25 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
 
         LinearLayout linearLayout;
         TextView textView;
-        if(parent.getId()==R.id.sp_family_cast){
-            Religion religion=castArrayList.get(position);
-            strCast=religion.getId();
+        if (parent.getId() == R.id.sp_family_cast) {
+            Religion religion = castArrayList.get(position);
+            strCast = religion.getId();
 //            Toast.makeText(thisActivity,religion.getName(),Toast.LENGTH_SHORT).show();
-        }else if(parent.getId()==R.id.sp_family_dharm){
-            Religion religion=religionArrayList.get(position);
-            strReligion=religion.getId();
+        } else if (parent.getId() == R.id.sp_family_dharm) {
+            Religion religion = religionArrayList.get(position);
+            strReligion = religion.getId();
 //            Toast.makeText(thisActivity,religion.getName(),Toast.LENGTH_SHORT).show();
-        }else if(parent.getId()==R.id.sp_street_name){
-            Religion religion=faliyaArrayList.get(position);
-            strFaliyaId=religion.getId();
-        }else if(parent.getId()==R.id.sp_Marital_status){
-                linearLayout = (LinearLayout) view;
-                textView = (TextView) linearLayout.getChildAt(0);
-                maritalStatus = textView.getTag().toString();
+        } else if (parent.getId() == R.id.sp_street_name) {
+            Religion religion = faliyaArrayList.get(position);
+            strFaliyaId = religion.getId();
+        } else if (parent.getId() == R.id.sp_Marital_status) {
+            linearLayout = (LinearLayout) view;
+            textView = (TextView) linearLayout.getChildAt(0);
+            maritalStatus = textView.getTag().toString();
+        } else if (parent.getId() == R.id.sp_aganvali) {
+            linearLayout = (LinearLayout) view;
+            textView = (TextView) linearLayout.getChildAt(0);
+            aaganvadiId = textView.getTag().toString();
         }
     }
 
@@ -746,7 +772,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 imgUserImage.setImageBitmap(receipt_bitmap);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 receipt_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                userImagebyteArray= stream.toByteArray();
+                userImagebyteArray = stream.toByteArray();
             }
         } else {
             Toast.makeText(getApplicationContext(), "No any image selected", Toast.LENGTH_SHORT).show();

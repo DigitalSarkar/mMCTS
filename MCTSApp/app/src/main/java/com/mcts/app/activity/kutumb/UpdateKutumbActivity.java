@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,8 +46,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.mcts.app.R;
 import com.mcts.app.adapter.ReligionAdapter;
+import com.mcts.app.adapter.StatusAdapter;
 import com.mcts.app.customview.CustomToast;
 import com.mcts.app.db.DatabaseHelper;
+import com.mcts.app.model.MaritalStatus;
 import com.mcts.app.model.Member;
 import com.mcts.app.model.Religion;
 import com.mcts.app.utils.Constants;
@@ -73,7 +76,7 @@ public class UpdateKutumbActivity extends BaseActivity implements View.OnClickLi
     private TextView mTitle;
     private TextView txt_village_name,txt_lat,txt_lng,txt_lbl_village,lbl_family_number,lbl_yes,lbl_no,lbl_bpl,lbl_family_dharm,lbl_family_cast;
     private TextView lbl_house_number,bt_family_location,txt_add_street,txt_take_image,txt_add_location;
-    private Spinner sp_family_cast,sp_family_dharm,sp_street_name,sp_Marital_status;
+    private Spinner sp_family_cast,sp_family_dharm,sp_street_name,sp_Marital_status,sp_aganvali;
     private RadioButton rdb_yes,rdb_no,rdb_sex_Male,rdb_sex_Female;
     private Button bt_family_identity,bt_add_family,bt_family_add_member;
     private ArrayList<Religion> castArrayList;
@@ -104,6 +107,7 @@ public class UpdateKutumbActivity extends BaseActivity implements View.OnClickLi
     private File compressFile;
     private Bitmap receipt_bitmap;
     private int width, height;
+    private String aaganvadiId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +181,7 @@ public class UpdateKutumbActivity extends BaseActivity implements View.OnClickLi
         sp_family_dharm=(Spinner)findViewById(R.id.sp_family_dharm);
         sp_street_name=(Spinner)findViewById(R.id.sp_street_name);
         sp_Marital_status=(Spinner)findViewById(R.id.sp_Marital_status);
+        sp_aganvali=(Spinner)findViewById(R.id.sp_aganvali);
 
         rdb_yes=(RadioButton)findViewById(R.id.rdb_yes);
         rdb_no=(RadioButton)findViewById(R.id.rdb_no);
@@ -227,6 +232,7 @@ public class UpdateKutumbActivity extends BaseActivity implements View.OnClickLi
         sp_family_dharm.setOnItemSelectedListener(this);
         sp_family_cast.setOnItemSelectedListener(this);
         sp_street_name.setOnItemSelectedListener(this);
+        sp_aganvali.setOnItemSelectedListener(this);
 
         if(MemberId!=null){
             setMemberData();
@@ -321,6 +327,32 @@ public class UpdateKutumbActivity extends BaseActivity implements View.OnClickLi
             ReligionAdapter faliyaAdapter=new ReligionAdapter(thisActivity,faliyaArrayList);
             sp_street_name.setAdapter(faliyaAdapter);
         }
+
+        SharedPreferences sharedPreferences=thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
+        String userDetail=sharedPreferences.getString(Constants.USER_ID, null);
+        try {
+            JSONObject jsonObject = new JSONObject(userDetail);
+            String subCenterId=jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId");
+            String userId=jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
+            ArrayList<MaritalStatus> aganvadiList=databaseHelper.getAganvadi(villageId, subCenterId);
+            StatusAdapter aganvadiAdapter=new StatusAdapter(thisActivity,aganvadiList);
+            sp_aganvali.setAdapter(aganvadiAdapter);
+            if(member!=null) {
+                if (member.getAnganwadiId() != null) {
+                    for (int i = 0; i < aganvadiList.size(); i++) {
+                        if (member.getAnganwadiId().equalsIgnoreCase(aganvadiList.get(i).getId())) {
+                            sp_aganvali.setSelection(i);
+                        }
+                    }
+                } else {
+                    sp_aganvali.setSelection(0);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
 
         if(member!=null){
             if(!member.getRaciald().equals("null")) {
@@ -513,23 +545,28 @@ public class UpdateKutumbActivity extends BaseActivity implements View.OnClickLi
                 bt_faliyu_save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String faliyaName=ed_street_name.getText().toString();
-                        SharedPreferences sharedPreferences=thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
-                        String userDetail=sharedPreferences.getString(Constants.USER_ID, null);
-                        try {
-                            JSONObject jsonObject = new JSONObject(userDetail);
-                            String userId=jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
-                            boolean flag=databaseHelper.insertFaliyu(villageId, faliyaName,isRisky,userId);
-                            if(flag){
-                                streetDialog.dismiss();
-                                faliyaArrayList=databaseHelper.getFaliyaList(villageId);
+                        if(ed_street_name.getText().toString().length()!=0) {
+                            String faliyaName = ed_street_name.getText().toString();
+                            SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
+                            String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
+                            try {
+                                JSONObject jsonObject = new JSONObject(userDetail);
+                                String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
+                                boolean flag = databaseHelper.insertFaliyu(villageId, faliyaName, isRisky, userId);
+                                if (flag) {
+                                    streetDialog.dismiss();
+                                    faliyaArrayList = databaseHelper.getFaliyaList(villageId);
+                                }
+                                if (faliyaArrayList != null) {
+                                    ReligionAdapter religionAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
+                                    sp_street_name.setAdapter(religionAdapter);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            if(faliyaArrayList!=null){
-                                ReligionAdapter religionAdapter=new ReligionAdapter(thisActivity,faliyaArrayList);
-                                sp_street_name.setAdapter(religionAdapter);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        }else{
+                            CustomToast customToast=new CustomToast(thisActivity, Messages.ADD_FALIYU);
+                            customToast.show();
                         }
 
                     }
@@ -632,6 +669,7 @@ public class UpdateKutumbActivity extends BaseActivity implements View.OnClickLi
                 familyMember.setRationcardNrumber(rationCardNumber);
                 familyMember.setRsbycardNumber(rsbyNumber);
                 familyMember.setMacardNumber(maaCardNumber);
+                familyMember.setAnganwadiId(aaganvadiId);
                 if (mLastLocation != null) {
                     double latitude = mLastLocation.getLatitude();
                     double longitude = mLastLocation.getLongitude();
@@ -772,6 +810,10 @@ public class UpdateKutumbActivity extends BaseActivity implements View.OnClickLi
         }else if(parent.getId()==R.id.sp_street_name){
             Religion religion=faliyaArrayList.get(position);
             strFaliyaId=religion.getId();
+        }else if(parent.getId()==R.id.sp_aganvali){
+            LinearLayout linearLayout = (LinearLayout) view;
+            TextView textView = (TextView) linearLayout.getChildAt(0);
+            aaganvadiId = textView.getTag().toString();
         }
     }
 

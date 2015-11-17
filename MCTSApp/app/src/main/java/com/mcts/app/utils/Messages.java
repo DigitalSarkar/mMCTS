@@ -14,4 +14,5 @@ public class Messages {
     public static final String FAMILY_UPDATE="કૌટુંબિક માહિતી સંપાદિત કરવામાં આવી છે";
     public static final String DELETE_FAMILY="કુટુંબ રદ કરવા માગો છો?";
     public static final String DELETE_FAMILY_MEMBER="સભ્ય રદ કરવા માગો છો?";
+    public static final String ADD_FALIYU="ફળિયું/સોસાયટીનું નામ દાખલ કરો";
 }

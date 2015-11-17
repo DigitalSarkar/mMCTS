@@ -55,6 +55,7 @@ public class Member {
     byte[] userImageArray;
     String subCenterId;
     String userId;
+    String anganwadiId;
 
     public String getUserId() {
         return userId;
@@ -478,5 +479,13 @@ public class Member {
 
     public void setMacardNumber(String macardNumber) {
         this.macardNumber = macardNumber;
+    }
+
+    public String getAnganwadiId() {
+        return anganwadiId;
+    }
+
+    public void setAnganwadiId(String anganwadiId) {
+        this.anganwadiId = anganwadiId;
     }
 }
