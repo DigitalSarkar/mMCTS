@@ -159,6 +159,7 @@
             android:layout_marginRight="@dimen/fab_button_margin_right"
             android:src="@drawable/ic_launcher"
             app:borderWidth="0dp"
+            android:visibility="gone"
             app:elevation="6dp"
             app:pressedTranslationZ="12dp" />
 

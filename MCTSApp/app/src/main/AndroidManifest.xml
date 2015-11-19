@@ -104,6 +104,10 @@
             android:name=".activity.kutumb.UpdateFamilyMemberActivity"
             android:label="@string/title_activity_update_family_member" >
         </activity>
+        <activity
+            android:name=".activity.FirstActivity"
+            android:label="@string/title_activity_first" >
+        </activity>
     </application>
 
 </manifest>

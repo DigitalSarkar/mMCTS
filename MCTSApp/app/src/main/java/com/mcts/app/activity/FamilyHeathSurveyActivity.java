@@ -44,6 +44,7 @@ import com.mcts.app.R;
 import com.mcts.app.activity.kutumb.FamilyListActivity;
 import com.mcts.app.adapter.StatusAdapter;
 import com.mcts.app.customview.CustomToast;
+import com.mcts.app.db.DatabaseHelper;
 import com.mcts.app.model.MaritalStatus;
 import com.mcts.app.utils.Constants;
 import com.mcts.app.utils.Messages;
@@ -59,20 +60,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FamilyHeathSurveyActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
+public class FamilyHeathSurveyActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     Activity thisActivity;
-    private static String TAG="HealthSevaActivity";
+    private static String TAG = "HealthSevaActivity";
     private Toolbar mToolbar;
     private TextView mTitle;
     private ImageView img_icon_home;
     private Spinner sp_village;
     private JSONObject jsonObject;
-//    private Button bt_add_family,bt_edit_family,bt_delete_family,bt_transfer_family,bt_identity_family,bt_location_family,bt_add_family_member
+    //    private Button bt_add_family,bt_edit_family,bt_delete_family,bt_transfer_family,bt_identity_family,bt_location_family,bt_add_family_member
 //            ,bt_edit_family_member,bt_delete_family_member,bt_locate_family_member,bt_identity_family_member,bt_bank_detail;
-    private LinearLayout ll_family_detail,ll_family_member_detail,ll_identity_family,ll_identity_family_member,ll_location_family,ll_bank_detail;
+    private LinearLayout ll_family_detail, ll_family_member_detail, ll_identity_family, ll_identity_family_member, ll_location_family, ll_bank_detail;
     private Dialog progressDialog;
-    private String strVillageName,strVillageId;
+    private String strVillageName, strVillageId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,13 +137,13 @@ public class FamilyHeathSurveyActivity extends AppCompatActivity implements View
 //        bt_edit_family.setOnClickListener(this);
 //        bt_add_family_member.setOnClickListener(this);
 
-        ll_family_detail=(LinearLayout)findViewById(R.id.ll_family_detail);
-        ll_family_member_detail=(LinearLayout)findViewById(R.id.ll_family_member_detail);
-        ll_identity_family=(LinearLayout)findViewById(R.id.ll_identity_family);
-        ll_identity_family_member=(LinearLayout)findViewById(R.id.ll_identity_family_member);
-        ll_location_family=(LinearLayout)findViewById(R.id.ll_location_family);
-        ll_bank_detail=(LinearLayout)findViewById(R.id.ll_bank_detail);
-        sp_village=(Spinner)findViewById(R.id.sp_village);
+        ll_family_detail = (LinearLayout) findViewById(R.id.ll_family_detail);
+        ll_family_member_detail = (LinearLayout) findViewById(R.id.ll_family_member_detail);
+        ll_identity_family = (LinearLayout) findViewById(R.id.ll_identity_family);
+        ll_identity_family_member = (LinearLayout) findViewById(R.id.ll_identity_family_member);
+        ll_location_family = (LinearLayout) findViewById(R.id.ll_location_family);
+        ll_bank_detail = (LinearLayout) findViewById(R.id.ll_bank_detail);
+        sp_village = (Spinner) findViewById(R.id.sp_village);
 
 
         Utils.findAllTextView(thisActivity, (ViewGroup) findViewById(R.id.ll_family_sarvy));
@@ -192,90 +193,62 @@ public class FamilyHeathSurveyActivity extends AppCompatActivity implements View
         progressDialog.setCancelable(false);
     }
 
-    private void getVillageData(){
+    private void getVillageData() {
 
-        if (NetworkUtil.getConnectivityStatus(thisActivity)!=0) {
-
-            SharedPreferences sharedPreferences=thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
-            String userDetail=sharedPreferences.getString(Constants.USER_ID, null);
-            Log.v("userDetail",userDetail);
-            if(userDetail!=null){
-                try {
-                    jsonObject=new JSONObject(userDetail);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                RequestQueue queue = MyVolley.getRequestQueue();
-                StringRequest myReq = new StringRequest(Request.Method.POST,
-                        Constants.BASE_URL + Constants.VILLAGE,
-                        createMyReqSuccessListener(),
-                        createMyReqErrorListener()){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-
-                        Map<String, String> params = new HashMap<>();
-
-                        try {
-                            params.put("subcenterid", jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        return params;
-                    }
-                };
-                queue.add(myReq);
-                progressDialog.show();
-            }
+        DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
+        ArrayList<MaritalStatus> villageArray = databaseHelper.getVillageData();
+        if (villageArray != null) {
+            StatusAdapter masikAdapter = new StatusAdapter(thisActivity, villageArray);
+            sp_village.setAdapter(masikAdapter);
         } else {
-            CustomToast customToast = new CustomToast(thisActivity, Messages.NO_INTERNET);
+            CustomToast customToast = new CustomToast(thisActivity, Messages.NOT_FOUND);
             customToast.show();
         }
+
     }
 
-    private Response.Listener<String> createMyReqSuccessListener() {
-        return new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                Log.v("Village Data", response);
-//                {"status":"ok","error":0,"villagedetails":[{"village":"VIJAPUR"}]}
-                try {
-                    JSONObject jsonVillage = new JSONObject(response);
-                    if (jsonVillage.getString("status").equals("ok")) {
-                        progressDialog.dismiss();
-                        JSONArray jsonVillageArray=jsonVillage.getJSONArray("villagedetails");
-                        ArrayList<MaritalStatus> villageArray=new ArrayList<>();
-                        for(int i=0;i<jsonVillageArray.length();i++){
-                            JSONObject jsonObject=jsonVillageArray.getJSONObject(i);
-                            MaritalStatus maritalStatus=new MaritalStatus();
-                            maritalStatus.setId(jsonObject.getString("villageId"));
-                            maritalStatus.setStatus(jsonObject.getString("village"));
-                            villageArray.add(maritalStatus);
-                        }
-
-                        StatusAdapter masikAdapter=new StatusAdapter(thisActivity,villageArray);
-                        sp_village.setAdapter(masikAdapter);
-
-                    } else {
-                        progressDialog.dismiss();
-                        CustomToast customToast = new CustomToast(thisActivity, "Error");
-                        customToast.show();
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-    }
+//    private Response.Listener<String> createMyReqSuccessListener() {
+//        return new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//
+//                Log.v("Village Data", response);
+////                {"status":"ok","error":0,"villagedetails":[{"village":"VIJAPUR"}]}
+//                try {
+//                    JSONObject jsonVillage = new JSONObject(response);
+//                    if (jsonVillage.getString("status").equals("ok")) {
+//                        progressDialog.dismiss();
+//                        JSONArray jsonVillageArray=jsonVillage.getJSONArray("villagedetails");
+//                        ArrayList<MaritalStatus> villageArray=new ArrayList<>();
+//                        for(int i=0;i<jsonVillageArray.length();i++){
+//                            JSONObject jsonObject=jsonVillageArray.getJSONObject(i);
+//                            MaritalStatus maritalStatus=new MaritalStatus();
+//                            maritalStatus.setId(jsonObject.getString("villageId"));
+//                            maritalStatus.setStatus(jsonObject.getString("village"));
+//                            villageArray.add(maritalStatus);
+//                        }
+//
+//                        StatusAdapter masikAdapter=new StatusAdapter(thisActivity,villageArray);
+//                        sp_village.setAdapter(masikAdapter);
+//
+//                    } else {
+//                        progressDialog.dismiss();
+//                        CustomToast customToast = new CustomToast(thisActivity, "Error");
+//                        customToast.show();
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+//    }
 
     @Override
     public void onClick(View v) {
 
-        Intent intent=null;
-        switch (v.getId()){
+        Intent intent = null;
+        switch (v.getId()) {
 //            case R.id.bt_add_family:
 //                intent=new Intent(thisActivity, UpdateKutumbActivity.class);
 //                startActivity(intent);
@@ -285,19 +258,19 @@ public class FamilyHeathSurveyActivity extends AppCompatActivity implements View
 //                startActivity(intent);
 //                break;
             case R.id.ll_family_detail:
-                intent=new Intent(thisActivity,FamilyListActivity.class);
-                int isFamily=0;
-                intent.putExtra("strVillageId",strVillageId);
-                intent.putExtra("strVillageName",strVillageName);
-                intent.putExtra("isFamily",isFamily);
+                intent = new Intent(thisActivity, FamilyListActivity.class);
+                int isFamily = 0;
+                intent.putExtra("strVillageId", strVillageId);
+                intent.putExtra("strVillageName", strVillageName);
+                intent.putExtra("isFamily", isFamily);
                 startActivity(intent);
                 break;
             case R.id.ll_family_member_detail:
-                intent=new Intent(thisActivity,FamilyListActivity.class);
-                int family=1;
-                intent.putExtra("strVillageId",strVillageId);
-                intent.putExtra("strVillageName",strVillageName);
-                intent.putExtra("isFamily",family);
+                intent = new Intent(thisActivity, FamilyListActivity.class);
+                int family = 1;
+                intent.putExtra("strVillageId", strVillageId);
+                intent.putExtra("strVillageName", strVillageName);
+                intent.putExtra("isFamily", family);
                 startActivity(intent);
                 break;
 //            case R.id.bt_add_family_member:
@@ -305,7 +278,7 @@ public class FamilyHeathSurveyActivity extends AppCompatActivity implements View
 //                startActivity(intent);
 //                break;
             case R.id.img_icon_home:
-                Toast.makeText(thisActivity,"Home",Toast.LENGTH_SHORT).show();
+                Toast.makeText(thisActivity, "Home", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -319,8 +292,8 @@ public class FamilyHeathSurveyActivity extends AppCompatActivity implements View
             case R.id.sp_village:
                 linearLayout = (LinearLayout) view;
                 textView = (TextView) linearLayout.getChildAt(0);
-                strVillageId=textView.getTag().toString();
-                strVillageName=textView.getText().toString();
+                strVillageId = textView.getTag().toString();
+                strVillageName = textView.getText().toString();
                 break;
         }
     }
@@ -330,34 +303,34 @@ public class FamilyHeathSurveyActivity extends AppCompatActivity implements View
 
     }
 
-    private Response.ErrorListener createMyReqErrorListener() {
-        return new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressDialog.dismiss();
-                NetworkResponse response = error.networkResponse;
-                if(response != null && response.data != null){
-                    switch(response.statusCode){
-                        case 500:
-                            Log.e("VolleyError", "Unexpected response");
-                            break;
-                    }
-                }
-                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                    Log.e("VolleyError", "TimeoutError");
-                } else if (error instanceof AuthFailureError) {
-                    Log.e("VolleyError", "AuthFailureError");
-                } else if (error instanceof ServerError) {
-                    Log.e("VolleyError", "ServerError");
-                } else if (error instanceof NetworkError) {
-                    Log.e("VolleyError", "NetworkError");
-                } else if (error instanceof ParseError) {
-                    Log.e("VolleyError", "ParseError");
-                }
-
-            }
-        };
-    }
+//    private Response.ErrorListener createMyReqErrorListener() {
+//        return new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                progressDialog.dismiss();
+//                NetworkResponse response = error.networkResponse;
+//                if(response != null && response.data != null){
+//                    switch(response.statusCode){
+//                        case 500:
+//                            Log.e("VolleyError", "Unexpected response");
+//                            break;
+//                    }
+//                }
+//                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+//                    Log.e("VolleyError", "TimeoutError");
+//                } else if (error instanceof AuthFailureError) {
+//                    Log.e("VolleyError", "AuthFailureError");
+//                } else if (error instanceof ServerError) {
+//                    Log.e("VolleyError", "ServerError");
+//                } else if (error instanceof NetworkError) {
+//                    Log.e("VolleyError", "NetworkError");
+//                } else if (error instanceof ParseError) {
+//                    Log.e("VolleyError", "ParseError");
+//                }
+//
+//            }
+//        };
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -367,7 +340,7 @@ public class FamilyHeathSurveyActivity extends AppCompatActivity implements View
     }
 
     @Override
-    public boolean onOptionsItemSelected (MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             thisActivity.finish();

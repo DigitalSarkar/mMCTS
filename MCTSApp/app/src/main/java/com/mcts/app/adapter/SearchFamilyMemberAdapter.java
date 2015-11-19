@@ -105,17 +105,18 @@ public class SearchFamilyMemberAdapter extends BaseAdapter implements View.OnCli
         viewHolder.txt_migrate.setTag(familyArrayList.get(position).getEmamtaFamilyId() + "," +familyArrayList.get(position).getEmamtahealthId());
 
         if (familyArrayList.get(position).getUserImageArray() != null) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(familyArrayList.get(position).getUserImageArray(), 0, familyArrayList.get(position).getUserImageArray().length);
-            viewHolder.img_member.setImageBitmap(bitmap);
+            if(familyArrayList.get(position).getUserImageArray().length>5) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(familyArrayList.get(position).getUserImageArray(), 0, familyArrayList.get(position).getUserImageArray().length);
+                viewHolder.img_member.setImageBitmap(bitmap);
+            }
         } else {
             viewHolder.img_member.setImageResource(R.drawable.ic_launcher);
         }
-
         return convertView;
     }
 
 
-    static class ViewHolder {
+    private static class ViewHolder {
 
         ImageView img_member;
         TextView txt_fm_number;

@@ -249,7 +249,7 @@ public class BaseActivity extends AppCompatActivity implements IVolleyRespose {
 				RequestURL=URL;
 
 			cm=new CustomLoaderDialog(cContext);
-			cm.show(true);
+			cm.show(false);
 
 			Log.v("RequestURL",RequestURL);
 

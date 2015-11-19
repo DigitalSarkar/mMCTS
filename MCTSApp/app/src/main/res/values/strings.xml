@@ -213,6 +213,13 @@
     <string name="migrate_type">સ્થળાંતરનો પ્રકાર </string>
     <string name="parmenant">કાયમી/સાસરી</string>
     <string name="temp">બિનકાયમી</string>
+    <string name="title_activity_first">FirstActivity</string>
+
+    <string name="data_entry">ડેટા એન્ટ્રી માટે</string>
+    <string name="my_schedule">મારું કાર્ય આયોજન</string>
+    <string name="sub_report">સબસેન્ટર\nરિપોર્ટ</string>
+    <string name="sup_visit">સુપરવાઇઝર\nમુલાકાત</string>
+    <string name="help">સહાય લો</string>
 </resources>
 
 

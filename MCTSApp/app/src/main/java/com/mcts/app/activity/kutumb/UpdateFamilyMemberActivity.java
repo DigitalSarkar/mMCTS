@@ -486,7 +486,12 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                 familyMember.setMemberStatus(memStatus);
                 String prdStatus=periodeStatus;
                 familyMember.setMenstruationStatus(prdStatus);
-                if(userImagebyteArray!=null){
+                if(receipt_bitmap!=null) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    receipt_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    userImagebyteArray = stream.toByteArray();
+                }
+                if (userImagebyteArray != null) {
                     familyMember.setUserImageArray(userImagebyteArray);
                 }
                 boolean flag=databaseHelper.updateFamilyMemberDetails(familyMember);
@@ -810,9 +815,9 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                 receipt_bitmap = TakePictureUtils.decodeFile(compressFile);
 //                receipt_bitmap = Bitmap.createScaledBitmap(receipt_bitmap, width, height, true);
                 imgUserImage.setImageBitmap(receipt_bitmap);
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                receipt_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                userImagebyteArray= stream.toByteArray();
+//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                receipt_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                userImagebyteArray= stream.toByteArray();
             }
         } else {
             Toast.makeText(getApplicationContext(), "No any image selected", Toast.LENGTH_SHORT).show();

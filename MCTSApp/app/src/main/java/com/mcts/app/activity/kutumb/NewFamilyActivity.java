@@ -533,6 +533,11 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 familyMember.setMobileNo(ed_Mobile_number.getText().toString());
                 familyMember.setEmamtafamilyId(ed_family_number.getText().toString());
                 familyMember.setAnganwadiId(aaganvadiId);
+                if(receipt_bitmap!=null) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    receipt_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    userImagebyteArray = stream.toByteArray();
+                }
                 if (userImagebyteArray != null) {
                     familyMember.setUserImageArray(userImagebyteArray);
                 }
@@ -770,9 +775,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 receipt_bitmap = TakePictureUtils.decodeFile(compressFile);
 //                receipt_bitmap = Bitmap.createScaledBitmap(receipt_bitmap, width, height, true);
                 imgUserImage.setImageBitmap(receipt_bitmap);
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                receipt_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                userImagebyteArray = stream.toByteArray();
+
             }
         } else {
             Toast.makeText(getApplicationContext(), "No any image selected", Toast.LENGTH_SHORT).show();

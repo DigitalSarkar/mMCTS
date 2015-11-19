@@ -177,9 +177,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
             cm.hide();
-
             if (familyArrayList.size() != 0) {
                 String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
                 SearchMemberAdapter searchMemberAdapter = new SearchMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName,searchString);
