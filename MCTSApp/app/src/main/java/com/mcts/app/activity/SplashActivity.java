@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.mcts.app.R;
-import com.mcts.app.model.Religion;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -24,7 +23,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(thisActivity, FirstActivity.class);
+                Intent i = new Intent(thisActivity, MainMenuActivity.class);
                 startActivity(i);
 
                 // close this activity

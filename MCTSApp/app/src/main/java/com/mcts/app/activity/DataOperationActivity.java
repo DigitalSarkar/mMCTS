@@ -2,7 +2,6 @@ package com.mcts.app.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
@@ -11,7 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -35,7 +33,6 @@ import com.mcts.app.utils.Constants;
 import com.mcts.app.utils.Messages;
 import com.mcts.app.utils.MyVolley;
 import com.mcts.app.utils.NetworkUtil;
-import com.mcts.app.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -156,7 +153,7 @@ public class DataOperationActivity extends AppCompatActivity implements View.OnC
 
         switch (id) {
             case R.id.bt_go_ahead:
-                Intent intent = new Intent(thisActivity, HealthSevaActivity.class);
+                Intent intent = new Intent(thisActivity, HealthServicesActivity.class);
                 startActivity(intent);
                 break;
             case R.id.bt_get_data:

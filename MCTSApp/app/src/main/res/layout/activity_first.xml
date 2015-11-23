@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_first"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_color"
@@ -7,150 +8,154 @@
 
     <include layout="@layout/custom_toolbar"></include>
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal|center_vertical"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_horizontal|center_vertical"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_corner_bg"
-                android:gravity="center_horizontal|center_vertical"
-                android:padding="@dimen/scale_5"
-                android:layout_margin="@dimen/scale_10"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/img_data_entry"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/data_entry" />
-
-                <com.mcts.app.customview.MyTextView
-                    style="@style/ValueText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/scale_5"
-                    android:text="@string/data_entry" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_corner_bg"
-                android:gravity="center_horizontal|center_vertical"
-                android:padding="@dimen/scale_5"
-                android:layout_margin="@dimen/scale_10"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/schedule" />
-
-                <com.mcts.app.customview.MyTextView
-                    style="@style/ValueText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/scale_5"
-                    android:text="@string/my_schedule" />
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_corner_bg"
-                android:gravity="center_horizontal|center_vertical"
-                android:padding="@dimen/scale_5"
-                android:layout_margin="@dimen/scale_10"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/scale_5"
-                    android:src="@drawable/subcenter" />
-
-                <com.mcts.app.customview.MyTextView
-                    style="@style/ValueText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-
-                    android:text="@string/sub_report" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_corner_bg"
-                android:gravity="center_horizontal|center_vertical"
-                android:padding="@dimen/scale_5"
-                android:layout_margin="@dimen/scale_10"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/scale_5"
-                    android:src="@drawable/supervisor" />
-
-                <com.mcts.app.customview.MyTextView
-                    style="@style/ValueText"
-                    android:layout_width="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sup_visit" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_corner_bg"
-            android:gravity="center_horizontal|center_vertical"
-            android:padding="@dimen/scale_5"
-            android:layout_margin="@dimen/scale_10"
             android:orientation="vertical">
 
-
-            <ImageView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/scale_5"
-                android:src="@drawable/help" />
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal">
 
-            <com.mcts.app.customview.MyTextView
-                style="@style/ValueText"
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_10"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_corner_bg"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_5">
+
+                    <ImageView
+                        android:id="@+id/img_data_entry"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/data_entry" />
+
+                    <com.mcts.app.customview.MyTextView
+                        style="@style/ValueText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/scale_5"
+                        android:text="@string/data_entry" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_10"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_corner_bg"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_5">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/schedule" />
+
+                    <com.mcts.app.customview.MyTextView
+                        style="@style/ValueText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/scale_5"
+                        android:text="@string/my_schedule" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/help" />
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_10"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_corner_bg"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_5">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/scale_5"
+                        android:src="@drawable/subcenter" />
+
+                    <com.mcts.app.customview.MyTextView
+                        style="@style/ValueText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+
+                        android:text="@string/sub_report" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_10"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_corner_bg"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_5">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/scale_5"
+                        android:src="@drawable/supervisor" />
+
+                    <com.mcts.app.customview.MyTextView
+                        style="@style/ValueText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/sup_visit" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/scale_10"
+                android:background="@drawable/round_corner_bg"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="vertical"
+                android:padding="@dimen/scale_5">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:src="@drawable/help" />
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/ValueText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/help" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

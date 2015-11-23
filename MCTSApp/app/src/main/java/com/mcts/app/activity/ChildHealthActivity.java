@@ -1,55 +1,59 @@
 package com.mcts.app.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.mcts.app.R;
 
-public class FirstActivity extends AppCompatActivity implements View.OnClickListener{
+public class ChildHealthActivity extends AppCompatActivity {
 
-    private Activity thisActivity;
-    private static String TAG="FirstActivity";
+    Activity thisActivity;
+    private static String TAG="ChildHealthActivity";
     private Toolbar mToolbar;
     private TextView mTitle;
-    private ImageView img_data_entry;
+    private Button bt_imnci,bt_hbnc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first);
+        setContentView(R.layout.activity_bal_health);
         setToolBar();
         init();
     }
 
     private void setToolBar() {
 
-        thisActivity = FirstActivity.this;
+        thisActivity = ChildHealthActivity.this;
         Typeface type = Typeface.createFromAsset(getAssets(), "SHRUTI.TTF");
         mToolbar = (Toolbar) findViewById(R.id.anim_toolbar);
         mTitle = (TextView) mToolbar.findViewById(R.id.title_text);
-        mTitle.setText(thisActivity.getResources().getString(R.string.appTitle));
+        mTitle.setText(thisActivity.getResources().getString(R.string.bal_seva_title));
         mTitle.setTypeface(type, Typeface.BOLD);
         setSupportActionBar(mToolbar);
     }
 
-    private void init(){
-        img_data_entry=(ImageView)findViewById(R.id.img_data_entry);
-        img_data_entry.setOnClickListener(this);
+    private void init() {
+
+        bt_imnci=(Button)findViewById(R.id.bt_imnci);
+        bt_hbnc=(Button)findViewById(R.id.bt_hbnc);
+
+        Typeface type = Typeface.createFromAsset(getAssets(), "SHRUTI.TTF");
+        bt_imnci.setTypeface(type, Typeface.BOLD);
+        bt_hbnc.setTypeface(type, Typeface.BOLD);
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_first, menu);
+//        getMenuInflater().inflate(R.menu.menu_bal_health, menu);
         return true;
     }
 
@@ -66,16 +70,5 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        switch (v.getId()){
-            case R.id.img_data_entry:
-                Intent intent=new Intent(thisActivity,LoginActivity.class);
-                startActivity(intent);
-                break;
-        }
     }
 }

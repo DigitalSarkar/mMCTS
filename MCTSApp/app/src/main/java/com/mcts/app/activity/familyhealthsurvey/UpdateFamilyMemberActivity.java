@@ -1,4 +1,4 @@
-package com.mcts.app.activity.kutumb;
+package com.mcts.app.activity.familyhealthsurvey;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -13,7 +13,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;

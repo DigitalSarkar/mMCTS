@@ -1,43 +1,24 @@
 package com.mcts.app.activity;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Point;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.error.AuthFailureError;
-import com.android.volley.error.VolleyError;
-import com.android.volley.request.StringRequest;
 import com.mcts.app.R;
 import com.mcts.app.customview.CustomToast;
 import com.mcts.app.db.DatabaseHelper;
 import com.mcts.app.utils.Constants;
-import com.mcts.app.utils.Messages;
-import com.mcts.app.utils.MyVolley;
-import com.mcts.app.utils.NetworkUtil;
 import com.mcts.app.utils.Utils;
 import com.mcts.app.volley.BaseActivity;
 import com.mcts.app.volley.Constant;
@@ -50,11 +31,11 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HealthSevaActivity extends BaseActivity implements View.OnClickListener, IVolleyRespose {
+public class HealthServicesActivity extends BaseActivity implements View.OnClickListener, IVolleyRespose {
 
     Activity thisActivity;
-    private static String TAG = "HealthSevaActivity";
-    HealthSevaActivity mContext;
+    private static String TAG = "HealthServicesActivity";
+    HealthServicesActivity mContext;
     private Toolbar mToolbar;
     private TextView mTitle;
     private LinearLayout ll_health_servey, ll_sagarbha_seva, ll_bal_seva, ll_kutumnb_kalyan_seva;
@@ -75,7 +56,7 @@ public class HealthSevaActivity extends BaseActivity implements View.OnClickList
 
     private void setToolBar() {
 
-        thisActivity = HealthSevaActivity.this;
+        thisActivity = HealthServicesActivity.this;
         Typeface type = Typeface.createFromAsset(getAssets(), "SHRUTI.TTF");
         mToolbar = (Toolbar) findViewById(R.id.anim_toolbar);
         mTitle = (TextView) mToolbar.findViewById(R.id.title_text);
@@ -137,7 +118,7 @@ public class HealthSevaActivity extends BaseActivity implements View.OnClickList
                 startActivity(intent);
                 break;
             case R.id.ll_sagarbha_seva:
-                intent = new Intent(thisActivity, SagrbhavsthaActivity.class);
+                intent = new Intent(thisActivity, MaternalServiceActivity.class);
                 startActivity(intent);
                 break;
             case R.id.bt_get_data:
@@ -156,7 +137,7 @@ public class HealthSevaActivity extends BaseActivity implements View.OnClickList
 
                 break;
             case R.id.ll_bal_seva:
-                intent = new Intent(thisActivity, BalHealthActivity.class);
+                intent = new Intent(thisActivity, ChildHealthActivity.class);
                 startActivity(intent);
                 break;
         }

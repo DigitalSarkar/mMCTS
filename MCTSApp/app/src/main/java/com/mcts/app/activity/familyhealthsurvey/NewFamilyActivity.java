@@ -1,4 +1,4 @@
-package com.mcts.app.activity.kutumb;
+package com.mcts.app.activity.familyhealthsurvey;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -64,11 +64,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Random;
 
 public class NewFamilyActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
@@ -752,9 +749,9 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
             textView = (TextView) linearLayout.getChildAt(0);
             maritalStatus = textView.getTag().toString();
         } else if (parent.getId() == R.id.sp_aganvali) {
-            linearLayout = (LinearLayout) view;
-            textView = (TextView) linearLayout.getChildAt(0);
-            aaganvadiId = textView.getTag().toString();
+//            linearLayout = (LinearLayout) view;
+//            textView = (TextView) linearLayout.getChildAt(0);
+//            aaganvadiId = textView.getTag().toString();
         }
     }
 

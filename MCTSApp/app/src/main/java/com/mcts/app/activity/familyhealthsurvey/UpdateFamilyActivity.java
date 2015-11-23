@@ -1,4 +1,4 @@
-package com.mcts.app.activity.kutumb;
+package com.mcts.app.activity.familyhealthsurvey;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -67,11 +67,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
-public class UpdateKutumbActivity extends BaseActivity implements View.OnClickListener,GoogleApiClient.ConnectionCallbacks,
+public class UpdateFamilyActivity extends BaseActivity implements View.OnClickListener,GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,AdapterView.OnItemSelectedListener {
 
     Activity thisActivity;
-    private static String TAG="UpdateKutumbActivity";
+    private static String TAG="UpdateFamilyActivity";
     private Toolbar mToolbar;
     private TextView mTitle;
     private TextView txt_village_name,txt_lat,txt_lng,txt_lbl_village,lbl_family_number,lbl_yes,lbl_no,lbl_bpl,lbl_family_dharm,lbl_family_cast;
@@ -127,7 +127,7 @@ public class UpdateKutumbActivity extends BaseActivity implements View.OnClickLi
 
     private void setToolBar() {
 
-        thisActivity = UpdateKutumbActivity.this;
+        thisActivity = UpdateFamilyActivity.this;
         Utils.hideSoftKeyboard(thisActivity);
 
         Intent intent=getIntent();

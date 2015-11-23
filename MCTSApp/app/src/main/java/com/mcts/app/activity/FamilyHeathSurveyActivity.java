@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -28,42 +27,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.error.AuthFailureError;
-import com.android.volley.error.NetworkError;
-import com.android.volley.error.NoConnectionError;
-import com.android.volley.error.ParseError;
-import com.android.volley.error.ServerError;
-import com.android.volley.error.TimeoutError;
-import com.android.volley.error.VolleyError;
-import com.android.volley.request.StringRequest;
 import com.mcts.app.R;
-import com.mcts.app.activity.kutumb.FamilyListActivity;
+import com.mcts.app.activity.familyhealthsurvey.FamilyListActivity;
 import com.mcts.app.adapter.StatusAdapter;
 import com.mcts.app.customview.CustomToast;
 import com.mcts.app.db.DatabaseHelper;
 import com.mcts.app.model.MaritalStatus;
-import com.mcts.app.utils.Constants;
 import com.mcts.app.utils.Messages;
-import com.mcts.app.utils.MyVolley;
-import com.mcts.app.utils.NetworkUtil;
 import com.mcts.app.utils.Utils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class FamilyHeathSurveyActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     Activity thisActivity;
-    private static String TAG = "HealthSevaActivity";
+    private static String TAG = "HealthServicesActivity";
     private Toolbar mToolbar;
     private TextView mTitle;
     private ImageView img_icon_home;
@@ -250,7 +230,7 @@ public class FamilyHeathSurveyActivity extends AppCompatActivity implements View
         Intent intent = null;
         switch (v.getId()) {
 //            case R.id.bt_add_family:
-//                intent=new Intent(thisActivity, UpdateKutumbActivity.class);
+//                intent=new Intent(thisActivity, UpdateFamilyActivity.class);
 //                startActivity(intent);
 //                break;
 //            case R.id.bt_identity_family:

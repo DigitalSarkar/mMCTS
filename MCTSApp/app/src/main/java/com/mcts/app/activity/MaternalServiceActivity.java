@@ -12,10 +12,10 @@ import android.widget.TextView;
 
 import com.mcts.app.R;
 
-public class SagrbhavsthaActivity extends AppCompatActivity {
+public class MaternalServiceActivity extends AppCompatActivity {
 
     Activity thisActivity;
-    private static String TAG="HealthSevaActivity";
+    private static String TAG="HealthServicesActivity";
     private Toolbar mToolbar;
     private TextView mTitle;
     private Button bt_masik_sevry,bt_new_pregnancy,bt_pregnancy_first_test,bt_pregnancy_second_test,bt_pregnancy_third_test,bt_pregnancy_forth_test,bt_tt_1
@@ -31,7 +31,7 @@ public class SagrbhavsthaActivity extends AppCompatActivity {
 
     private void setToolBar() {
 
-        thisActivity = SagrbhavsthaActivity.this;
+        thisActivity = MaternalServiceActivity.this;
         Typeface type = Typeface.createFromAsset(getAssets(), "SHRUTI.TTF");
         mToolbar = (Toolbar) findViewById(R.id.anim_toolbar);
         mTitle = (TextView) mToolbar.findViewById(R.id.title_text);

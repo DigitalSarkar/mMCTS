@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -45,7 +46,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.HealthSevaActivity"
+            android:name=".activity.HealthServicesActivity"
             android:label="@string/title_activity_health_seva"
             android:screenOrientation="portrait" >
         </activity>
@@ -62,50 +63,50 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".activity.SagrbhavsthaActivity"
+            android:name=".activity.MaternalServiceActivity"
             android:label="@string/title_activity_sagrbhavstha"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.BalRasikaranActivity"
+            android:name=".activity.ChildImmunizationActivity"
             android:label="@string/title_activity_bal_rasikaran"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.BalHealthActivity"
+            android:name=".activity.ChildHealthActivity"
             android:label="@string/title_activity_bal_health"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.kutumb.UpdateKutumbActivity"
+            android:name=".activity.familyhealthsurvey.UpdateFamilyActivity"
             android:label="@string/title_activity_add_kutumb"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.kutumb.FamilyIdentityActivity"
+            android:name=".activity.familyhealthsurvey.FamilyIdentityActivity"
             android:label="@string/title_activity_family_identity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.kutumb.FamilyListActivity"
+            android:name=".activity.familyhealthsurvey.FamilyListActivity"
             android:label="@string/title_activity_family_list"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.kutumb.AddFamilyMemberActivity"
+            android:name=".activity.familyhealthsurvey.AddFamilyMemberActivity"
             android:label="@string/title_activity_add_family_member"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.kutumb.NewFamilyActivity"
+            android:name=".activity.familyhealthsurvey.NewFamilyActivity"
             android:label="@string/title_activity_new_family" >
         </activity>
         <activity
-            android:name=".activity.kutumb.UpdateFamilyMemberActivity"
+            android:name=".activity.familyhealthsurvey.UpdateFamilyMemberActivity"
             android:label="@string/title_activity_update_family_member" >
         </activity>
         <activity
-            android:name=".activity.FirstActivity"
+            android:name=".activity.MainMenuActivity"
             android:label="@string/title_activity_first" >
         </activity>
     </application>

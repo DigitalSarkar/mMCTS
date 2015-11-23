@@ -18,7 +18,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -26,8 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mcts.app.R;
-import com.mcts.app.activity.kutumb.AddFamilyMemberActivity;
-import com.mcts.app.activity.kutumb.UpdateKutumbActivity;
+import com.mcts.app.activity.familyhealthsurvey.UpdateFamilyActivity;
 import com.mcts.app.customview.CustomToast;
 import com.mcts.app.db.DatabaseHelper;
 import com.mcts.app.model.Family;
@@ -35,7 +33,6 @@ import com.mcts.app.model.MaritalStatus;
 import com.mcts.app.utils.Messages;
 import com.mcts.app.utils.Utils;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -136,7 +133,7 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
             case R.id.txt_edit:
 
                 TextView textView=(TextView)v;
-                Intent intent=new Intent(context, UpdateKutumbActivity.class);
+                Intent intent=new Intent(context, UpdateFamilyActivity.class);
                 intent.putExtra("MemberId",textView.getTag().toString());
                 intent.putExtra("villageId",villageId);
                 intent.putExtra("villageName",villageName);

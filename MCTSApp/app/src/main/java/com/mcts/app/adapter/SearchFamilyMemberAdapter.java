@@ -25,8 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mcts.app.R;
-import com.mcts.app.activity.kutumb.UpdateFamilyMemberActivity;
-import com.mcts.app.activity.kutumb.UpdateKutumbActivity;
+import com.mcts.app.activity.familyhealthsurvey.UpdateFamilyMemberActivity;
 import com.mcts.app.customview.CustomToast;
 import com.mcts.app.db.DatabaseHelper;
 import com.mcts.app.model.Family;

@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -25,33 +24,19 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.error.AuthFailureError;
-import com.android.volley.error.NetworkError;
-import com.android.volley.error.NoConnectionError;
-import com.android.volley.error.ParseError;
-import com.android.volley.error.ServerError;
-import com.android.volley.error.TimeoutError;
 import com.android.volley.error.VolleyError;
-import com.android.volley.request.StringRequest;
 import com.mcts.app.R;
 import com.mcts.app.customview.CustomToast;
-import com.mcts.app.db.DatabaseHelper;
 import com.mcts.app.utils.Constants;
 import com.mcts.app.utils.Messages;
-import com.mcts.app.utils.MyVolley;
 import com.mcts.app.utils.NetworkUtil;
 import com.mcts.app.utils.Utils;
 import com.mcts.app.volley.BaseActivity;
 import com.mcts.app.volley.Constant;
 import com.mcts.app.volley.IVolleyRespose;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -201,7 +186,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             case R.id.bt_login_submit:
 //                Intent intent = new Intent(thisActivity, DataOperationActivity.class);
 //                startActivity(intent);
-                Intent intent = new Intent(thisActivity, HealthSevaActivity.class);
+                Intent intent = new Intent(thisActivity, HealthServicesActivity.class);
                 startActivity(intent);
                 thisActivity.finish();
                 break;
@@ -379,7 +364,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 SharedPreferences.Editor editor=sharedPreferences.edit();
                 editor.putString(Constants.USER_ID,jsonUserDetail.toString());
                 editor.commit();
-                Intent intent = new Intent(thisActivity, HealthSevaActivity.class);
+                Intent intent = new Intent(thisActivity, HealthServicesActivity.class);
                 startActivity(intent);
                 thisActivity.finish();
             }else{
