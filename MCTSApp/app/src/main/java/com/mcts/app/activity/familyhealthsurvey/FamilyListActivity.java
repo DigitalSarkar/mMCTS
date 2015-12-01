@@ -71,7 +71,11 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         mToolbar = (Toolbar) findViewById(R.id.toolbar_home);
         mTitle = (TextView) mToolbar.findViewById(R.id.txt_title);
         img_icon_home = (ImageView) mToolbar.findViewById(R.id.img_icon_home);
-        mTitle.setText(thisActivity.getResources().getString(R.string.family_list));
+        if(isFamily!=0) {
+            mTitle.setText(thisActivity.getResources().getString(R.string.member_list));
+        }else{
+            mTitle.setText(thisActivity.getResources().getString(R.string.family_add_member));
+        }
         mTitle.setTypeface(type, Typeface.BOLD);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -124,7 +128,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 
                     }
                 }else{
-                    CustomToast customToast=new CustomToast(thisActivity,Messages.MINIMUM_CHARACTER);
+                    String str=thisActivity.getResources().getString(R.string.three_char);
+                    CustomToast customToast=new CustomToast(thisActivity,str);
                     customToast.show();
                 }
 
@@ -180,7 +185,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                 String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
                 SearchMemberAdapter searchMemberAdapter = new SearchMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName,searchString);
                 list_members.setAdapter(searchMemberAdapter);
-                CustomToast customToast = new CustomToast(thisActivity, Messages.NO_MATCH_DATA);
+                String str=thisActivity.getResources().getString(R.string.no_match);
+                CustomToast customToast = new CustomToast(thisActivity, str);
                 customToast.show();
             }
         }
@@ -216,7 +222,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
             } else {
                 SearchFamilyMemberAdapter searchFamilyMemberAdapter = new SearchFamilyMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName,searchString);
                 list_members.setAdapter(searchFamilyMemberAdapter);
-                CustomToast customToast = new CustomToast(thisActivity, Messages.NO_MATCH_DATA);
+                String str=thisActivity.getResources().getString(R.string.no_match);
+                CustomToast customToast = new CustomToast(thisActivity, str);
                 customToast.show();
             }
         }

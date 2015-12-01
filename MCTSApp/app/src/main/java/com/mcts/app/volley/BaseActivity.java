@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
 public class BaseActivity extends AppCompatActivity implements IVolleyRespose {
 
 	/*//---------------------call for volley service------------------------------------------------------------------
-	public RequestQueue queue;
+    public RequestQueue queue;
 	StringRequest jsStrRequest,addRequest;
 	//JsonObjectRequest j
 	String res=null;
@@ -51,41 +51,40 @@ public class BaseActivity extends AppCompatActivity implements IVolleyRespose {
 	public static final int RESPONSE_ERROR=404; 
 	//---------------------call for volley service------------------------------------------------------------------
 */
-	
-	//---------------------call for volley service------------------------------------------------------------------
-		public RequestQueue queue;
-	CustomLoaderDialog cm;
-		StringRequest jsStrRequest;
-	//	JsonObjectRequest jsStrRequest;
-		//JsonObjectRequest j
-		String res=null;
-		public static final int RESPONSE_OK=200; 
-		public static final int RESPONSE_ERROR=404; 
-		//---------------------call for volley service------------------------------------------------------------------
 
-		
-	BaseActivity mCommonActivity;
-	
-	ProgressDialog progressDialog;
+    //---------------------call for volley service------------------------------------------------------------------
+    public RequestQueue queue;
+    CustomLoaderDialog cm;
+    StringRequest jsStrRequest;
+    //	JsonObjectRequest jsStrRequest;
+    //JsonObjectRequest j
+    String res = null;
+    public static final int RESPONSE_OK = 200;
+    public static final int RESPONSE_ERROR = 404;
+    //---------------------call for volley service------------------------------------------------------------------
 
-	public void printToastAlert(Context context,int id)
-	{
-		Toast.makeText(context, ""+context.getResources().getString(id), Toast.LENGTH_SHORT).show();
-	}
 
-	public static boolean isEmailValid(String email) {
-		boolean isValid = false;
+    BaseActivity mCommonActivity;
 
-		//  String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-		String expression ="[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-		CharSequence inputStr = email;
-		Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-		Matcher matcher = pattern.matcher(inputStr);
-		if (matcher.matches()) {
-			isValid = true;
-		}
-		return isValid;
-	}
+    ProgressDialog progressDialog;
+
+    public void printToastAlert(Context context, int id) {
+        Toast.makeText(context, "" + context.getResources().getString(id), Toast.LENGTH_SHORT).show();
+    }
+
+    public static boolean isEmailValid(String email) {
+        boolean isValid = false;
+
+        //  String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        String expression = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        CharSequence inputStr = email;
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches()) {
+            isValid = true;
+        }
+        return isValid;
+    }
 
 	/*public boolean isOnline(Context cContext) {
 		ConnectivityManager cm =
@@ -97,190 +96,194 @@ public class BaseActivity extends AppCompatActivity implements IVolleyRespose {
 		return false;
 	}*/
 
-	public void printToastShort(Context context,String string)
-	{
-		Toast.makeText(context, ""+string, Toast.LENGTH_SHORT).show();
-	}
+    public void printToastShort(Context context, String string) {
+        Toast.makeText(context, "" + string, Toast.LENGTH_SHORT).show();
+    }
 
-	public String prepareWebserviceRequest(String methodname, String[] keys, String[] values) throws JSONException{
-		String retStr = null;
-		String strParams = null;
-		JSONObject json = new JSONObject();
-		for(int i=0;i<keys.length;i++){
-			json.put(keys[i],values[i]);
-		}
+    public String prepareWebserviceRequest(String methodname, String[] keys, String[] values) throws JSONException {
+        String retStr = null;
+        String strParams = null;
+        JSONObject json = new JSONObject();
+        for (int i = 0; i < keys.length; i++) {
+            json.put(keys[i], values[i]);
+        }
 
-		JSONObject fJson = new JSONObject();
-		fJson.put("method_name", methodname);
-		fJson.put("body", json);
-		retStr = fJson.toString();
-		return retStr;
-	}
+        JSONObject fJson = new JSONObject();
+        fJson.put("method_name", methodname);
+        fJson.put("body", json);
+        retStr = fJson.toString();
+        return retStr;
+    }
 
-	public String prepareWebserviceRequestforvolly(String methodname, String[] keys, String[] values) throws JSONException{
-		String retStr = null;
-		//String strParams = null;
-		JSONObject json = new JSONObject();
+    public String prepareWebserviceRequestforvolly(String methodname, String[] keys, String[] values) throws JSONException {
+        String retStr = null;
+        //String strParams = null;
+        JSONObject json = new JSONObject();
 
-		if(keys!=null)
-		{
-			for(int i=0;i<keys.length;i++){
-				json.put(keys[i],values[i]);
-			}
-		}
-		JSONObject fJson = new JSONObject();
-		fJson.put("method_name", methodname);
-		if(keys!=null)
-			fJson.put("body", json);
-		retStr = fJson.toString();
-		return retStr;
-	}
+        if (keys != null) {
+            for (int i = 0; i < keys.length; i++) {
+                json.put(keys[i], values[i]);
+            }
+        }
+        JSONObject fJson = new JSONObject();
+        fJson.put("method_name", methodname);
+        if (keys != null)
+            fJson.put("body", json);
+        retStr = fJson.toString();
+        return retStr;
+    }
 
 
-	/////////////////////////conver dp to pixl and viseversa
-	/**
-	 * This method converts dp unit to equivalent pixels, depending on device density. 
-	 * 
-	 * @param dp A value in dp (density independent pixels) unit. Which we need to convert into pixels
-	 * @param context Context to get resources and device specific display metrics
-	 * @return A float value to represent px equivalent to dp depending on device density
-	 */
-	public static float convertDpToPixel(float dp, Context context){
-		Resources resources = context.getResources();
-		DisplayMetrics metrics = resources.getDisplayMetrics();
-		float px = dp * (metrics.densityDpi / 160f);
-		return px;
-	}
+    /////////////////////////conver dp to pixl and viseversa
 
-	/**
-	 * This method converts device specific pixels to density independent pixels.
-	 * 
-	 * @param px A value in px (pixels) unit. Which we need to convert into db
-	 * @param context Context to get resources and device specific display metrics
-	 * @return A float value to represent dp equivalent to px value
-	 */
-	public static float convertPixelsToDp(float px, Context context){
-		Resources resources = context.getResources();
-		DisplayMetrics metrics = resources.getDisplayMetrics();
-		float dp = px / (metrics.densityDpi / 160f);
-		return dp;
-	}
+    /**
+     * This method converts dp unit to equivalent pixels, depending on device density.
+     *
+     * @param dp      A value in dp (density independent pixels) unit. Which we need to convert into pixels
+     * @param context Context to get resources and device specific display metrics
+     * @return A float value to represent px equivalent to dp depending on device density
+     */
+    public static float convertDpToPixel(float dp, Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float px = dp * (metrics.densityDpi / 160f);
+        return px;
+    }
 
-
-	public void hideKeybord(View view) {
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(view.getWindowToken(), 
-				InputMethodManager.RESULT_UNCHANGED_SHOWN);
-	}
-
-	public static void ButtonClickEffect(View v)
-	{
-		AlphaAnimation obja = new AlphaAnimation(1.0f, 0.3f);
-		obja.setDuration(10);
-		obja.setFillAfter(false);
-		v.startAnimation(obja);
-	}
-
-	public int getStatusBarHeight() {
-		int result = 0;
-		int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-		if (resourceId > 0) {
-			result = getResources().getDimensionPixelSize(resourceId);
-		}
-		return result;
-	}
-
-	// check tablet or phone method..................................
-	public boolean isTablet(Context context) {
-		boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
-		boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
-		return (xlarge || large);
-		//..................................
-	}
+    /**
+     * This method converts device specific pixels to density independent pixels.
+     *
+     * @param px      A value in px (pixels) unit. Which we need to convert into db
+     * @param context Context to get resources and device specific display metrics
+     * @return A float value to represent dp equivalent to px value
+     */
+    public static float convertPixelsToDp(float px, Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / 160f);
+        return dp;
+    }
 
 
-	public void printAlert(Context context)
-	{
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle(""+getResources().getString(R.string.app_name));
-		//alert.setMessage(""+getResources().getString(R.string.blockuser));
-		alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+    public void hideKeybord(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(),
+                InputMethodManager.RESULT_UNCHANGED_SHOWN);
+    }
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) { 
+    public static void ButtonClickEffect(View v) {
+        AlphaAnimation obja = new AlphaAnimation(1.0f, 0.3f);
+        obja.setDuration(10);
+        obja.setFillAfter(false);
+        v.startAnimation(obja);
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    // check tablet or phone method..................................
+    public boolean isTablet(Context context) {
+        boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+        boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+        return (xlarge || large);
+        //..................................
+    }
 
 
-			}});
-		alert.create();alert.show();
-	}
+    public void printAlert(Context context) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("" + getResources().getString(R.string.app_name));
+        //alert.setMessage(""+getResources().getString(R.string.blockuser));
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
-	//---------------------call for volley service------------------------------------------------------------------
-	/**
-	 * <h1>  Use for calling volley webService </h1>
-	 * 
-	 *  @param  cContext           	Context of activity from where you call the webService
-	 *  @param  mMethodType    		Should be POST or GET
-	 *  @param  mMethodname   		Name of the method you want to call
-	 *  @param  URL          		Url of your webService
-	 *  @param  map           		Key Values pairs
-	 *	@param  initialTimeoutMs 	Timeout of webService in milliseconds	   
-	 *  @param  shouldCache   		Web Api response are stored in catch(true) or not(false)
-	 *  @param  maxNumRetries 		maximum number in integer for retries to execute webService
-	 *  @param 	isCancelable 		set true if you set cancel progressDialog by user event
-	 * 	@param  aActivity 			pass your activity object
-	 */
-	public void callVolley(final Context cContext,String mMethodType,final String mMethodname,String URL, final Map map,int initialTimeoutMs,boolean shouldCache,int maxNumRetries,final Boolean isProgressDailogEnable,Boolean isCancelable,final BaseActivity aActivity){
-		// TODO Auto-generated method stub
-		Log.i("call","service");
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-			Log.i("call","2service");
-			int reqType=0;
-			String RequestURL=URL.trim();
-			queue = MyVolley.getRequestQueue();
 
-			if(mMethodType.trim().equalsIgnoreCase("GET"))
-				reqType=com.android.volley.Request.Method.GET;
-			else if(mMethodType.trim().equalsIgnoreCase("POST"))
-				reqType=com.android.volley.Request.Method.POST;
+            }
+        });
+        alert.create();
+        alert.show();
+    }
 
-			if (RequestURL.equals(null)) 
-				RequestURL= Constants.BASE_URL;
-			else
-				RequestURL=URL;
+    //---------------------call for volley service------------------------------------------------------------------
 
-			cm=new CustomLoaderDialog(cContext);
-			cm.show(false);
+    /**
+     * <h1>  Use for calling volley webService </h1>
+     *
+     * @param cContext         Context of activity from where you call the webService
+     * @param mMethodType      Should be POST or GET
+     * @param mMethodname      Name of the method you want to call
+     * @param URL              Url of your webService
+     * @param map              Key Values pairs
+     * @param initialTimeoutMs Timeout of webService in milliseconds
+     * @param shouldCache      Web Api response are stored in catch(true) or not(false)
+     * @param maxNumRetries    maximum number in integer for retries to execute webService
+     * @param isCancelable     set true if you set cancel progressDialog by user event
+     * @param aActivity        pass your activity object
+     */
+    public void callVolley(final Context cContext, String mMethodType, final String mMethodname, String URL, final Map map, int initialTimeoutMs, boolean shouldCache, int maxNumRetries, final Boolean isProgressDailogEnable, Boolean isCancelable, final BaseActivity aActivity) {
+        // TODO Auto-generated method stub
+        Log.i("call", "service");
 
-			Log.v("RequestURL",RequestURL);
+//			Log.i("call","2service");
+        int reqType = 0;
+        String RequestURL = URL.trim();
+        queue = MyVolley.getRequestQueue();
 
-			jsStrRequest = new StringRequest(reqType,RequestURL, new Response.Listener<String>() {
-				@Override
-				public void onResponse(String response) {
-					Log.i("response", "" + response);
-					cm.hide();
-					if (response == null) {
-						IVolleyRespose iVolleyRespose= (IVolleyRespose) aActivity;
-						iVolleyRespose.onVolleyResponse(RESPONSE_ERROR,response,mMethodname);
-						res=response;
-					}
-					else if (response != null) {
-						IVolleyRespose iVolleyRespose= (IVolleyRespose) aActivity;
-						iVolleyRespose.onVolleyResponse(RESPONSE_OK,response,mMethodname);
-						res=response;
-					}
-				}
-			}, new Response.ErrorListener() {
-				@Override
-				public void onErrorResponse(VolleyError arg0) {
-					// TODO Auto-generated method stub
-					res="";
-					cm.hide();
-					IVolleyRespose iVolleyError =(IVolleyRespose) aActivity;
-					iVolleyError.onVolleyError(RESPONSE_ERROR,"Error",mMethodname);
-				}
-			}){
-				@Override
-				protected Map<String,String> getParams(){
+        if (mMethodType.trim().equalsIgnoreCase("GET"))
+            reqType = com.android.volley.Request.Method.GET;
+        else if (mMethodType.trim().equalsIgnoreCase("POST"))
+            reqType = com.android.volley.Request.Method.POST;
+
+        if (RequestURL.equals(null))
+            RequestURL = Constants.BASE_URL;
+        else
+            RequestURL = URL;
+
+        if (isProgressDailogEnable) {
+            cm = new CustomLoaderDialog(cContext);
+            cm.show(false);
+        }
+        Log.v("RequestURL", RequestURL);
+
+        jsStrRequest = new StringRequest(reqType, RequestURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("response", "" + response);
+                if (isProgressDailogEnable) {
+                    cm.hide();
+                }
+                if (response == null) {
+                    IVolleyRespose iVolleyRespose = (IVolleyRespose) aActivity;
+                    iVolleyRespose.onVolleyResponse(RESPONSE_ERROR, response, mMethodname);
+                    res = response;
+                } else if (response != null) {
+                    IVolleyRespose iVolleyRespose = (IVolleyRespose) aActivity;
+                    iVolleyRespose.onVolleyResponse(RESPONSE_OK, response, mMethodname);
+                    res = response;
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError arg0) {
+                // TODO Auto-generated method stub
+                res = "";
+                if (isProgressDailogEnable) {
+                    cm.hide();
+                }
+                IVolleyRespose iVolleyError = (IVolleyRespose) aActivity;
+                iVolleyError.onVolleyError(RESPONSE_ERROR, "Error", mMethodname);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
 				/*	String  strRequest ="";
 					try {
 						strRequest=getWebservicejsObjRequestforvolley(mMethodname, jsonObject);
@@ -291,120 +294,40 @@ public class BaseActivity extends AppCompatActivity implements IVolleyRespose {
 						e.printStackTrace();
 					}*/
 
-					Map<String,String> params = new HashMap<String, String>();
-					params=map;
-					return params;
-				}
+                Map<String, String> params = new HashMap<String, String>();
+                params = map;
+                return params;
+            }
 				/*@Override
 				public Map<String, String> getHeaders() throws AuthFailureError {
 					Map<String,String> params = new HashMap<String, String>();
 					params.put("Content-Type","application/json");
 					return params;
 				}*/
-			};
-			jsStrRequest.setTag(mMethodname);
-			jsStrRequest.setShouldCache(shouldCache);
-			jsStrRequest.setRetryPolicy(new DefaultRetryPolicy(initialTimeoutMs,maxNumRetries, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-			queue.add(jsStrRequest);
+        };
+        jsStrRequest.setTag(mMethodname);
+        jsStrRequest.setShouldCache(shouldCache);
+        jsStrRequest.setRetryPolicy(new DefaultRetryPolicy(initialTimeoutMs, maxNumRetries, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        queue.add(jsStrRequest);
 
-	}
+    }
 
 
-	//---------------------call for volley service------------------------------------------------------------------
-	/**
-	 * <h1>  Use for calling volley webService </h1>
-	 *
-	 *  @param  cContext           	Context of activity from where you call the webService
-	 *  @param  mMethodType    		Should be POST or GET
-	 *  @param  mMethodname   		Name of the method you want to call
-	 *  @param  URL          		Url of your webService
-	 *  @param  map           		Key Values pairs
-	 *	@param  initialTimeoutMs 	Timeout of webService in milliseconds
-	 *  @param  shouldCache   		Web Api response are stored in catch(true) or not(false)
-	 *  @param  maxNumRetries 		maximum number in integer for retries to execute webService
-	 *  @param 	isCancelable 		set true if you set cancel progressDialog by user event
-	 * 	@param  aActivity 			pass your activity object
-	 */
-	public void callVolleyWithoutParam(final Context cContext,String mMethodType,final String mMethodname,String URL, final Map map,int initialTimeoutMs,boolean shouldCache,int maxNumRetries,final Boolean isProgressDailogEnable,Boolean isCancelable,final BaseActivity aActivity){
-		// TODO Auto-generated method stub
-		Log.i("call","service");
-
-		Log.i("call","2service");
-		int reqType=0;
-		String RequestURL=URL.trim();
-		queue = MyVolley.getRequestQueue();
-
-		if(mMethodType.trim().equalsIgnoreCase("GET"))
-			reqType=com.android.volley.Request.Method.GET;
-		else if(mMethodType.trim().equalsIgnoreCase("POST"))
-			reqType=com.android.volley.Request.Method.POST;
-
-		if (RequestURL.equals(null))
-			RequestURL= Constants.BASE_URL;
-		else
-			RequestURL=URL;
-
-		cm=new CustomLoaderDialog(cContext);
-		cm.show(true);
-
-		Log.v("RequestURL",RequestURL);
-
-		jsStrRequest = new StringRequest(reqType,RequestURL, new Response.Listener<String>() {
-			@Override
-			public void onResponse(String response) {
-				Log.i("response", "" + response);
-				cm.hide();
-				if (response == null) {
-					IVolleyRespose iVolleyRespose= (IVolleyRespose) aActivity;
-					iVolleyRespose.onVolleyResponse(RESPONSE_ERROR,response,mMethodname);
-					res=response;
-				}
-				else if (response != null) {
-					IVolleyRespose iVolleyRespose= (IVolleyRespose) aActivity;
-					iVolleyRespose.onVolleyResponse(RESPONSE_OK,response,mMethodname);
-					res=response;
-				}
-			}
-		}, new Response.ErrorListener() {
-			@Override
-			public void onErrorResponse(VolleyError arg0) {
-				// TODO Auto-generated method stub
-				res="";
-				cm.hide();
-				IVolleyRespose iVolleyError =(IVolleyRespose) aActivity;
-				iVolleyError.onVolleyError(RESPONSE_ERROR,"Error",mMethodname);
-			}
-		}){
-
-				/*@Override
-				public Map<String, String> getHeaders() throws AuthFailureError {
-					Map<String,String> params = new HashMap<String, String>();
-					params.put("Content-Type","application/json");
-					return params;
-				}*/
-		};
-		jsStrRequest.setTag(mMethodname);
-		jsStrRequest.setShouldCache(shouldCache);
-		jsStrRequest.setRetryPolicy(new DefaultRetryPolicy(initialTimeoutMs,maxNumRetries, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-		queue.add(jsStrRequest);
-
-	}
-
-	//---------------------call for volley service------------------------------------------------------------------
-	/**
-	 * <h1>  Use for calling volley webService </h1>
-	 * 
-	 *  @param  cContext           	Context of activity from where you call the webService
-	 *  @param  mMethodType    		Should be POST or GET
-	 *  @param  mMethodname   		Name of the method you want to call
-	 *  @param  URL          		Url of your webService
-	 *   mMap          		Key Values pairs
-	 *	@param  initialTimeoutMs 	Timeout of webService in milliseconds	   
-	 *  @param  shouldCache   		Web Api response are stored in catch(true) or not(false)
-	 *  @param  maxNumRetries 		maximum number in integer for retries to execute webService
-	 *  @param 	isCancelable 		set true if you set cancel progressDialog by user event
-	 * 	@param  aActivity 			pass your activity object
-	 */
+    //---------------------call for volley service------------------------------------------------------------------
+    /**
+     * <h1>  Use for calling volley webService </h1>
+     *
+     *  @param  cContext            Context of activity from where you call the webService
+     *  @param  mMethodType            Should be POST or GET
+     *  @param  mMethodname        Name of the method you want to call
+     *  @param  URL                Url of your webService
+     *   mMap          		Key Values pairs
+     *	@param  initialTimeoutMs    Timeout of webService in milliseconds
+     *  @param  shouldCache        Web Api response are stored in catch(true) or not(false)
+     *  @param  maxNumRetries        maximum number in integer for retries to execute webService
+     *  @param    isCancelable        set true if you set cancel progressDialog by user event
+     * 	@param  aActivity            pass your activity object
+     */
 	/*public void callVolley(final Context cContext,String mMethodType,final String mMethodname,String URL, final JSONObject jsonObject,int initialTimeoutMs,boolean shouldCache,int maxNumRetries,final Boolean isProgressDailogEnable,Boolean isCancelable,final BaseActivity aActivity){
 		// TODO Auto-generated method stub
 
@@ -475,44 +398,43 @@ public class BaseActivity extends AppCompatActivity implements IVolleyRespose {
 
 	
 	*/
-	
-	/**
-	 * This method use for get String request for call web method
-	 * mMethodname  Name of web method for call
-	 * mMap 		   key value pair for preper json request
-	 * */
-	public String prepareReq(String methodName, HashMap<String, String> map){
-		String final_request;
-	    String param="";
-	    if (map!=null && map.size()>0) {
-	    	int length=map.size();
-	    	 final_request=Constant.WEBSERVICE_URL+"?";	
-	    	 int i=0;
-	 	    for (Entry<String, String> entry : map.entrySet()) {
-	 	     /**At last parameter '&' should not be add*/ 
-	 	     if((i++)==(length-1))
-	 	      param+=entry.getKey() + "=" + entry.getValue();
-	 	     else
-	 	      param+=entry.getKey() + "=" + entry.getValue() + "&";
-	 	    }  
-	 	    final_request+=param;
-	    }
-	    else{
-	    	final_request=Constant.WEBSERVICE_URL+"?method_name="+methodName;
-	    }
-	    final_request=final_request.replace(" ", "%20");
-	    return final_request;
-	}
-	
-	
-	
-	/**
-	 * This method use for get Json request for call web method
-	 * @param mMethodname  Name of web method for call
-	 * */
-	@SuppressWarnings("deprecation")
-	public String getWebservicejsObjRequestforvolley(String mMethodname, JSONObject json) throws JSONException{
-		String retStr = null;
+
+    /**
+     * This method use for get String request for call web method
+     * mMethodname  Name of web method for call
+     * mMap 		   key value pair for preper json request
+     */
+    public String prepareReq(String methodName, HashMap<String, String> map) {
+        String final_request;
+        String param = "";
+        if (map != null && map.size() > 0) {
+            int length = map.size();
+            final_request = Constant.WEBSERVICE_URL + "?";
+            int i = 0;
+            for (Entry<String, String> entry : map.entrySet()) {
+                /**At last parameter '&' should not be add*/
+                if ((i++) == (length - 1))
+                    param += entry.getKey() + "=" + entry.getValue();
+                else
+                    param += entry.getKey() + "=" + entry.getValue() + "&";
+            }
+            final_request += param;
+        } else {
+            final_request = Constant.WEBSERVICE_URL + "?method_name=" + methodName;
+        }
+        final_request = final_request.replace(" ", "%20");
+        return final_request;
+    }
+
+
+    /**
+     * This method use for get Json request for call web method
+     *
+     * @param mMethodname Name of web method for call
+     */
+    @SuppressWarnings("deprecation")
+    public String getWebservicejsObjRequestforvolley(String mMethodname, JSONObject json) throws JSONException {
+        String retStr = null;
 
 		/*JSONObject json = new JSONObject();
 
@@ -524,28 +446,28 @@ public class BaseActivity extends AppCompatActivity implements IVolleyRespose {
 			}
 		}
 		if(mMap!=null)*/
-		if (json != null)
-			retStr = URLEncoder.encode(json.toString());
-		else
-			retStr = "";
-		
-		return retStr;
-	}
+        if (json != null)
+            retStr = URLEncoder.encode(json.toString());
+        else
+            retStr = "";
 
-	@Override
-	public void onVolleyResponse(int responseCode, String mRes,
-			String ResponseTag) {
-		// TODO Auto-generated method stub
+        return retStr;
+    }
 
-	}
+    @Override
+    public void onVolleyResponse(int responseCode, String mRes,
+                                 String ResponseTag) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void onVolleyError(int Code, String mError, String ResponseTag) {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void onVolleyError(int Code, String mError, String ResponseTag) {
+        // TODO Auto-generated method stub
 
-	//---------------------call for volley service------------------------------------------------------------------
+    }
+
+    //---------------------call for volley service------------------------------------------------------------------
 
 }
 

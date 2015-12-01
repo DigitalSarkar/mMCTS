@@ -6,188 +6,188 @@
     <string name="title_activity_main"></string>
 
     <!-- Startup Screen-->
-    <string name="appTitle">મોબાઇલ સ્વાસ્થ્ય</string>
-    <string name="startup_note">ગુજરાત રાજ્ય દ્વારા બાળ મરણ અને માતા મરણ અટકાવવાના ઉમદા કાર્યમાં સહકાર આપવા
-“મોબાઇલ સ્વાસ્થ્ય” એપ્લીકેશન બનાવવમાં આવી છે.</string>
-    <string name="login">લોગીન</string>
-    <string name="today_schedule">આજનુ આયોજન</string>
-    <string name="yojnao">યોજનાઓ</string>
-    <string name="sansth_visit">આરોગ્ય સંસ્થાની મુલાકાત</string>
-    <string name="new_abhigam">નવીન અભિગમ્</string>
+    <string name="appTitle">Mobile Health</string>
+    <string name="startup_note"></string>
+    <string name="login">Login</string>
+    <string name="today_schedule">My Workplan</string>
+    <string name="yojnao">Schemes</string>
+    <string name="sansth_visit">Supervisor Visit</string>
+    <string name="new_abhigam">New Initiatives</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="change_pin">પીન બદલો</string>
-    <string name="get_pin">પીન\nમેળવો</string>
-    <string name="send_data">ડેટા મોકલો</string>
-    <string name="get_data">ડેટા મેળવો</string>
+    <string name="change_pin">Change Pin</string>
+    <string name="get_pin">Get Pin</string>
+    <string name="send_data">Upload Data</string>
+    <string name="get_data">Download Data</string>
     <string name="title_activity_data_operation">DataOperationActivity</string>
-    <string name="last_data_sent">છેલ્લે ડેટા મોકલેલ તારીખ</string>
-    <string name="last_data_get">છેલ્લે ડેટા મેળવેલ તારીખ</string>
-    <string name="go_ahead">આગળ વધો</string>
-    <string name="title_activity_health_seva">HealthSevaActivity</string>
-    <string name="health_seva">આરોગ્ય સેવાઓ</string>
-    <string name="health_servey">કુટુંબનું આરોગ્ય સર્વે</string>
-    <string name="sagarbha_seva">માતા આરોગ્ય</string>
-    <string name="sagarbha_seva_title">સગર્ભા સંસ્થાની સેવા</string>
-    <string name="prasuti_seva">પ્રસુતિ સેવા</string>
-    <string name="bal_seva">બાળ\nઆરોગ્ય સેવા</string>
-    <string name="bal_seva_ll">બાળ આરોગ્ય સેવા</string>
-    <string name="bal_rasikaran_seva">બાળ\nરસીકરણ સેવા</string>
-    <string name="kutumnb_kalyan_seva">કુટુંબ કલ્યાણ સેવા</string>
-    <string name="rog_sarvey">રોગનુ સર્વે</string>
-    <string name="death_register">મરણ નોધણી</string>
-    <string name="aasha">આશા</string>
-    <string name="staff_detail">સ્ક્ટાફની\n વિગત</string>
+    <string name="last_data_sent">Date of last uploaded data</string>
+    <string name="last_data_get">Date of last downloaded data</string>
+    <string name="go_ahead">Move ahead</string>
+    <string name="title_activity_health_seva">HealthServicesActivity</string>
+    <string name="health_seva">Health Services</string>
+    <string name="health_servey">Family Health Survey</string>
+    <string name="sagarbha_seva">Maternal Health</string>
+    <string name="sagarbha_seva_title">Antenatl Service</string>
+    <string name="prasuti_seva">Delivery Service</string>
+    <string name="bal_seva">Child Services</string>
+    <string name="bal_seva_ll">Child Health Service</string>
+    <string name="bal_rasikaran_seva">Child Imunization Service</string>
+    <string name="kutumnb_kalyan_seva">Family Planning Service</string>
+    <string name="rog_sarvey">Disease Survey</string>
+    <string name="death_register">Maternal Registration</string>
+    <string name="aasha">ASHA</string>
+    <string name="staff_detail">Staff</string>
     <string name="title_activity_family_heath_survey">FamilyHeathSurveyActivity</string>
-    <string name="clear">કાઢી\nનાખો</string>
+    <string name="clear">Delete</string>
 
     <!-- Family Health Survey-->
-    <string name="loading">કૃપા કરીને રાહ જુઓ</string>
-    <string name="add_family">કુટુંબ ઉમેરો</string>
-    <string name="edit_family">કુટુંબ સુધારો</string>
-    <string name="delete_family">કુટુંબ રદ કરો</string>
-    <string name="transfer_family">કુટુંબ\nસ્થાંળાંતર</string>
-    <string name="identity_family">કુટુંબ ના ઓળખપત્ર</string>
-    <string name="location_family">કુટુંબનું લોકેશન</string>
-    <string name="add_family_member">નવુ સભ્ય ઉમેરો</string>
-    <string name="edit_family_member">સભ્ય સુધારો</string>
-    <string name="delete_family_member">સભ્ય રદ કરો</string>
-    <string name="locate_family_member">સભ્ય\nસ્થાંળાંતર</string>
-    <string name="identity_family_member">સભ્યના ઓળખપત્ર</string>
-    <string name="bank_detail">સભ્યના બેંકની વિગત</string>
-    <string name="family_detail">કુટુંબની વિગત</string>
-    <string name="family_list">કુટુંબની યાદી</string>
-    <string name="family_member_detail">કુટુંબના સભ્યોની વિગત</string>
-    <string name="title_activity_sagrbhavstha">SagrbhavsthaActivity</string>
+    <string name="loading">Please wait for a while</string>
+    <string name="add_family">Add Family</string>
+    <string name="edit_family">Edit Family</string>
+    <string name="delete_family">Delete Family</string>
+    <string name="transfer_family">Migrate Family</string>
+    <string name="identity_family">Family ID Cards</string>
+    <string name="location_family">Family Location</string>
+    <string name="add_family_member">Add Member</string>
+    <string name="edit_family_member">Edit Member</string>
+    <string name="delete_family_member">Delete Member</string>
+    <string name="locate_family_member">Migrate Member</string>
+    <string name="identity_family_member">Member ID Cards</string>
+    <string name="bank_detail">Member Bank Details</string>
+    <string name="family_detail">Family Details</string>
+    <string name="family_list">List of Families</string>
+    <string name="family_member_detail">Member Details</string>
+    <string name="title_activity_sagrbhavstha">AntenatalActivity</string>
 
     <!-- Sagarbha Seva-->
-    <string name="masik_sevry">માસિક સર્વે</string>
-    <string name="new_pregnancy">નવી\nસગર્ભા\nનોધણી</string>
-    <string name="pregnancy_first_test">સગર્ભાની\nપ્રથમ\nતપાસ</string>
-    <string name="pregnancy_second_test">સગર્ભાની\nબીજી\nતપાસ</string>
-    <string name="pregnancy_third_test">સગર્ભાની\nત્રીજી\nતપાસ</string>
-    <string name="pregnancy_forth_test">સગર્ભાની\nચોથી\nતપાસ</string>
-    <string name="tt_1">ટીટી-1</string>
-    <string name="tt_2">ટીટી-2</string>
-    <string name="tt_booster">ટીટી-બુસ્ટર</string>
-    <string name="risky_mom">જોખમી માતા</string>
-    <string name="Kortikostiroidasa">કોર્ટીકોસ્ટીરોઇડસ</string>
+    <string name="masik_sevry"></string>
+    <string name="new_pregnancy"></string>
+    <string name="pregnancy_first_test"></string>
+    <string name="pregnancy_second_test"></string>
+    <string name="pregnancy_third_test"></string>
+    <string name="pregnancy_forth_test"></string>
+    <string name="tt_1"></string>
+    <string name="tt_2"></string>
+    <string name="tt_booster"></string>
+    <string name="risky_mom"></string>
+    <string name="Kortikostiroidasa"></string>
     <string name="title_activity_bal_rasikaran">BalRasikaranActivity</string>
 
     <!-- Bal Rasikaran-->
-    <string name="bal_rasikaran">બાળ રસીકરણ</string>
-    <string name="polio_0">પોલીઓ-0</string>
-    <string name="hipetytis_0">હીપેટાઇટીસ-0</string>
-    <string name="bcg">બીસીજી</string>
-    <string name="pentavelent_1">પેન્ટાવેલેન્ટ-1</string>
-    <string name="pentavelent_2">પેન્ટાવેલેન્ટ-2</string>
-    <string name="pentavelent_3">પેન્ટાવેલેન્ટ-3</string>
-    <string name="ori_1">ઓરી-1</string>
-    <string name="ori_2">ઓરી-2</string>
-    <string name="vita_a_1">વિટા-એ-1</string>
-    <string name="dpt_1">ડીપીટી-1</string>
-    <string name="dpt_2">ડીપીટી-2</string>
-    <string name="dpt_3">ડીપીટી-3</string>
-    <string name="dpt_booster">ડીપીટી-બુસ્ટર્</string>
-    <string name="polio_booster">પોલીઓ-બુસ્ટર્</string>
-    <string name="dpt_five_year">ડીપીટી-5 વર્ષ</string>
-    <string name="tt_ten_year">ટીટી-10 વર્ષ</string>
-    <string name="tt_sixtine_year">ટીટી-16 વર્ષ</string>
+    <string name="bal_rasikaran"></string>
+    <string name="polio_0"></string>
+    <string name="hipetytis_0"></string>
+    <string name="bcg"></string>
+    <string name="pentavelent_1"></string>
+    <string name="pentavelent_2"></string>
+    <string name="pentavelent_3"></string>
+    <string name="ori_1"></string>
+    <string name="ori_2"></string>
+    <string name="vita_a_1"></string>
+    <string name="dpt_1"></string>
+    <string name="dpt_2"></string>
+    <string name="dpt_3"></string>
+    <string name="dpt_booster"></string>
+    <string name="polio_booster"></string>
+    <string name="dpt_five_year"></string>
+    <string name="tt_ten_year"></string>
+    <string name="tt_sixtine_year"></string>
     <string name="title_activity_bal_health">BalHealthActivity</string>
 
     <!-- Bal Health-->
-    <string name="bal_seva_title">બાળ આરોગ્ય સેવા</string>
-    <string name="hbnc">એચબીએનસી</string>
-    <string name="imnci">આઇએમએનસીઆઇ</string>
+    <string name="bal_seva_title"></string>
+    <string name="hbnc"></string>
+    <string name="imnci"></string>
     <string name="title_activity_add_kutumb">AddKutumbActivity</string>
     
     <!-- Add Family-->
-    <string name="village_name">ગામનું નામ</string>
-    <string name="family_number">કુટુંબ નોંધણી નબંર</string>
-    <string name="house_number">ઘર નંબર</string>
-    <string name="street_name">ફળિયું/સોસાયટીનું નામ</string>
-    <string name="risky_area">જોખમી વિસ્તાર છે?</string>
-    <string name="aasha_name">આશાનું નામ</string>
-    <string name="family_address">સરનામું</string>
-    <string name="family_cast">જ્ઞાતિ</string>
-    <string name="family_dharm">ધર્મ</string>
-    <string name="family_bpl">બીપીએલ છે?</string>
-    <string name="main_member_photo">મુખ્ય સભ્યનો ફોટો</string>
-    <string name="landmark">લેન્ડમાર્ક</string>
-    <string name="aaganvadi_no">આંગણવાડી નં.</string>
-    <string name="family_yes">હા</string>
-    <string name="family_no">ના</string>
-    <string name="family_identity">ઓળખપત્ર</string>
-    <string name="family_location">લોકેશન લો</string>
-    <string name="family_add_member">સભ્ય ઉમેરો</string>
+    <string name="village_name">Village name</string>
+    <string name="family_number">Family registration number</string>
+    <string name="house_number">House number</string>
+    <string name="street_name">Street/Society name</string>
+    <string name="risky_area">Is high risk area?</string>
+    <string name="aasha_name">ASHA name</string>
+    <string name="family_address">Address</string>
+    <string name="family_cast">Caste</string>
+    <string name="family_dharm">Religion</string>
+    <string name="family_bpl">Is BPL?</string>
+    <string name="main_member_photo">Photo</string>
+    <string name="landmark">Landmark</string>
+    <string name="aaganvadi_no">Anganwadi name.</string>
+    <string name="family_yes">Yes</string>
+    <string name="family_no">No</string>
+    <string name="family_identity">Identity card</string>
+    <string name="family_location">Fatch location</string>
+    <string name="family_add_member">Add member</string>
     <string name="title_activity_family_identity">FamilyIdentityActivity</string>
 
     <!-- Identity-->
-    <string name="bpl_number">બીપીલ લાભર્થી નંબર</string>
-    <string name="bpl_card_number">બીપીલ કાર્ડ નંબર</string>
-    <string name="rsby_number">RSBY નંબર</string>
-    <string name="maa_card_number">માં કાર્ડ નંબર</string>
-    <string name="save">સેવ કરો</string>
-    <string name="edit">સુધારો</string>
+    <string name="bpl_number">BPL number</string>
+    <string name="bpl_card_number">Ration card number</string>
+    <string name="rsby_number">RSBY number</string>
+    <string name="maa_card_number">MA card number</string>
+    <string name="save">Save</string>
+    <string name="edit">Edit</string>
     <string name="title_activity_family_list">FamilyListActivity</string>
 
     <!-- Edit Family-->
-    <string name="search">શોધો</string>
-    <string name="family_search_number">કુટુંબ નંબર</string>
-    <string name="main_member_name">મુખ્ય માણસનું નામ</string>
+    <string name="search">Search</string>
+    <string name="family_search_number">Family registration number</string>
+    <string name="main_member_name">Head of family name</string>
     <string name="title_activity_add_family_member">AddFamilyMemberActivity</string>
 
     <!-- Add Family Number-->
-    <string name="health_number">હેલ્થ યુનિક નંબર</string>
-    <string name="Take_photo">ફોટૉ લો</string>
-    <string name="Name">નામ</string>
-    <string name="Sir_Name">અટક</string>
-    <string name="Sex">જાતિ</string>
-    <string name="husband_name">પિતા / પતિનું નામ</string>
-    <string name="family_head">કુટુુંબના વડા છે?</string>
-    <string name="family_head_relation">કુટુુંબના વડા સાથેનો સબંધ</string>
-    <string name="Marital_status">વૈવાહિક દરજ્જો</string>
-    <string name="Birth_date">જન્મ તારીખ</string>
-    <string name="Mobile_number">મોબાઇલ નંબર</string>
-    <string name="Whos_wife">કોની પત્ની છે?</string>
-    <string name="Whos_sun_daughter">કોનો પુત્ર કે પુત્રી છે? </string>
-    <string name="Family_welfare">કુટુુંબ કલ્યાણની કઇ પધ્ધતિ અપનાવેલ છે?</string>
-    <string name="Family_welfare_user">કુટુુંબ કલ્યાણની કઇ પધ્ધતિ અપનાવવા માગો છે?</string>
-    <string name="Want_Family_welfare">કુટુુંબ કલ્યાણની પધ્ધતિ અપનાવવા માગો છે?</string>
-    <string name="second_child">બીજા બાળકની ઇચ્છા ધરાવે છે? </string>
-    <string name="isPregnent">હાલમાં સગર્ભા છે?</string>
-    <string name="Current_Status">હાલની સ્થિતી</string>
-    <string name="periods_status">માસિકની સ્થિતી</string>
-    <string name="Please_Modern">અધતન કરો</string>
-    <string name="Cancel">રદ કરો</string>
-    <string name="Please_migration">સ્થળાતર કરો</string>
-    <string name="Male">પુરૂષ</string>
-    <string name="Female">સ્ત્રી</string>
-    <string name="Living">જીવિત</string>
-    <string name="Dead">મૃત</string>
-    <string name="bank_name">બેન્કનુું નામ</string>
-    <string name="branch_name">બ્રાન્ચનુું નામ</string>
-    <string name="ac_number">એકાઉન્ટ નબંર</string>
+    <string name="health_number">Unique health number </string>
+    <string name="Take_photo">Take photo</string>
+    <string name="Name">First name</string>
+    <string name="Sir_Name">Last name</string>
+    <string name="Sex">Gender</string>
+    <string name="husband_name">Father/Husband name</string>
+    <string name="family_head">Is family head?</string>
+    <string name="family_head_relation">Relation with family head</string>
+    <string name="Marital_status">Marital status</string>
+    <string name="Birth_date">Birth date</string>
+    <string name="Mobile_number">Mobile numer</string>
+    <string name="Whos_wife">Wife of?</string>
+    <string name="Whos_sun_daughter">child of? </string>
+    <string name="Family_welfare">Adopted family planning method ?</string>
+    <string name="Family_welfare_user">Do you want to adopt family planning method?</string>
+    <string name="Want_Family_welfare">Which family planning method?</string>
+    <string name="second_child">Need child? </string>
+    <string name="isPregnent">Is pregnant?</string>
+    <string name="Current_Status">Current status</string>
+    <string name="periods_status">Menstruation status</string>
+    <string name="Please_Modern">Update</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Delete">Delete</string>
+    <string name="Please_migration">Please migrate</string>
+    <string name="Male">Male</string>
+    <string name="Female">Female</string>
+    <string name="Living">Live</string>
+    <string name="Dead">Death</string>
+    <string name="bank_name">Bank name</string>
+    <string name="branch_name">Branch name</string>
+    <string name="ac_number">Account number</string>
     <string name="IFSC_Code">IFSC Code</string>
-    <string name="aadhar_no">આધાર નબંર</string>
-    <string name="election_no">ચૂંટણી કાર્ડ નં</string>
-    <string name="pan_no">પાન નં</string>
-    <string name="driving_no">ડ્રાઇવિંગ નં</string>
-    <string name="passport_no">પાસપોર્ટ નં</string>
-    <string name="family_head_name">મુખ્ય સભ્યનું નામ</string>
+    <string name="aadhar_no">Adhar number</string>
+    <string name="election_no">Voter\'s card number</string>
+    <string name="pan_no">Page number</string>
+    <string name="driving_no">Driving License</string>
+    <string name="passport_no">Passport number</string>
+    <string name="family_head_name">Head of family name</string>
     <string-array name="family_walfare">
-        <item>એનએસવી (NSV)</item>
-        <item>વાઝેક્ટોમી (VT)</item>
-        <item>લેપ્રો ટીએલ </item>
-        <item>કોપર-ટી</item>
-        <item>ઓરલ પીલ્સ </item>
-        <item>નિરોધ </item>
-        <item>અન્ય </item>
-        <item>એબ્ડોમીનલ ટીએલ </item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
     </string-array>
 
     <string-array name="masik">
-        <item>આવેલ નથી</item>
-        <item>આવે છે</item>
+        <item></item>
+        <item></item>
     </string-array>
 
     <string-array name="years">
@@ -207,19 +207,41 @@
     <string name="title_activity_new_family">NewFamilyActivity</string>
     <string name="title_activity_update_family_member">UpdateFamilyMemberActivity</string>
 
-    <string name="dist">જિલ્લો પસંદ કરો</string>
-    <string name="taluko">તાલુકો પસંદ કરો</string>
-    <string name="select_village">ગામ પસંદ કરો</string>
-    <string name="migrate_type">સ્થળાંતરનો પ્રકાર </string>
-    <string name="parmenant">કાયમી/સાસરી</string>
-    <string name="temp">બિનકાયમી</string>
+    <string name="dist">Select district</string>
+    <string name="taluko">select taluko</string>
+    <string name="select_village">Select village</string>
+    <string name="migrate_type">Migration type</string>
+    <string name="parmenant">Permanent</string>
+    <string name="temp">Temporary</string>
     <string name="title_activity_first">FirstActivity</string>
 
-    <string name="data_entry">ડેટા એન્ટ્રી માટે</string>
-    <string name="my_schedule">મારું કાર્ય આયોજન</string>
-    <string name="sub_report">સબસેન્ટર\nરિપોર્ટ</string>
-    <string name="sup_visit">સુપરવાઇઝર\nમુલાકાત</string>
-    <string name="help">સહાય લો</string>
+    <string name="data_entry">Login</string>
+    <string name="my_schedule">My workplan</string>
+    <string name="sub_report">Reports</string>
+    <string name="sup_visit">Supervisor visit</string>
+    <string name="help">Help</string>
+	
+	 <!-- Messages-->
+    <string name="please_wait">Please wait for a while...</string>
+    <string name="no_internet">Please check internet connection</string>
+    <string name="wrong_pass">Wrong password</string>
+    <string name="no_match">Data is not available</string>
+    <string name="three_char">Please type minimum two digits</string>
+    <string name="family_saved">Family successfully saved</string>
+    <string name="family_updated">Family successfully updated</string>
+    <string name="family_delete">Do you want to delete family?</string>
+    <string name="member_delete">Do you want to delete family member?</string>
+    <string name="add_street">Add Street/Society name</string>
+    <string name="no_data">No data</string>
+    <string name="work_in_progress">Under development</string>
+    <string name="migrate_success">Successfully migrated</string>
+    <string name="migrate_not_success">Migration unsuccessfull</string>
+    <string name="family_delete_success">Family successfully deleted</string>
+    <string name="family_delete_unsuccess">Family delete unsuccessfull</string>
+    <string name="data_download_success">Data successfully downloaded</string>
+    <string name="member_update_success">Family member successfully updated</string>
+    <string name="member_new_success">Family member successfully saved</string>
+    <string name="family_update_success">Family successfully updated</string>
+    <string name="family_new_success">Family successfully saved</string>
+    <string name="member_list">Member List</string>
 </resources>
-
-

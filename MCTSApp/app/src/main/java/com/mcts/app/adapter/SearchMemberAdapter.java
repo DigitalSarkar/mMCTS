@@ -107,6 +107,8 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
             if(familyArrayList.get(position).getUserImageArray().length>5) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(familyArrayList.get(position).getUserImageArray(), 0, familyArrayList.get(position).getUserImageArray().length);
                 viewHolder.img_member.setImageBitmap(bitmap);
+            }else {
+                viewHolder.img_member.setImageResource(R.drawable.ic_launcher);
             }
         }else{
             viewHolder.img_member.setImageResource(R.drawable.ic_launcher);
@@ -147,10 +149,11 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
                 View view=mInflater.inflate(R.layout.custom_delete_dialog, null);
                 Utils.findAllTextView(context, ((ViewGroup) view.findViewById(R.id.ll_delete)));
                 final TextView txt_delete_title=(TextView)view.findViewById(R.id.txt_delete_title);
-                txt_delete_title.setText(Messages.DELETE_FAMILY);
+                txt_delete_title.setText(R.string.family_delete);
                 Button bt_delete_yes=(Button)view.findViewById(R.id.bt_delete_yes);
                 Button bt_delete_no=(Button)view.findViewById(R.id.bt_delete_no);
-
+                TextView deleteFam=(TextView)v;
+                final String eMamtaid=deleteFam.getTag().toString();
                 bt_delete_no.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -163,19 +166,22 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
                     public void onClick(View v) {
                         dialog.dismiss();
 
-                        TextView deleteFam=(TextView)v;
                         DatabaseHelper databaseHelper=new DatabaseHelper(context);
-                        String eMamtaId=deleteFam.getTag().toString();
-                        boolean flag=databaseHelper.deleteFamily(eMamtaId);
+                        boolean flag=databaseHelper.deleteFamily(eMamtaid);
                         if(!flag){
-                            CustomToast customToast=new CustomToast((Activity) context,"Invalid operation");
+                            String str=context.getResources().getString(R.string.family_delete_unsuccess);
+                            CustomToast customToast=new CustomToast((Activity) context,str);
                             customToast.show();
                         }else{
-                            boolean result=databaseHelper.deleteFamilyMember(eMamtaId);
+                            boolean result=databaseHelper.deleteFamilyMember(eMamtaid);
                             if(!result){
-                                CustomToast customToast=new CustomToast((Activity) context,"Invalid operation");
+                                String str=context.getResources().getString(R.string.family_delete_unsuccess);
+                                CustomToast customToast=new CustomToast((Activity) context,str);
                                 customToast.show();
                             }else{
+                                String str=context.getResources().getString(R.string.family_delete_success);
+                                CustomToast customToast=new CustomToast((Activity) context,str);
+                                customToast.show();
                                 familyArrayList = databaseHelper.searchFamily(searchString, villageId);
                                 notifyDataSetChanged();
                             }
@@ -309,11 +315,15 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
                         DatabaseHelper databaseHelper = new DatabaseHelper(context);
                         boolean flag=databaseHelper.migrateFamily(eMamtaId,villageID,isParmenant);
                         if(!flag){
-                            CustomToast customToast=new CustomToast((Activity) context,"Invalid operation");
+                            String str=context.getResources().getString(R.string.migrate_not_success);
+                            CustomToast customToast=new CustomToast((Activity) context,str);
                             customToast.show();
                             migrateDialog.dismiss();
                         }else{
                             migrateDialog.dismiss();
+                            String str=context.getResources().getString(R.string.migrate_success);
+                            CustomToast customToast=new CustomToast((Activity) context,str);
+                            customToast.show();
                             familyArrayList = databaseHelper.searchFamily(searchString, villageId);
                             notifyDataSetChanged();
                         }

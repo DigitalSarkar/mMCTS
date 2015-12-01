@@ -15,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
@@ -64,6 +65,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
@@ -103,6 +106,8 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
 //    ImageView userImage;
     private String imageName = "item_picture";
     public static final int TAKE_PICTURE = 1;
+    private final int CROP_PIC = 2;
+    private Uri picUri;
     private String imageRealPath = null;
     private File compressFile;
     private Bitmap receipt_bitmap;
@@ -252,9 +257,6 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
         sp_street_name.setOnItemSelectedListener(this);
         sp_Marital_status.setOnItemSelectedListener(this);
         sp_aganvali.setOnItemSelectedListener(this);
-//
-
-
     }
 
     private void getDataFromDB() {
@@ -309,6 +311,19 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 final EditText ed_maa_card_number = (EditText) view.findViewById(R.id.ed_maa_card_number);
                 Button bt_save = (Button) view.findViewById(R.id.bt_save);
                 Button bt_identity_cancel = (Button) view.findViewById(R.id.bt_identity_cancel);
+
+                if(familyMember.getBplNumber()!=null){
+                    ed_bpl_number.setText(familyMember.getBplNumber());
+                }
+                if(familyMember.getRationcardNrumber()!=null) {
+                    ed_bpl_card_number.setText(familyMember.getRationcardNrumber());
+                }
+                if(familyMember.getRsbycardNumber()!=null) {
+                    ed_rsby_number.setText(familyMember.getRsbycardNumber());
+                }
+                if(familyMember.getMacardNumber()!=null) {
+                    ed_maa_card_number.setText(familyMember.getMacardNumber());
+                }
 
                 bt_identity_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -419,7 +434,8 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                                 e.printStackTrace();
                             }
                         }else{
-                            CustomToast customToast=new CustomToast(thisActivity, Messages.ADD_FALIYU);
+                            String str=thisActivity.getResources().getString(R.string.add_family);
+                            CustomToast customToast=new CustomToast(thisActivity, str);
                             customToast.show();
                         }
                     }
@@ -563,7 +579,8 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 if (isSave) {
                     boolean isMemberSave = databaseHelper.createMember(familyMember);
                     if (isMemberSave) {
-                        CustomToast customToast = new CustomToast(thisActivity, Messages.NEW_FAMILY_SAVE);
+                        String str=thisActivity.getResources().getString(R.string.family_new_success);
+                        CustomToast customToast=new CustomToast(thisActivity, str);
                         customToast.show();
                         ed_house_number.setEnabled(false);
                         ed_family_head_name.setEnabled(false);
@@ -614,13 +631,8 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
 
     public void captureImage() {
 
-        imageName = "picture_" + "" + System.currentTimeMillis();
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
-            Uri mImageCaptureUri = null;
-            mImageCaptureUri = Uri.fromFile(new File(getExternalFilesDir("temp"), imageName + ".png"));
-            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-            intent.putExtra("return-data", true);
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, TAKE_PICTURE);
         } catch (ActivityNotFoundException e) {
             Log.e(this + "", "cannot take picture " + e);
@@ -749,9 +761,9 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
             textView = (TextView) linearLayout.getChildAt(0);
             maritalStatus = textView.getTag().toString();
         } else if (parent.getId() == R.id.sp_aganvali) {
-//            linearLayout = (LinearLayout) view;
-//            textView = (TextView) linearLayout.getChildAt(0);
-//            aaganvadiId = textView.getTag().toString();
+            linearLayout = (LinearLayout) view;
+            textView = (TextView) linearLayout.getChildAt(0);
+            aaganvadiId = textView.getTag().toString();
         }
     }
 
@@ -761,21 +773,112 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == TAKE_PICTURE) {
-            if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == TAKE_PICTURE) {
 
-                imageRealPath = new File(getExternalFilesDir("temp"),
-                        imageName + ".png").getPath();
-                compressFile = new File(imageRealPath);
+                try {
+                    Bitmap bmp = (Bitmap) data.getExtras().get("data");
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+                    String dir = Environment.getExternalStorageDirectory() + File.separator + thisActivity.getResources().getString(R.string.app_name) + File.separator + "Images";
+                    File appDir = new File(dir);
+                    if (!appDir.exists())
+                        appDir.mkdirs();
+
+                    //you can create a new file name "test.jpg" in sdcard folder.
+                    File f = new File(appDir + "/" + File.separator + "MCTS_" + System.currentTimeMillis() + ".jpg");
+                    Log.d(TAG, "onActivity : File Name" + bmp);
+                    if (f.exists())
+                        f.delete();
+                    else
+                        f.createNewFile();
+                    //write the bytes in file
+                    FileOutputStream fo = new FileOutputStream(f);
+                    fo.write(bytes.toByteArray());
+
+                    // remember close de FileOutput
+                    fo.close();
+
+//                    picUri = Uri.fromFile(f);
+                    picUri = data.getData();
+                    Log.d(TAG, "onActivity : Camera File Path" + picUri.getPath());
+                    performCrop();
+
+                } catch (Exception e) {
+
+                }
+            } else if (requestCode == CROP_PIC) {
+                // get the returned data
+                Bundle extras = data.getExtras();
+                // get the cropped bitmap
+                Bitmap bitmap = extras.getParcelable("data");
+                bitmap = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
                 txt_take_image.setVisibility(View.GONE);
                 imgUserImage.setVisibility(View.VISIBLE);
-                receipt_bitmap = TakePictureUtils.decodeFile(compressFile);
-//                receipt_bitmap = Bitmap.createScaledBitmap(receipt_bitmap, width, height, true);
-                imgUserImage.setImageBitmap(receipt_bitmap);
+                imgUserImage.setImageBitmap(bitmap);
+
+                receipt_bitmap = extras.getParcelable("data");
+
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                receipt_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+                //you can create a new file name "test.jpg" in sdcard folder.
+                String dir = Environment.getExternalStorageDirectory() + File.separator + thisActivity.getResources().getString(R.string.app_name) + File.separator + "Images";
+                File appDir = new File(dir);
+                if (!appDir.exists())
+                    appDir.mkdirs();
+
+                //you can create a new file name "test.jpg" in sdcard folder.
+                File f = new File(appDir + "/" + File.separator + "MCTS_" + System.currentTimeMillis() + ".jpg");
+
+                Log.d(TAG, "onActivity : File Name" + receipt_bitmap);
+                if (f.exists())
+                    f.delete();
+                else
+                    try {
+                        f.createNewFile();
+                        //write the bytes in file
+                        FileOutputStream fo = new FileOutputStream(f);
+                        fo.write(bytes.toByteArray());
+
+                        // remember close de FileOutput
+                        fo.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
             }
-        } else {
-            Toast.makeText(getApplicationContext(), "No any image selected", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    private void performCrop() {
+        // take care of exceptions
+        try {
+            // call the standard crop action intent (the user device may not
+            // support it)
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            // indicate image type and Uri
+            cropIntent.setDataAndType(picUri, "image/*");
+            // set crop properties
+            cropIntent.putExtra("crop", "true");
+            // indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            // indicate output X and Y
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            // retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            // start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, CROP_PIC);
+        }
+        // respond to users whose devices do not support the crop action
+        catch (ActivityNotFoundException anfe) {
+            Toast toast = Toast
+                    .makeText(this, "This device doesn't support the crop action!", Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 

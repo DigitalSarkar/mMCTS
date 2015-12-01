@@ -30,8 +30,7 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
     private static String TAG="MainMenuActivity";
     private Toolbar mToolbar;
     private TextView mTitle;
-    private ImageView img_data_entry;
-    private LinearLayout ll_first;
+    private LinearLayout ll_first,ll_data_entry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +71,8 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         ll_first=(LinearLayout)findViewById(R.id.ll_first);
         Utils.findAllTextView(thisActivity, (ViewGroup) findViewById(R.id.ll_first));
 
-        img_data_entry=(ImageView)findViewById(R.id.img_data_entry);
-        img_data_entry.setOnClickListener(this);
+        ll_data_entry=(LinearLayout)findViewById(R.id.ll_data_entry);
+        ll_data_entry.setOnClickListener(this);
     }
 
     public static void setUpDirectories() {
@@ -121,7 +120,7 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
 
         switch (v.getId()){
-            case R.id.img_data_entry:
+            case R.id.ll_data_entry:
                 Intent intent=new Intent(thisActivity,LoginActivity.class);
                 startActivity(intent);
                 break;

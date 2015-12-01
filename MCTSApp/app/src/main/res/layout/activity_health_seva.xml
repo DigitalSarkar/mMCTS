@@ -353,6 +353,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_selector"
+                    android:padding="@dimen/scale_5"
                     android:text="@string/send_data"
                     android:textColor="@color/black" />
 
@@ -361,6 +362,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
+                    android:gravity="center_horizontal"
                     android:text="@string/last_data_sent"
                     android:textColor="@color/black"
                     android:textSize="@dimen/normal_font" />
@@ -384,6 +386,7 @@
                     android:id="@+id/bt_get_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/scale_5"
                     android:background="@drawable/button_selector"
                     android:text="@string/get_data"
                     android:textColor="@color/black" />
@@ -393,6 +396,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
+                    android:gravity="center_horizontal"
                     android:text="@string/last_data_get"
                     android:textColor="@color/black"
                     android:textSize="@dimen/normal_font" />

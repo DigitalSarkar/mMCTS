@@ -12,6 +12,7 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import android.widget.Toast;
 
 import com.mcts.app.R;
 import com.mcts.app.adapter.StatusAdapter;
+import com.mcts.app.customview.CustomToast;
 import com.mcts.app.db.DatabaseHelper;
 import com.mcts.app.model.MaritalStatus;
 import com.mcts.app.model.Member;
@@ -47,6 +49,8 @@ import com.mcts.app.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -75,9 +79,11 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
     ImageView imgUserImage;
     private String imageName = "item_picture";
     public static final int TAKE_PICTURE = 1;
+    private final int CROP_PIC = 2;
+    private Uri picUri;
     private String imageRealPath = null;
     private File compressFile;
-    private Bitmap receipt_bitmap;
+    private Bitmap image_bitmap;
     private int width, height;
     private byte[] userImagebyteArray;
     private String villageId,villageName,MemberId;
@@ -174,6 +180,8 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
         bt_Cancel = (Button) findViewById(R.id.bt_Cancel);
         bt_Please_migration = (Button) findViewById(R.id.bt_Please_migration);
 
+        txt_take_image.setVisibility(View.VISIBLE);
+        imgUserImage.setVisibility(View.GONE);
 
         bt_Please_Modern.setOnClickListener(this);
         rdb_yes.setOnClickListener(this);
@@ -189,7 +197,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
         rdb_isPregnent_yes.setOnClickListener(this);
         rdb_isPregnent_no.setOnClickListener(this);
         bt_family_identity.setOnClickListener(this);
-        bt_bank_detail.setOnClickListener(this);
+//        bt_bank_detail.setOnClickListener(this);
         ed_Birth_date.setOnClickListener(this);
         imgUserImage.setOnClickListener(this);
         txt_take_image.setOnClickListener(this);
@@ -211,10 +219,12 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
             ed_Mobile_number.setText(member.getMobileNo());
 
             if(member.getUserImageArray()!=null) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(member.getUserImageArray(), 0, member.getUserImageArray().length);
-                imgUserImage.setImageBitmap(bitmap);
-                txt_take_image.setVisibility(View.GONE);
-                imgUserImage.setVisibility(View.VISIBLE);
+                if(member.getUserImageArray().length>5) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(member.getUserImageArray(), 0, member.getUserImageArray().length);
+                    imgUserImage.setImageBitmap(bitmap);
+                    txt_take_image.setVisibility(View.GONE);
+                    imgUserImage.setVisibility(View.VISIBLE);
+                }
             }
 
             if(member.getIsHead()!=null) {
@@ -485,16 +495,20 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                 familyMember.setMemberStatus(memStatus);
                 String prdStatus=periodeStatus;
                 familyMember.setMenstruationStatus(prdStatus);
-                if(receipt_bitmap!=null) {
+                if(image_bitmap!=null) {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    receipt_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    image_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     userImagebyteArray = stream.toByteArray();
+                    Log.v(TAG,"Image length"+userImagebyteArray.length);
                 }
                 if (userImagebyteArray != null) {
                     familyMember.setUserImageArray(userImagebyteArray);
                 }
                 boolean flag=databaseHelper.updateFamilyMemberDetails(familyMember);
                 if(flag){
+                    String str=thisActivity.getResources().getString(R.string.member_update_success);
+                    CustomToast customToast=new CustomToast(thisActivity,str);
+                    customToast.show();
                     thisActivity.finish();
                 }
                 break;
@@ -607,16 +621,16 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                         passportNo =ed_passport_no.getText().toString();
 
                         if(!electionNo.equalsIgnoreCase(member.getElectioncardNumber())){
-                            familyMember.setElectioncardNumber(electionNo);
+                            member.setElectioncardNumber(electionNo);
                         }
                         if(!panNo.equalsIgnoreCase(member.getPancardNumber())) {
-                            familyMember.setPancardNumber(panNo);
+                            member.setPancardNumber(panNo);
                         }
                         if(!drivingNo.equalsIgnoreCase(member.getDrivingcardNumer())) {
-                            familyMember.setDrivingcardNumer(drivingNo);
+                            member.setDrivingcardNumer(drivingNo);
                         }
                         if(!passportNo.equalsIgnoreCase(member.getPassportcardNumber())) {
-                            familyMember.setPassportcardNumber(passportNo);
+                            member.setPassportcardNumber(passportNo);
                         }
                     }
                 });
@@ -628,10 +642,10 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                         panNo =ed_pan_no.getText().toString();
                         drivingNo =ed_driving_no.getText().toString();
                         passportNo =ed_passport_no.getText().toString();
-                        familyMember.setElectioncardNumber(electionNo);
-                        familyMember.setPancardNumber(panNo);
-                        familyMember.setDrivingcardNumer(drivingNo);
-                        familyMember.setPassportcardNumber(passportNo);
+                        member.setElectioncardNumber(electionNo);
+                        member.setPancardNumber(panNo);
+                        member.setDrivingcardNumer(drivingNo);
+                        member.setPassportcardNumber(passportNo);
                     }
                 });
 
@@ -662,42 +676,42 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                 dialog.show();
                 break;
             case R.id.bt_bank_detail:
-                final Dialog bankDialog = new Dialog(thisActivity);
-                LayoutInflater bankInflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View bankView=bankInflater.inflate(R.layout.bank_detail_layout, null);
-                Utils.findAllTextView(thisActivity, ((ViewGroup) bankView.findViewById(R.id.ll_alert)));
-                final EditText ed_branch_name=(EditText)bankView.findViewById(R.id.ed_branch_name);
-                final EditText ed_ac_number=(EditText)bankView.findViewById(R.id.ed_ac_number);
-                final EditText ed_IFSC_Code=(EditText)bankView.findViewById(R.id.ed_IFSC_Code);
-                final EditText ed_aadhar_no=(EditText)bankView.findViewById(R.id.ed_aadhar_no);
-                Button bt_save_bank=(Button)bankView.findViewById(R.id.bt_save_bank);
-                Button bt_cancel_bank=(Button)bankView.findViewById(R.id.bt_cancel_bank);
-
-                bankDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                bankDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                bankDialog.setContentView(bankView);
-
-                WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE); // for activity use context instead of getActivity()
-                Display bankDisplay = windowManager.getDefaultDisplay(); // getting the screen size of device
-                Point bankSize = new Point();
-                bankDisplay.getSize(bankSize);
-                int bankwidth1 = WindowManager.LayoutParams.WRAP_CONTENT;
-                int bankheight1 = WindowManager.LayoutParams.WRAP_CONTENT;
-
-                int bankTempValue = 0;
-                bankTempValue = ((bankSize.x) * 200) / 1440;
-                int bankwidth = bankSize.x - bankTempValue;  // Set your widths
-                int bankheight = bankheight1; // set your heights
-
-                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-                layoutParams.copyFrom(bankDialog.getWindow().getAttributes());
-
-                layoutParams.width = bankwidth;
-                layoutParams.height = bankheight;
-                bankDialog.getWindow().setAttributes(layoutParams);
-                bankDialog.setCancelable(false);
-                bankDialog.show();
-                break;
+//                final Dialog bankDialog = new Dialog(thisActivity);
+//                LayoutInflater bankInflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                View bankView=bankInflater.inflate(R.layout.bank_detail_layout, null);
+//                Utils.findAllTextView(thisActivity, ((ViewGroup) bankView.findViewById(R.id.ll_alert)));
+//                final EditText ed_branch_name=(EditText)bankView.findViewById(R.id.ed_branch_name);
+//                final EditText ed_ac_number=(EditText)bankView.findViewById(R.id.ed_ac_number);
+//                final EditText ed_IFSC_Code=(EditText)bankView.findViewById(R.id.ed_IFSC_Code);
+//                final EditText ed_aadhar_no=(EditText)bankView.findViewById(R.id.ed_aadhar_no);
+//                Button bt_save_bank=(Button)bankView.findViewById(R.id.bt_save_bank);
+//                Button bt_cancel_bank=(Button)bankView.findViewById(R.id.bt_cancel_bank);
+//
+//                bankDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                bankDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//                bankDialog.setContentView(bankView);
+//
+//                WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE); // for activity use context instead of getActivity()
+//                Display bankDisplay = windowManager.getDefaultDisplay(); // getting the screen size of device
+//                Point bankSize = new Point();
+//                bankDisplay.getSize(bankSize);
+//                int bankwidth1 = WindowManager.LayoutParams.WRAP_CONTENT;
+//                int bankheight1 = WindowManager.LayoutParams.WRAP_CONTENT;
+//
+//                int bankTempValue = 0;
+//                bankTempValue = ((bankSize.x) * 200) / 1440;
+//                int bankwidth = bankSize.x - bankTempValue;  // Set your widths
+//                int bankheight = bankheight1; // set your heights
+//
+//                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+//                layoutParams.copyFrom(bankDialog.getWindow().getAttributes());
+//
+//                layoutParams.width = bankwidth;
+//                layoutParams.height = bankheight;
+//                bankDialog.getWindow().setAttributes(layoutParams);
+//                bankDialog.setCancelable(false);
+//                bankDialog.show();
+//                break;
 
             case R.id.ed_Birth_date:
                 showDatePicker();
@@ -785,15 +799,10 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
 
     }
 
-    public void captureImage() {
+    /*public void captureImage() {
 
-        imageName = "picture_" + "" + System.currentTimeMillis();
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
-            Uri mImageCaptureUri = null;
-            mImageCaptureUri = Uri.fromFile(new File(getExternalFilesDir("temp"), imageName + ".png"));
-            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-            intent.putExtra("return-data", true);
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, TAKE_PICTURE);
         } catch (ActivityNotFoundException e) {
             Log.e(this + "", "cannot take picture " + e);
@@ -803,25 +812,257 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == TAKE_PICTURE) {
-            if (resultCode == RESULT_OK) {
 
-                imageRealPath = new File(getExternalFilesDir("temp"),
-                        imageName + ".png").getPath();
-                compressFile = new File(imageRealPath);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == TAKE_PICTURE) {
+
+                try{
+                    Bitmap bmp = (Bitmap)data.getExtras().get("data");
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+                    String dir = Environment.getExternalStorageDirectory() + File.separator + thisActivity.getResources().getString(R.string.app_name) + File.separator + "Images";
+                    File appDir = new File(dir);
+                    if (!appDir.exists())
+                        appDir.mkdirs();
+
+                    //you can create a new file name "test.jpg" in sdcard folder.
+                    File f = new File(appDir+"/"+File.separator + "MCTS_" + System.currentTimeMillis() + ".jpg");
+                    Log.d(TAG, "onActivity : File Name" + bmp);
+                    if(f.exists())
+                        f.delete();
+                    else
+                        f.createNewFile();
+                    //write the bytes in file
+                    FileOutputStream fo = new FileOutputStream(f);
+                    fo.write(bytes.toByteArray());
+
+                    // remember close de FileOutput
+                    fo.close();
+
+//                    picUri = Uri.fromFile(f);
+                    picUri = data.getData();
+                    Log.d(TAG, "onActivity : Camera File Path"+picUri.getPath());
+                    performCrop();
+
+                }
+                catch(Exception e) {
+
+                }
+            } else if (requestCode == CROP_PIC) {
+                // get the returned data
+                Bundle extras = data.getExtras();
+                // get the cropped bitmap
+                Bitmap bitmap = extras.getParcelable("data");
+                bitmap = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
                 txt_take_image.setVisibility(View.GONE);
                 imgUserImage.setVisibility(View.VISIBLE);
-                receipt_bitmap = TakePictureUtils.decodeFile(compressFile);
-//                receipt_bitmap = Bitmap.createScaledBitmap(receipt_bitmap, width, height, true);
-                imgUserImage.setImageBitmap(receipt_bitmap);
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                receipt_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                userImagebyteArray= stream.toByteArray();
+                imgUserImage.setImageBitmap(bitmap);
+
+                image_bitmap = extras.getParcelable("data");
+
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                image_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+                //you can create a new file name "test.jpg" in sdcard folder.
+                String dir = Environment.getExternalStorageDirectory() + File.separator + thisActivity.getResources().getString(R.string.app_name) + File.separator + "Images";
+                File appDir = new File(dir);
+                if (!appDir.exists())
+                    appDir.mkdirs();
+
+                //you can create a new file name "test.jpg" in sdcard folder.
+                File f = new File(appDir+"/"+File.separator + "MCTS_" + System.currentTimeMillis() + ".jpg");
+
+                Log.d(TAG, "onActivity : File Name" + image_bitmap);
+                if(f.exists())
+                    f.delete();
+                else
+                    try {
+                        f.createNewFile();
+                        //write the bytes in file
+                        FileOutputStream fo = new FileOutputStream(f);
+                        fo.write(bytes.toByteArray());
+
+                        // remember close de FileOutput
+                        fo.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
             }
-        } else {
-            Toast.makeText(getApplicationContext(), "No any image selected", Toast.LENGTH_SHORT).show();
+
         }
     }
+
+    private void performCrop() {
+        // take care of exceptions
+        try {
+            // call the standard crop action intent (the user device may not
+            // support it)
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            // indicate image type and Uri
+            cropIntent.setDataAndType(picUri, "image*//*");
+            // set crop properties
+            cropIntent.putExtra("crop", "true");
+            // indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            // indicate output X and Y
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            // retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            // start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, CROP_PIC);
+        }
+        // respond to users whose devices do not support the crop action
+        catch (ActivityNotFoundException anfe) {
+            Toast toast = Toast
+                    .makeText(this, "This device doesn't support the crop action!", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }*/
+
+    public void captureImage() {
+
+        try {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, TAKE_PICTURE);
+        } catch (ActivityNotFoundException e) {
+            Log.e(this + "", "cannot take picture " + e);
+        } catch (Exception ex) {
+            Log.e(this + "", "cannot take picture " + ex);
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (resultCode == RESULT_OK) {
+//            if (requestCode == TAKE_PICTURE) {
+//
+//                imageRealPath = new File(getExternalFilesDir("temp"),
+//                        imageName + ".png").getPath();
+//                compressFile = new File(imageRealPath);
+//                txt_take_image.setVisibility(View.GONE);
+//                imgUserImage.setVisibility(View.VISIBLE);
+//                receipt_bitmap = TakePictureUtils.decodeFile(compressFile);
+////                receipt_bitmap = Bitmap.createScaledBitmap(receipt_bitmap, width, height, true);
+//                imgUserImage.setImageBitmap(receipt_bitmap);
+////                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+////                receipt_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+////                userImagebyteArray= stream.toByteArray();
+//            }
+//        } else {
+//            Toast.makeText(getApplicationContext(), "No any image selected", Toast.LENGTH_SHORT).show();
+//        }
+        if (resultCode == RESULT_OK) {
+            if (requestCode == TAKE_PICTURE) {
+
+                try {
+                    Bitmap bmp = (Bitmap) data.getExtras().get("data");
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+                    String dir = Environment.getExternalStorageDirectory() + File.separator + thisActivity.getResources().getString(R.string.app_name) + File.separator + "Images";
+                    File appDir = new File(dir);
+                    if (!appDir.exists())
+                        appDir.mkdirs();
+
+                    //you can create a new file name "test.jpg" in sdcard folder.
+                    File f = new File(appDir + "/" + File.separator + "MCTS_" + System.currentTimeMillis() + ".jpg");
+                    Log.d(TAG, "onActivity : File Name" + bmp);
+                    if (f.exists())
+                        f.delete();
+                    else
+                        f.createNewFile();
+                    //write the bytes in file
+                    FileOutputStream fo = new FileOutputStream(f);
+                    fo.write(bytes.toByteArray());
+
+                    // remember close de FileOutput
+                    fo.close();
+
+//                    picUri = Uri.fromFile(f);
+                    picUri = data.getData();
+                    Log.d(TAG, "onActivity : Camera File Path" + picUri.getPath());
+                    performCrop();
+
+                } catch (Exception e) {
+
+                }
+            } else if (requestCode == CROP_PIC) {
+                // get the returned data
+                Bundle extras = data.getExtras();
+                // get the cropped bitmap
+                Bitmap bitmap = extras.getParcelable("data");
+                bitmap = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
+                txt_take_image.setVisibility(View.GONE);
+                imgUserImage.setVisibility(View.VISIBLE);
+                imgUserImage.setImageBitmap(bitmap);
+
+                image_bitmap = extras.getParcelable("data");
+
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                image_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+                //you can create a new file name "test.jpg" in sdcard folder.
+                String dir = Environment.getExternalStorageDirectory() + File.separator + thisActivity.getResources().getString(R.string.app_name) + File.separator + "Images";
+                File appDir = new File(dir);
+                if (!appDir.exists())
+                    appDir.mkdirs();
+
+                //you can create a new file name "test.jpg" in sdcard folder.
+                File f = new File(appDir + "/" + File.separator + "MCTS_" + System.currentTimeMillis() + ".jpg");
+
+                Log.d(TAG, "onActivity : File Name" + image_bitmap);
+                if (f.exists())
+                    f.delete();
+                else
+                    try {
+                        f.createNewFile();
+                        //write the bytes in file
+                        FileOutputStream fo = new FileOutputStream(f);
+                        fo.write(bytes.toByteArray());
+
+                        // remember close de FileOutput
+                        fo.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+            }
+
+        }
+    }
+
+    private void performCrop() {
+        // take care of exceptions
+        try {
+            // call the standard crop action intent (the user device may not
+            // support it)
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            // indicate image type and Uri
+            cropIntent.setDataAndType(picUri, "image/*");
+            // set crop properties
+            cropIntent.putExtra("crop", "true");
+            // indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            // indicate output X and Y
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            // retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            // start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, CROP_PIC);
+        }
+        // respond to users whose devices do not support the crop action
+        catch (ActivityNotFoundException anfe) {
+            Toast toast = Toast
+                    .makeText(this, "This device doesn't support the crop action!", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

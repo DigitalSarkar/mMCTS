@@ -565,7 +565,8 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
                                 e.printStackTrace();
                             }
                         }else{
-                            CustomToast customToast=new CustomToast(thisActivity, Messages.ADD_FALIYU);
+                            String str=thisActivity.getResources().getString(R.string.add_street);
+                            CustomToast customToast=new CustomToast(thisActivity, str);
                             customToast.show();
                         }
 
@@ -684,7 +685,8 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
 
                 boolean isSave=databaseHelper.updateFamilyDetails(familyMember);
                 if(isSave){
-                    CustomToast customToast=new CustomToast(thisActivity, Messages.FAMILY_UPDATE);
+                    String str=thisActivity.getResources().getString(R.string.family_update_success);
+                    CustomToast customToast=new CustomToast(thisActivity, str);
                     customToast.show();
                     ed_house_number.setEnabled(false);
                     ed_landmark.setEnabled(false);

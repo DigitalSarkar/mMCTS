@@ -118,19 +118,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public int getdatabaselenght() {
-        int db_length = 0;
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("select * from CheckIN_master", null);
-        if (c != null) {
-            while (c.moveToNext()) {
-                db_length++;
-            }
-        }
-        return db_length;
-    }
-
     public ArrayList<Religion> getReligionData() {
 
         ArrayList<Religion> religionArrayList = new ArrayList<>();
@@ -192,6 +179,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String selectQuery = "SELECT  * FROM tbl_anganwadi WHERE villageId='" + villageId + "' and subcentreId='" + subCenterId + "'";
             Cursor cursor = mDataBase.rawQuery(selectQuery, null);
 
+            Log.e("getAganvadi", selectQuery);
             // looping through all rows and adding to list
             if (cursor.moveToFirst()) {
                 do {
@@ -294,7 +282,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             insert.bindString(16, member.getUserId());
             insert.bindString(17, dateFormat.format(date));
             insert.bindString(18, "1");
-            if(member.getAnganwadiId()!=null) {
+            if (member.getAnganwadiId() != null) {
                 insert.bindString(19, member.getAnganwadiId());
             }
             insert.execute();
@@ -396,14 +384,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<Family> familyArrayList = new ArrayList<>();
         readDatabase();
         try {
-           /* String selectQuery = "SELECT m.memberId,fm.familyId,fm.emamtafamilyId,m.emamtafamilyId,m.firstName,m.middleName,m.lastName,m.photo\n" +
-                    "FROM tbl_member m inner join tbl_family fm " +
-                    "on m.emamtafamilyId=fm.emamtafamilyId " +
-                    "WHERE m.emamtafamilyId LIKE '%" + number + "%' and m.isHead='1' and fm.isActive=1 and fm.villageId='" + villageId + "'";*/
             String selectQuery = "SELECT m.memberId,fm.familyId,fm.emamtafamilyId,m.emamtafamilyId,m.firstName,m.middleName,m.lastName,m.photo\n" +
                     "FROM tbl_member m inner join tbl_family fm " +
                     "on m.emamtafamilyId=fm.emamtafamilyId " +
-                    "WHERE m.emamtafamilyId LIKE '%" + number + "%' and m.isHead='1' and fm.villageId='" + villageId + "'";
+                    "WHERE m.emamtafamilyId LIKE '%" + number + "%' and m.isHead='1' and fm.migrationtypeId!='0' and fm.isActive=1 and fm.villageId='" + villageId + "'";
+           /* String selectQuery = "SELECT m.memberId,fm.familyId,fm.emamtafamilyId,m.emamtafamilyId,m.firstName,m.middleName,m.lastName,m.photo\n" +
+                    "FROM tbl_member m inner join tbl_family fm " +
+                    "on m.emamtafamilyId=fm.emamtafamilyId " +
+                    "WHERE m.emamtafamilyId LIKE '%" + number + "%' and m.isHead='1' and fm.villageId='" + villageId + "'";*/
             Log.e("searchFamily", selectQuery);
 
             Cursor cursor = mDataBase.rawQuery(selectQuery, null);
@@ -416,10 +404,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     family.setId(cursor.getString(cursor.getColumnIndex("familyId")));
                     family.setEmamtaFamilyId(cursor.getString(cursor.getColumnIndex("emamtafamilyId")));
                     family.setMemberName(cursor.getString(cursor.getColumnIndex("firstName")) + " " + cursor.getString(cursor.getColumnIndex("middleName")) + " " + cursor.getString(cursor.getColumnIndex("lastName")));
-                    if(cursor.getBlob(cursor.getColumnIndex("photo")).length>5) {
-                        family.setUserImageArray(cursor.getBlob(cursor.getColumnIndex("photo")));
-                    }else{
+                    if (cursor.getBlob(cursor.getColumnIndex("photo")) != null) {
+                        if (cursor.getBlob(cursor.getColumnIndex("photo")).length > 5) {
+                            family.setUserImageArray(cursor.getBlob(cursor.getColumnIndex("photo")));
+                        } else {
 
+                        }
                     }
                     familyArrayList.add(family);
                 } while (cursor.moveToNext());
@@ -541,7 +531,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteMemberData() {
         writeDatabase();
         try {
-            mDataBase.delete(DBConstant.MEMBER_TABLE, null, null);
+            mDataBase.delete(DBConstant.MEMBER_TABLE, "1", null);
         } catch (Exception e) {
             Log.i("Exe : ", e.getMessage());
             e.printStackTrace();
@@ -556,18 +546,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mDataBase.beginTransaction();
 
         try {
-//            String sql = "Insert into " + DBConstant.MEMBER_TABLE + "(memberId,emamtahealthId,familyId,emamtafamilyId,villageId," +
-//                    "emrNumber,photo,firstName,middleName,lastName,firstnameEng,middlenameEng,lastnameEng,isHead,relationwithheadId," +
-//                    "gender,maritalStatus,birthDate,mobileNo,childof,wifeof,adoptedfpMethod,wanttoadoptfpMethod,plannedfpMethod,isPregnant" +
-//                    ",wantChild,memberStatus,menstruationStatus,adharcardNumber,electioncardNumber,pancardNumber,drivingcardNumer,passportcardNumber" +
-//                    ",migratedemamtafamilyId,migratedemamtamemberId,createdbyuserId,createdDate,updatedDate,subcentreId" +
-//                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             String sql = "Insert into " + DBConstant.MEMBER_TABLE + "(memberId,emamtahealthId,familyId,emamtafamilyId,villageId," +
                     "emrNumber,photo,firstName,middleName,lastName,firstnameEng,middlenameEng,lastnameEng,isHead,relationwithheadId," +
                     "gender,maritalStatus,birthDate,mobileNo,childof,wifeof,adoptedfpMethod,wanttoadoptfpMethod,plannedfpMethod,isPregnant" +
                     ",wantChild,memberStatus,menstruationStatus,adharcardNumber,electioncardNumber,pancardNumber,drivingcardNumer,passportcardNumber" +
-                    ",migratedemamtafamilyId,migratedemamtamemberId,createdbyuserId,createdDate,updatedDate" +
-                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    ",migratedemamtafamilyId,migratedemamtamemberId,createdbyuserId,createdDate,updatedDate,subcentreId,isActive" +
+                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+//            String sql = "Insert into " + DBConstant.MEMBER_TABLE + "(memberId,emamtahealthId,familyId,emamtafamilyId,villageId," +
+//                    "emrNumber,photo,firstName,middleName,lastName,firstnameEng,middlenameEng,lastnameEng,isHead,relationwithheadId," +
+//                    "gender,maritalStatus,birthDate,mobileNo,childof,wifeof,adoptedfpMethod,wanttoadoptfpMethod,plannedfpMethod,isPregnant" +
+//                    ",wantChild,memberStatus,menstruationStatus,adharcardNumber,electioncardNumber,pancardNumber,drivingcardNumer,passportcardNumber" +
+//                    ",migratedemamtafamilyId,migratedemamtamemberId,createdbyuserId,createdDate,updatedDate" +
+//                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             SQLiteStatement insert = mDataBase.compileStatement(sql);
 
             for (int i = 0; i < jsonMemberArray.length(); i++) {
@@ -578,7 +568,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 insert.bindString(4, jsonObject.getString("emamtafamilyId"));
                 insert.bindString(5, jsonObject.getString("villageId"));
                 insert.bindString(6, jsonObject.getString("emrNumber"));
-                if(jsonObject.getString("photo")!=null) {
+                if (jsonObject.getString("photo") != null) {
                     insert.bindString(7, jsonObject.getString("photo"));
                 }
                 insert.bindString(8, jsonObject.getString("firstName"));
@@ -612,7 +602,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 insert.bindString(36, jsonObject.getString("createdbyuserId"));
                 insert.bindString(37, jsonObject.getString("createdDate"));
                 insert.bindString(38, jsonObject.getString("updatedDate"));
-//                insert.bindString(39, jsonObject.getString("subcentreId"));
+                insert.bindString(39, jsonObject.getString("subcentreId"));
+                insert.bindString(40, jsonObject.getString("isActive"));
                 insert.execute();
             }
             mDataBase.setTransactionSuccessful();
@@ -636,8 +627,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             String sql = "Insert into " + DBConstant.FAMILY_TABLE + "(familyId,emamtafamilyId,villageId,migratedvillagId," +
                     "houseNumber,faliyaId,landmark,racialId,religionId,isBpl,migrationtypeId,bplNumber,rationcardNrumber,rsbycardNumber," +
-                    "macardNumber,mavatsalyacardNumber,lattitudes,longitude,createdbyuserId,createdDate,updatedDate,faliyaId" +
-                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    "macardNumber,mavatsalyacardNumber,lattitudes,longitude,createdbyuserId,createdDate,updatedDate,faliyaId,isActive" +
+                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             SQLiteStatement insert = mDataBase.compileStatement(sql);
 
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -664,6 +655,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 insert.bindString(20, jsonObject.getString("createdDate"));
                 insert.bindString(21, jsonObject.getString("updatedDate"));
                 insert.bindString(22, jsonObject.getString("faliyaId"));
+                insert.bindString(23, jsonObject.getString("isActive"));
                 insert.execute();
             }
             mDataBase.setTransactionSuccessful();
@@ -685,13 +677,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mDataBase.beginTransaction();
 
         try {
-            String sql = "Insert into " + DBConstant.VILLAGE_TABLE + "(villageId,village) values (?,?)";
+            String sql = "Insert into " + DBConstant.VILLAGE_TABLE + "(villageId,village,subcentreId,talukaId) values (?,?,?,?)";
             SQLiteStatement insert = mDataBase.compileStatement(sql);
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 insert.bindLong(1, jsonObject.getInt("villageId"));
                 insert.bindString(2, jsonObject.getString("village"));
+                insert.bindString(3, jsonObject.getString("subcentreId"));
+                insert.bindString(4, jsonObject.getString("talukaId"));
                 insert.execute();
             }
             mDataBase.setTransactionSuccessful();
@@ -710,7 +704,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteFamilyDetail() {
         writeDatabase();
         try {
-            mDataBase.delete(DBConstant.FAMILY_TABLE, null, null);
+            mDataBase.delete(DBConstant.FAMILY_TABLE, "1", null);
         } catch (Exception e) {
             Log.i("Exe : ", e.getMessage());
             e.printStackTrace();
@@ -722,7 +716,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteVillageDetail() {
         writeDatabase();
         try {
-            mDataBase.delete(DBConstant.VILLAGE_TABLE, null, null);
+            mDataBase.delete(DBConstant.VILLAGE_TABLE, "1", null);
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+    }
+
+    public void deleteAganwadieDetail() {
+        writeDatabase();
+        try {
+            mDataBase.delete(DBConstant.AGANWADI_TABLE, "1", null);
         } catch (Exception e) {
             Log.i("Exe : ", e.getMessage());
             e.printStackTrace();
@@ -795,14 +801,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<Family> familyArrayList = new ArrayList<>();
         readDatabase();
         try {
-            /*String selectQuery = "SELECT m.memberId,fm.familyId,fm.emamtafamilyId,m.emamtafamilyId,m.emamtahealthId,m.firstName,m.middleName,m.lastName,m.photo\n" +
-                    "FROM tbl_member m inner join tbl_family fm " +
-                    "on m.emamtafamilyId=fm.emamtafamilyId " +
-                    "WHERE m.emamtafamilyId LIKE '%" + searchString + "%' and m.isActive=1 and fm.villageId='" + strVillageId + "'";*/
             String selectQuery = "SELECT m.memberId,fm.familyId,fm.emamtafamilyId,m.emamtafamilyId,m.emamtahealthId,m.firstName,m.middleName,m.lastName,m.photo\n" +
                     "FROM tbl_member m inner join tbl_family fm " +
                     "on m.emamtafamilyId=fm.emamtafamilyId " +
-                    "WHERE m.emamtafamilyId LIKE '%" + searchString + "%' and fm.villageId='" + strVillageId + "'";
+                    "WHERE m.emamtafamilyId LIKE '%" + searchString + "%' and fm.migrationtypeId!='0' and m.isActive=1 and fm.villageId='" + strVillageId + "'";
+            /*String selectQuery = "SELECT m.memberId,fm.familyId,fm.emamtafamilyId,m.emamtafamilyId,m.emamtahealthId,m.firstName,m.middleName,m.lastName,m.photo\n" +
+                    "FROM tbl_member m inner join tbl_family fm " +
+                    "on m.emamtafamilyId=fm.emamtafamilyId " +
+                    "WHERE m.emamtafamilyId LIKE '%" + searchString + "%' and fm.villageId='" + strVillageId + "'";*/
             Log.e("searchFamilyMember", selectQuery);
 
             Cursor cursor = mDataBase.rawQuery(selectQuery, null);
@@ -816,7 +822,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     family.setEmamtaFamilyId(cursor.getString(cursor.getColumnIndex("emamtafamilyId")));
                     family.setEmamtahealthId(cursor.getString(cursor.getColumnIndex("emamtahealthId")));
                     family.setMemberName(cursor.getString(cursor.getColumnIndex("firstName")) + " " + cursor.getString(cursor.getColumnIndex("middleName")) + " " + cursor.getString(cursor.getColumnIndex("lastName")));
-                    family.setUserImageArray(cursor.getBlob(cursor.getColumnIndex("photo")));
+//                    family.setUserImageArray(cursor.getBlob(cursor.getColumnIndex("photo")));
+                    if (cursor.getBlob(cursor.getColumnIndex("photo")) != null) {
+                        if (cursor.getBlob(cursor.getColumnIndex("photo")).length > 5) {
+                            family.setUserImageArray(cursor.getBlob(cursor.getColumnIndex("photo")));
+                        } else {
+
+                        }
+                    }
                     familyArrayList.add(family);
                 } while (cursor.moveToNext());
             }
@@ -1030,16 +1043,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             contentValues.put("wantChild", member.getWantChild());
             contentValues.put("memberStatus", member.getMemberStatus());
             contentValues.put("menstruationStatus", member.getMenstruationStatus());
-            if(member.getElectioncardNumber()!=null) {
+            if (member.getElectioncardNumber() != null) {
                 contentValues.put("electioncardNumber", member.getElectioncardNumber());
             }
-            if(member.getPancardNumber()!=null) {
+            if (member.getPancardNumber() != null) {
                 contentValues.put("pancardNumber", member.getPancardNumber());
             }
-            if(member.getDrivingcardNumer()!=null) {
+            if (member.getDrivingcardNumer() != null) {
                 contentValues.put("drivingcardNumer", member.getDrivingcardNumer());
             }
-            if(member.getPassportcardNumber()!=null) {
+            if (member.getPassportcardNumber() != null) {
                 contentValues.put("passportcardNumber", member.getPassportcardNumber());
             }
             contentValues.put("updatedDate", dateFormat.format(date));
@@ -1091,16 +1104,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             insert.bindString(20, familyMember.getMemberStatus());
             insert.bindString(21, familyMember.getMenstruationStatus());
 
-            if(familyMember.getElectioncardNumber()!=null) {
+            if (familyMember.getElectioncardNumber() != null) {
                 insert.bindString(22, familyMember.getElectioncardNumber());
             }
-            if(familyMember.getPancardNumber()!=null) {
+            if (familyMember.getPancardNumber() != null) {
                 insert.bindString(23, familyMember.getPancardNumber());
             }
-            if(familyMember.getDrivingcardNumer()!=null) {
+            if (familyMember.getDrivingcardNumer() != null) {
                 insert.bindString(24, familyMember.getDrivingcardNumer());
             }
-            if(familyMember.getPassportcardNumber()!=null) {
+            if (familyMember.getPassportcardNumber() != null) {
                 insert.bindString(25, familyMember.getPassportcardNumber());
             }
             insert.bindString(26, familyMember.getUserId());
@@ -1183,7 +1196,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<MaritalStatus> getDistrictData() {
 
-        ArrayList<MaritalStatus> arrayListDistrict=new ArrayList<>();
+        ArrayList<MaritalStatus> arrayListDistrict = new ArrayList<>();
         readDatabase();
         try {
             String selectQuery = "select districtId,district from tbl_district where stateId=24";
@@ -1209,10 +1222,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<MaritalStatus> getTaluka(String dirstID) {
 
-        ArrayList<MaritalStatus> arrayListTaluka=new ArrayList<>();
+        ArrayList<MaritalStatus> arrayListTaluka = new ArrayList<>();
         readDatabase();
         try {
-            String selectQuery = "select talukaId,taluka from tbl_taluka where districtId='"+ dirstID+"'";
+            String selectQuery = "select talukaId,taluka from tbl_taluka where districtId='" + dirstID + "'";
 
             Log.v("getTaluka Query", selectQuery);
             Cursor cursor = mDataBase.rawQuery(selectQuery, null);
@@ -1234,10 +1247,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<MaritalStatus> getVillages(String talukaID) {
-        ArrayList<MaritalStatus> arrayListVillages=new ArrayList<>();
+        ArrayList<MaritalStatus> arrayListVillages = new ArrayList<>();
         readDatabase();
         try {
-            String selectQuery = "select villageId,village from tbl_village where talukaId='"+ talukaID+"'";
+            String selectQuery = "select villageId,village from tbl_village where talukaId='" + talukaID + "'";
 
             Log.v("getTaluka Query", selectQuery);
             Cursor cursor = mDataBase.rawQuery(selectQuery, null);
@@ -1278,7 +1291,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean migrateFamilyMember(String eMamtaId,String eHealthId, String villageID, String isParmenant) {
+    public boolean migrateFamilyMember(String eMamtaId, String eHealthId, String villageID, String isParmenant) {
         writeDatabase();
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -1302,7 +1315,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<MaritalStatus> getVillageData() {
 
-        ArrayList<MaritalStatus> villageArray=new ArrayList<>();
+        ArrayList<MaritalStatus> villageArray = new ArrayList<>();
         readDatabase();
         try {
             String selectQuery = "select villageId,village from tbl_village";
@@ -1324,5 +1337,140 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         closeDataBase();
         SQLiteDatabase.releaseMemory();
         return villageArray;
+    }
+
+    public boolean insertAganwadi(JSONArray jsonArray) {
+        mDataBase = getWritableDatabase();
+        mDataBase.beginTransaction();
+
+        try {
+            String sql = "Insert into " + DBConstant.AGANWADI_TABLE + "(anganwadiId,talukaId,subcentreId,villageId,anganwadi,createdDate,updatedDate,createdbyuserId) " +
+                    "values (?,?,?,?,?,?,?,?)";
+            SQLiteStatement insert = mDataBase.compileStatement(sql);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                insert.bindLong(1, jsonObject.getInt("anganwadiId"));
+                insert.bindString(2, jsonObject.getString("talukaId"));
+                insert.bindString(3, jsonObject.getString("subcentreId"));
+                insert.bindString(4, jsonObject.getString("villageId"));
+                insert.bindString(5, jsonObject.getString("anganwadi"));
+                insert.bindString(6, jsonObject.getString("createdDate"));
+                insert.bindString(7, jsonObject.getString("updatedDate"));
+                insert.bindString(8, jsonObject.getString("createdbyuserId"));
+                insert.execute();
+            }
+            mDataBase.setTransactionSuccessful();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (mDataBase != null) {
+                mDataBase.endTransaction();
+                mDataBase.close();
+            }
+        }
+        return true;
+    }
+
+    public void deleteUserDetails() {
+
+        writeDatabase();
+        try {
+            mDataBase.delete(DBConstant.USER_TABLE, "1", null);
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+    }
+
+    public boolean insertUser(JSONArray jsonArray) {
+        mDataBase = getWritableDatabase();
+        mDataBase.beginTransaction();
+
+        try {
+            String sql = "Insert into " + DBConstant.USER_TABLE + "(userId,employeeId,userName,originalPassword,createdDate,updatedDate,createdbyuserId,macId,imeiId) values (?,?,?,?,?,?,?,?,?)";
+            SQLiteStatement insert = mDataBase.compileStatement(sql);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                insert.bindLong(1, jsonObject.getInt("userId"));
+                insert.bindString(2, jsonObject.getString("employeeId"));
+                insert.bindString(3, jsonObject.getString("userName"));
+                insert.bindString(4, jsonObject.getString("originalPassword"));
+                insert.bindString(5, jsonObject.getString("createdDate"));
+                insert.bindString(6, jsonObject.getString("updatedDate"));
+                insert.bindString(7, jsonObject.getString("createdbyuserId"));
+                insert.bindString(8, jsonObject.getString("macId"));
+                insert.bindString(9, jsonObject.getString("imeiId"));
+                insert.execute();
+            }
+            mDataBase.setTransactionSuccessful();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (mDataBase != null) {
+                mDataBase.endTransaction();
+                mDataBase.close();
+            }
+        }
+        return true;
+    }
+
+    public boolean getUserDetails(String pin) {
+        readDatabase();
+        try {
+            String selectQuery = "Select userId " +
+                    "from tbl_userMaster " +
+                    "where originalPassword='" + pin + "'";
+
+            Log.v("getUserDetails Query", selectQuery);
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                if (cursor.getCount() != 0) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return false;
+    }
+
+    public JSONArray getFaliya() {
+        JSONArray jsonArray = new JSONArray();
+        readDatabase();
+        try {
+            String selectQuery = "select faliyaId,villageId,faliyaName,ishighRisk,createdbyuserId,createdDate,updatedDate from tbl_faliya";
+
+            Log.v("getTaluka Query", selectQuery);
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("faliyaId", cursor.getString(cursor.getColumnIndex("faliyaId")));
+                    jsonObject.put("villageId", cursor.getString(cursor.getColumnIndex("villageId")));
+                    jsonObject.put("faliyaName", cursor.getString(cursor.getColumnIndex("faliyaName")));
+                    jsonObject.put("ishighRisk", cursor.getString(cursor.getColumnIndex("ishighRisk")));
+                    jsonObject.put("createdbyuserId", cursor.getString(cursor.getColumnIndex("createdbyuserId")));
+                    jsonObject.put("createdDate", cursor.getString(cursor.getColumnIndex("createdDate")));
+                    jsonObject.put("updatedDate", cursor.getString(cursor.getColumnIndex("updatedDate")));
+                    jsonArray.put(jsonObject);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return jsonArray;
     }
 }

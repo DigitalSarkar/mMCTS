@@ -25,6 +25,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/ll_data_entry"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_10"
@@ -35,7 +36,7 @@
                     android:padding="@dimen/scale_5">
 
                     <ImageView
-                        android:id="@+id/img_data_entry"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/data_entry" />

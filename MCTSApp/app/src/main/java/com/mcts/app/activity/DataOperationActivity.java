@@ -95,7 +95,7 @@ public class DataOperationActivity extends AppCompatActivity implements View.OnC
         LayoutInflater mInflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View progressView = mInflater.inflate(R.layout.custom_progress_dialog, null);
         TextView txt_protext = (TextView) progressView.findViewById(R.id.txt_protext);
-        txt_protext.setText(Messages.DATA_DOWNLOAD);
+        txt_protext.setText(R.string.please_wait);
         Typeface type = Typeface.createFromAsset(getAssets(), "SHRUTI.TTF");
         txt_protext.setTypeface(type);
         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -168,7 +168,8 @@ public class DataOperationActivity extends AppCompatActivity implements View.OnC
 
                     progressDialog.show();
                 } else {
-                    CustomToast customToast = new CustomToast(thisActivity, Messages.NO_INTERNET);
+                    String str=thisActivity.getResources().getString(R.string.no_internet);
+                    CustomToast customToast = new CustomToast(thisActivity, str);
                     customToast.show();
                 }
                 break;
@@ -211,7 +212,8 @@ public class DataOperationActivity extends AppCompatActivity implements View.OnC
 
             queue.add(myReq);
         } else {
-            CustomToast customToast = new CustomToast(thisActivity, Messages.NO_INTERNET);
+            String str=thisActivity.getResources().getString(R.string.no_internet);
+            CustomToast customToast = new CustomToast(thisActivity, str);
             customToast.show();
         }
     }

@@ -29,6 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
 import com.mcts.app.R;
 import com.mcts.app.customview.CustomToast;
+import com.mcts.app.db.DatabaseHelper;
 import com.mcts.app.utils.Constants;
 import com.mcts.app.utils.Messages;
 import com.mcts.app.utils.NetworkUtil;
@@ -37,6 +38,7 @@ import com.mcts.app.volley.BaseActivity;
 import com.mcts.app.volley.Constant;
 import com.mcts.app.volley.IVolleyRespose;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,7 +62,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext=this;
+        mContext = this;
         setContentView(R.layout.activity_login);
         setToolBar();
         init();
@@ -126,7 +128,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         LayoutInflater mInflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View progressView = mInflater.inflate(R.layout.custom_progress_dialog, null);
         TextView txt_protext = (TextView) progressView.findViewById(R.id.txt_protext);
-        txt_protext.setText(Messages.DATA_DOWNLOAD);
+        txt_protext.setText(R.string.please_wait);
         Typeface type = Typeface.createFromAsset(getAssets(), "SHRUTI.TTF");
         txt_protext.setTypeface(type);
         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -305,28 +307,51 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onTextChanged(final CharSequence s, int start, int before, int count) {
-        if (s.toString().length() == 6 && txt_password.getText().length()==6) {
+        if (s.toString().length() == 6 && txt_password.getText().length() == 6) {
             if (isStart == false) {
                 isStart = true;
-                if (NetworkUtil.getConnectivityStatus(thisActivity) != 0) {
-                    Log.i("call","service");
-                    Map<String, String> params = new HashMap<>();
-                    params.put("password", s.toString());
-                    String strMAC=Utils.getMacAddress(thisActivity);
-                    params.put("macid", strMAC);
-                    String strIMEI=Utils.getIMEINumber(thisActivity);
-                    params.put("imeiid", strIMEI);
-                    callVolley(thisActivity, Constant.POST_REQUEST, Constants.USER_LOGIN, Constants.BASE_URL + Constants.USER_LOGIN, params, Constant.CALL_TIME_OUT, Constant.SHOULD_CACHE, Constant.VOLLEY_RETRY_COUNT, false, Constant.IS_PROGRESSDAILOG_CANCELABLE, mContext);
-
+                SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
+                String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
+                if (userDetail != null) {
+                    DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
+                    boolean isValid = databaseHelper.getUserDetails(s.toString());
+                    if (isValid) {
+                        Intent intent = new Intent(thisActivity, HealthServicesActivity.class);
+                        startActivity(intent);
+                        thisActivity.finish();
+                    } else {
+                        isStart = false;
+                        ed_pin.setText("");
+                        strPinText = new StringBuilder();
+                        txt_password.setText(strPinText);
+                        String str=thisActivity.getResources().getString(R.string.wrong_pass);
+                        CustomToast customToast = new CustomToast(thisActivity, str);
+                        customToast.show();
+                    }
                 } else {
-                    CustomToast customToast = new CustomToast(thisActivity, Messages.NO_INTERNET);
-                    customToast.show();
-                    isStart = false;
-                    ed_pin.setText("");
-                    strPinText = new StringBuilder();
-                    txt_password.setText(strPinText);
+                    if (NetworkUtil.getConnectivityStatus(thisActivity) != 0) {
+                        Log.i("call", "service");
+                        Map<String, String> params = new HashMap<>();
+                        params.put("password", s.toString());
+                        String strMAC = Utils.getMacAddress(thisActivity);
+                        params.put("macid", strMAC);
+//                        params.put("macid", "e4:90:7e:f0:40:5b");
+                        String strIMEI = Utils.getIMEINumber(thisActivity);
+                        params.put("imeiid", strIMEI);
+//                        params.put("imeiid", "353327063688253");
+                        callVolley(thisActivity, Constant.POST_REQUEST, Constants.USER_LOGIN, Constants.BASE_URL + Constants.USER_LOGIN, params, Constant.CALL_TIME_OUT, Constant.SHOULD_CACHE, Constant.VOLLEY_RETRY_COUNT, false, Constant.IS_PROGRESSDAILOG_CANCELABLE, mContext);
+
+                    } else {
+                        String str=thisActivity.getResources().getString(R.string.no_internet);
+                        CustomToast customToast = new CustomToast(thisActivity, str);
+                        customToast.show();
+                        isStart = false;
+                        ed_pin.setText("");
+                        strPinText = new StringBuilder();
+                        txt_password.setText(strPinText);
+                    }
                 }
-            }else{
+            } else {
                 ed_pin.setText("");
                 strPinText = new StringBuilder();
                 txt_password.setText(strPinText);
@@ -359,20 +384,34 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 //              {"status":"ok","error":0,"userdetails":[{"userId":6,"subcenterId":1}]}
         try {
             JSONObject jsonUserDetail = new JSONObject(response);
-            if(jsonUserDetail.getString("status").equals("ok")) {
-                SharedPreferences sharedPreferences=thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF,MODE_PRIVATE);
-                SharedPreferences.Editor editor=sharedPreferences.edit();
-                editor.putString(Constants.USER_ID,jsonUserDetail.toString());
+            if (jsonUserDetail.getString("status").equals("ok")) {
+
+                SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(Constants.USER_ID, jsonUserDetail.toString());
                 editor.commit();
-                Intent intent = new Intent(thisActivity, HealthServicesActivity.class);
-                startActivity(intent);
-                thisActivity.finish();
-            }else{
+
+                DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
+                databaseHelper.deleteUserDetails();
+                JSONObject jsonMember = new JSONObject(response);
+                if (jsonMember.getString("status").equals("ok")) {
+                    JSONArray jsonArray = jsonMember.getJSONArray("userdetails");
+                    if (databaseHelper.insertUser(jsonArray)) {
+                        Intent intent = new Intent(thisActivity, HealthServicesActivity.class);
+                        startActivity(intent);
+                        thisActivity.finish();
+                    } else {
+                        CustomToast customToast = new CustomToast(thisActivity, "Error");
+                        customToast.show();
+                    }
+                }
+            } else {
                 isStart = false;
                 ed_pin.setText("");
                 strPinText = new StringBuilder();
                 txt_password.setText(strPinText);
-                CustomToast customToast = new CustomToast(thisActivity, Messages.INVALID_PIN);
+                String str=thisActivity.getResources().getString(R.string.wrong_pass);
+                CustomToast customToast = new CustomToast(thisActivity, str);
                 customToast.show();
             }
         } catch (JSONException e) {
@@ -384,7 +423,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void onVolleyError(int Code, String mError, String ResponseTag) {
         super.onVolleyError(Code, mError, ResponseTag);
-        Log.e("VolleyError", "mError");
+        Log.e("VolleyError", mError);
         isStart = false;
         ed_pin.setText("");
         strPinText = new StringBuilder();

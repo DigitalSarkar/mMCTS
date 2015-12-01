@@ -22,6 +22,7 @@ import com.mcts.app.utils.Constants;
 import com.mcts.app.utils.Utils;
 import com.mcts.app.volley.BaseActivity;
 import com.mcts.app.volley.Constant;
+import com.mcts.app.volley.CustomLoaderDialog;
 import com.mcts.app.volley.IVolleyRespose;
 
 import org.json.JSONArray;
@@ -43,6 +44,7 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
     private TextView txt_last_data_send, txt_last_data_get;
     private JSONObject jsonObject;
     private int webIndex = 0;
+    CustomLoaderDialog customLoaderDialog;
 
 
     @Override
@@ -79,6 +81,7 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
         Utils.findAllTextView(thisActivity, (ViewGroup) findViewById(R.id.ll_health_seva));
 
         bt_get_data.setOnClickListener(this);
+        bt_send_data.setOnClickListener(this);
         ll_health_servey.setOnClickListener(this);
         ll_sagarbha_seva.setOnClickListener(this);
         ll_kutumnb_kalyan_seva.setOnClickListener(this);
@@ -118,7 +121,7 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
                 startActivity(intent);
                 break;
             case R.id.ll_sagarbha_seva:
-                intent = new Intent(thisActivity, MaternalServiceActivity.class);
+                intent = new Intent(thisActivity, MainActivity.class);
                 startActivity(intent);
                 break;
             case R.id.bt_get_data:
@@ -130,14 +133,25 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
                         jsonObject = new JSONObject(userDetail);
                         params.put("id", jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId"));
                         getWebData(Constants.webApiArrayList[webIndex], params);
+                        customLoaderDialog = new CustomLoaderDialog(thisActivity);
+                        customLoaderDialog.show(false);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 break;
+            case R.id.bt_send_data:
+                DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
+                JSONArray jsonArray=databaseHelper.getFaliya();
+                Log.v(TAG,"getFaliya "+jsonArray.toString());
+                break;
             case R.id.ll_bal_seva:
-                intent = new Intent(thisActivity, ChildHealthActivity.class);
+                intent = new Intent(thisActivity, MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.ll_kutumnb_kalyan_seva:
+                intent = new Intent(thisActivity, MainActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -214,8 +228,33 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
                     JSONArray jsonArray = jsonFamily.getJSONArray("villagedetails");
                     if (databaseHelper.insertVillageDetail(jsonArray)) {
                         params.put("subcenterid", jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId"));
-//                        getWebData(Constants.webApiArrayList[webIndex], params);
+                        getWebData(Constants.webApiArrayList[webIndex], params);
+//                        webIndex = 0;
+                    } else {
+                        CustomToast customToast = new CustomToast(thisActivity, "Error");
+                        customToast.show();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else if(ResponseTag.equalsIgnoreCase(Constants.webApiArrayList[3])){
+            Log.v("AGANWADI", mRes);
+            webIndex++;
+            Map<String, String> params = new HashMap<>();
+            try {
+                DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
+                databaseHelper.deleteAganwadieDetail();
+                JSONObject jsonFamily = new JSONObject(mRes);
+                if (jsonFamily.getString("status").equals("ok")) {
+                    JSONArray jsonArray = jsonFamily.getJSONArray("anganwadidetails");
+                    if (databaseHelper.insertAganwadi(jsonArray)) {
+                        params.put("subcenterid", jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId"));
                         webIndex = 0;
+                        customLoaderDialog.hide();
+                        String str=thisActivity.getResources().getString(R.string.data_download_success);
+                        CustomToast customToast = new CustomToast(thisActivity, str);
+                        customToast.show();
                     } else {
                         CustomToast customToast = new CustomToast(thisActivity, "Error");
                         customToast.show();
@@ -231,5 +270,6 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
     @Override
     public void onVolleyError(int Code, String mError, String ResponseTag) {
         Log.v("mError", mError);
+        customLoaderDialog.hide();
     }
 }
