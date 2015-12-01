@@ -112,7 +112,7 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-
+        Utils.ButtonClickEffect(v);
         int id = v.getId();
         Intent intent;
         switch (id) {

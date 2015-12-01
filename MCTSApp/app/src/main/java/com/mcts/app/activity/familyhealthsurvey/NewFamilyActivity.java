@@ -56,9 +56,11 @@ import com.mcts.app.model.Member;
 import com.mcts.app.model.Religion;
 import com.mcts.app.utils.Constants;
 import com.mcts.app.utils.DatePickerFragment;
+import com.mcts.app.utils.FormValidation;
 import com.mcts.app.utils.Messages;
 import com.mcts.app.utils.TakePictureUtils;
 import com.mcts.app.utils.Utils;
+import com.mcts.app.volley.CustomLoaderDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,7 +89,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<Religion> religionArrayList;
     private ArrayList<Religion> faliyaArrayList;
     private EditText ed_house_number, ed_husband_name, ed_Sir_Name, ed_family_number, ed_landmark, ed_family_head_name, ed_Birth_date, ed_Mobile_number;
-    private String isAns = "1", isGender = "M";
+    private String isAns, isGender;
     private Location mLastLocation;
     private ImageView imgUserImage;
     private String villageId, villageName;
@@ -97,25 +99,19 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     private String strReligion, strCast, strFaliyaId;
     DatabaseHelper databaseHelper;
-    private CustomToast customToast;
-    private int randomNumber;
-    private String MemberId;
     private String isRisky = "1";
     String bplNumber, rationCardNumber, rsbyNumber, maaCardNumber;
+
     //    Image Capture
-//    ImageView userImage;
     private String imageName = "item_picture";
     public static final int TAKE_PICTURE = 1;
     private final int CROP_PIC = 2;
     private Uri picUri;
-    private String imageRealPath = null;
-    private File compressFile;
     private Bitmap receipt_bitmap;
-    private int width, height;
     Member familyMember = new Member();
     private String maritalStatus;
     private byte[] userImagebyteArray;
-    private String aaganvadiId;
+    private String aaganvadiId,MemberId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,13 +258,17 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
     private void getDataFromDB() {
 
         religionArrayList = databaseHelper.getReligionData();
-        ReligionAdapter religionAdapter = new ReligionAdapter(thisActivity, religionArrayList);
-        sp_family_dharm.setAdapter(religionAdapter);
+        if(religionArrayList!=null) {
+            ReligionAdapter religionAdapter = new ReligionAdapter(thisActivity, religionArrayList);
+            sp_family_dharm.setAdapter(religionAdapter);
+        }
 
-        castArrayList = new ArrayList<>();
         castArrayList = databaseHelper.getCastData();
-        ReligionAdapter castAdapter = new ReligionAdapter(thisActivity, castArrayList);
-        sp_family_cast.setAdapter(castAdapter);
+        if(castArrayList!=null) {
+            ReligionAdapter castAdapter = new ReligionAdapter(thisActivity, castArrayList);
+            sp_family_cast.setAdapter(castAdapter);
+        }
+
 
         faliyaArrayList = databaseHelper.getFaliyaList(villageId);
         if (faliyaArrayList != null) {
@@ -277,8 +277,11 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
         }
 
         ArrayList<MaritalStatus> maritalStatusArrayList = databaseHelper.getMaritalStatus();
-        StatusAdapter statusAdapter = new StatusAdapter(thisActivity, maritalStatusArrayList);
-        sp_Marital_status.setAdapter(statusAdapter);
+        if (maritalStatusArrayList != null) {
+            StatusAdapter statusAdapter = new StatusAdapter(thisActivity, maritalStatusArrayList);
+            sp_Marital_status.setAdapter(statusAdapter);
+        }
+
 
         SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
         String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
@@ -297,7 +300,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-
+        Utils.ButtonClickEffect(v);
         switch (v.getId()) {
             case R.id.bt_family_identity:
 
@@ -328,6 +331,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 bt_identity_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
                         dialog.dismiss();
 
                         bplNumber = ed_bpl_number.getText().toString();
@@ -343,6 +347,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 bt_save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
                         dialog.dismiss();
                         bplNumber = ed_bpl_number.getText().toString();
                         rationCardNumber = ed_bpl_card_number.getText().toString();
@@ -397,6 +402,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 rdb_risky_area_yes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
                         rdb_risky_area_yes.setChecked(true);
                         rdb_risky_area_no.setChecked(false);
                         isRisky = "1";
@@ -405,6 +411,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 rdb_risky_area_no.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
                         rdb_risky_area_yes.setChecked(false);
                         rdb_risky_area_no.setChecked(true);
                         isRisky = "0";
@@ -434,7 +441,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                                 e.printStackTrace();
                             }
                         }else{
-                            String str=thisActivity.getResources().getString(R.string.add_family);
+                            String str=thisActivity.getResources().getString(R.string.add_street);
                             CustomToast customToast=new CustomToast(thisActivity, str);
                             customToast.show();
                         }
@@ -564,41 +571,45 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 if (strFaliyaId != null) {
                     familyMember.setFaliyu(strFaliyaId);
                 }
-
-                SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
-                String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
-                try {
-                    JSONObject jsonObject = new JSONObject(userDetail);
-                    familyMember.setSubCenterId(jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId"));
-                    String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
-                    familyMember.setUserId(userId);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                boolean isSave = databaseHelper.createNewFamily(familyMember);
-                if (isSave) {
-                    boolean isMemberSave = databaseHelper.createMember(familyMember);
-                    if (isMemberSave) {
-                        String str=thisActivity.getResources().getString(R.string.family_new_success);
-                        CustomToast customToast=new CustomToast(thisActivity, str);
-                        customToast.show();
-                        ed_house_number.setEnabled(false);
-                        ed_family_head_name.setEnabled(false);
-                        ed_husband_name.setEnabled(false);
-                        ed_Mobile_number.setEnabled(false);
-                        ed_Birth_date.setEnabled(false);
-                        ed_landmark.setEnabled(false);
-                        ed_Sir_Name.setEnabled(false);
-                        sp_family_cast.setEnabled(false);
-                        sp_family_dharm.setEnabled(false);
-                        sp_Marital_status.setEnabled(false);
-                        rdb_no.setEnabled(false);
-                        rdb_yes.setEnabled(false);
-                        rdb_sex_Female.setEnabled(false);
-                        rdb_sex_Male.setEnabled(false);
-                        thisActivity.finish();
+                String validateAddFamilyDetailForm = FormValidation.validateFamilyRegistrationForm(familyMember, this);
+                if(validateAddFamilyDetailForm.length()!=0) {
+                    CustomLoaderDialog customLoaderDialog = new CustomLoaderDialog(thisActivity);
+                    customLoaderDialog.showValidationDialog(validateAddFamilyDetailForm);
+                }else {
+                    SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
+                    String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
+                    try {
+                        JSONObject jsonObject = new JSONObject(userDetail);
+                        familyMember.setSubCenterId(jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId"));
+                        String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
+                        familyMember.setUserId(userId);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-//
+                    boolean isSave = databaseHelper.createNewFamily(familyMember);
+                    if (isSave) {
+                        boolean isMemberSave = databaseHelper.createMember(familyMember);
+                        if (isMemberSave) {
+                            String str = thisActivity.getResources().getString(R.string.family_new_success);
+                            CustomToast customToast = new CustomToast(thisActivity, str);
+                            customToast.show();
+                            ed_house_number.setEnabled(false);
+                            ed_family_head_name.setEnabled(false);
+                            ed_husband_name.setEnabled(false);
+                            ed_Mobile_number.setEnabled(false);
+                            ed_Birth_date.setEnabled(false);
+                            ed_landmark.setEnabled(false);
+                            ed_Sir_Name.setEnabled(false);
+                            sp_family_cast.setEnabled(false);
+                            sp_family_dharm.setEnabled(false);
+                            sp_Marital_status.setEnabled(false);
+                            rdb_no.setEnabled(false);
+                            rdb_yes.setEnabled(false);
+                            rdb_sex_Female.setEnabled(false);
+                            rdb_sex_Male.setEnabled(false);
+                            thisActivity.finish();
+                        }
+                    }
                 }
 //                Member member=databaseHelper.getLastInsertedFamlily();
                 break;
@@ -746,24 +757,36 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
         LinearLayout linearLayout;
         TextView textView;
         if (parent.getId() == R.id.sp_family_cast) {
-            Religion religion = castArrayList.get(position);
-            strCast = religion.getId();
+            if(position!=0) {
+                Religion religion = castArrayList.get(position);
+                strCast = religion.getId();
+            }
 //            Toast.makeText(thisActivity,religion.getName(),Toast.LENGTH_SHORT).show();
         } else if (parent.getId() == R.id.sp_family_dharm) {
-            Religion religion = religionArrayList.get(position);
-            strReligion = religion.getId();
-//            Toast.makeText(thisActivity,religion.getName(),Toast.LENGTH_SHORT).show();
+            if(position!=0) {
+                Religion religion = religionArrayList.get(position);
+                strReligion = religion.getId();
+            }
         } else if (parent.getId() == R.id.sp_street_name) {
-            Religion religion = faliyaArrayList.get(position);
-            strFaliyaId = religion.getId();
+            if(position!=0) {
+                Religion religion = faliyaArrayList.get(position);
+                strFaliyaId = religion.getId();
+            }
+
         } else if (parent.getId() == R.id.sp_Marital_status) {
-            linearLayout = (LinearLayout) view;
-            textView = (TextView) linearLayout.getChildAt(0);
-            maritalStatus = textView.getTag().toString();
+            if(position!=0) {
+                linearLayout = (LinearLayout) view;
+                textView = (TextView) linearLayout.getChildAt(0);
+                maritalStatus = textView.getTag().toString();
+            }
+
         } else if (parent.getId() == R.id.sp_aganvali) {
-            linearLayout = (LinearLayout) view;
-            textView = (TextView) linearLayout.getChildAt(0);
-            aaganvadiId = textView.getTag().toString();
+            if(position!=0) {
+                linearLayout = (LinearLayout) view;
+                textView = (TextView) linearLayout.getChildAt(0);
+                aaganvadiId = textView.getTag().toString();
+            }
+
         }
     }
 

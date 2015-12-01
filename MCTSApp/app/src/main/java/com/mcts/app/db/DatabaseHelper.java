@@ -22,6 +22,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import com.mcts.app.R;
 import com.mcts.app.model.Family;
 import com.mcts.app.model.MaritalStatus;
 import com.mcts.app.model.Member;
@@ -121,6 +122,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<Religion> getReligionData() {
 
         ArrayList<Religion> religionArrayList = new ArrayList<>();
+        Religion rel = new Religion();
+        rel.setId("000");
+        rel.setName(mContext.getResources().getString(R.string.family_dharm));
+        religionArrayList.add(rel);
         readDatabase();
         try {
             String selectQuery = "SELECT  * FROM tbl_religion";
@@ -146,6 +151,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<Religion> getCastData() {
 
         ArrayList<Religion> religionArrayList = new ArrayList<>();
+        Religion rel = new Religion();
+        rel.setId("000");
+        rel.setName(mContext.getResources().getString(R.string.family_cast));
+        religionArrayList.add(rel);
         readDatabase();
         try {
             String selectQuery = "SELECT  * FROM tbl_racial";
@@ -174,6 +183,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<MaritalStatus> getAganvadi(String villageId, String subCenterId) {
 
         ArrayList<MaritalStatus> maritalStatusArrayList = new ArrayList<>();
+
+        MaritalStatus rel = new MaritalStatus();
+        rel.setId("000");
+        rel.setStatus(mContext.getResources().getString(R.string.aaganvadi_no));
+        maritalStatusArrayList.add(rel);
+
         readDatabase();
         try {
             String selectQuery = "SELECT  * FROM tbl_anganwadi WHERE villageId='" + villageId + "' and subcentreId='" + subCenterId + "'";
@@ -480,6 +495,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<MaritalStatus> getMaritalStatus() {
 
         ArrayList<MaritalStatus> maritalStatusArrayList = new ArrayList<>();
+
+        MaritalStatus rel = new MaritalStatus();
+        rel.setId("000");
+        rel.setStatus(mContext.getResources().getString(R.string.Marital_status));
+        maritalStatusArrayList.add(rel);
+
         readDatabase();
         try {
             String selectQuery = "SELECT  maritalstatusId,maritalStatus FROM tbl_maritalStatus";
@@ -505,6 +526,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<MaritalStatus> getRelation() {
 
         ArrayList<MaritalStatus> maritalStatusArrayList = new ArrayList<>();
+
+        MaritalStatus rel = new MaritalStatus();
+        rel.setId("000");
+        rel.setStatus(mContext.getResources().getString(R.string.family_head_relation));
+        maritalStatusArrayList.add(rel);
+
         readDatabase();
         try {
             String selectQuery = "SELECT  relationwithheadId,relationwithHead FROM tbl_relationwithhead";
@@ -770,6 +797,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<Religion> getFaliyaList(String villageId) {
 
         ArrayList<Religion> religionArrayList = new ArrayList<>();
+        Religion rel = new Religion();
+        rel.setId("000");
+        rel.setName(mContext.getResources().getString(R.string.street_name));
+        religionArrayList.add(rel);
         readDatabase();
         try {
             String selectQuery = "SELECT  * FROM tbl_faliya where villageId='" + villageId + "'";
@@ -913,6 +944,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<MaritalStatus> getFamilyPlanningData() {
         ArrayList<MaritalStatus> maritalStatusArrayList = new ArrayList<>();
+
+        MaritalStatus rel = new MaritalStatus();
+        rel.setId("000");
+        rel.setStatus(mContext.getResources().getString(R.string.Family_welfare));
+        maritalStatusArrayList.add(rel);
+
         readDatabase();
         try {
             String selectQuery = "SELECT  familyplanningmethodId,familyplanningMethod FROM tbl_familyplanningmethod";
@@ -939,6 +976,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<MaritalStatus> getPeriodeData() {
 
         ArrayList<MaritalStatus> maritalStatusArrayList = new ArrayList<>();
+
+        MaritalStatus rel = new MaritalStatus();
+        rel.setId("000");
+        rel.setStatus(mContext.getResources().getString(R.string.periods_status));
+        maritalStatusArrayList.add(rel);
+
         readDatabase();
         try {
             String selectQuery = "SELECT  menstruationstatusId,menstruationStatus FROM tbl_menstruationStatus";
@@ -965,6 +1008,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<MaritalStatus> getParentList(String emamtaID) {
 
         ArrayList<MaritalStatus> memberArrayList = new ArrayList<>();
+
+        MaritalStatus rel = new MaritalStatus();
+        rel.setId("000");
+        rel.setStatus(mContext.getResources().getString(R.string.Whos_sun_daughter));
+        memberArrayList.add(rel);
+
         readDatabase();
         try {
             String selectQuery = "Select emamtahealthId,firstName,middleName,lastName " +
@@ -993,6 +1042,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<MaritalStatus> getWifeList(String emamtaFamilyId) {
 
         ArrayList<MaritalStatus> memberArrayList = new ArrayList<>();
+
+        MaritalStatus rel = new MaritalStatus();
+        rel.setId("000");
+        rel.setStatus(mContext.getResources().getString(R.string.Whos_wife));
+        memberArrayList.add(rel);
+
         readDatabase();
         try {
             String selectQuery = "Select emamtahealthId,firstName,middleName,lastName " +
@@ -1029,20 +1084,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             contentValues.put("middleName", member.getMiddleName());
             contentValues.put("lastName", member.getLastName());
             contentValues.put("isHead", member.getIsHead());
-            contentValues.put("relationwithheadId", member.getRelationwithheadId());
+            if(member.getRelationwithheadId()!=null) {
+                contentValues.put("relationwithheadId", member.getRelationwithheadId());
+            }
             contentValues.put("gender", member.getGender());
             contentValues.put("maritalStatus", member.getMaritalStatus());
-            contentValues.put("birthDate", member.getBirthDate());
-            contentValues.put("mobileNo", member.getMobileNo());
-            contentValues.put("wifeof", member.getWifeof());
-            contentValues.put("childof", member.getChildof());
-            contentValues.put("adoptedfpMethod", member.getAdoptedfpMethod());
-            contentValues.put("wanttoadoptfpMethod", member.getWantadoptedfpMethod());
-            contentValues.put("plannedfpMethod", member.getPlannedfpMethod());
-            contentValues.put("isPregnant", member.getIsPregnant());
-            contentValues.put("wantChild", member.getWantChild());
-            contentValues.put("memberStatus", member.getMemberStatus());
-            contentValues.put("menstruationStatus", member.getMenstruationStatus());
+            if(member.getBirthDate()!=null) {
+                contentValues.put("birthDate", member.getBirthDate());
+            }
+            if(member.getMobileNo()!=null) {
+                contentValues.put("mobileNo", member.getMobileNo());
+            }
+            if(member.getWifeof()!=null) {
+                contentValues.put("wifeof", member.getWifeof());
+            }
+            if(member.getChildof()!=null) {
+                contentValues.put("childof", member.getChildof());
+            }
+            if(member.getAdoptedfpMethod()!=null) {
+                contentValues.put("adoptedfpMethod", member.getAdoptedfpMethod());
+            }
+            if(member.getWantadoptedfpMethod()!=null) {
+                contentValues.put("wanttoadoptfpMethod", member.getWantadoptedfpMethod());
+            }
+            if(member.getPlannedfpMethod()!=null) {
+                contentValues.put("plannedfpMethod", member.getPlannedfpMethod());
+            }
+            if(member.getIsPregnant()!=null) {
+                contentValues.put("isPregnant", member.getIsPregnant());
+            }
+            if(member.getWantChild()!=null) {
+                contentValues.put("wantChild", member.getWantChild());
+            }
+            if(member.getMemberStatus()!=null) {
+                contentValues.put("memberStatus", member.getMemberStatus());
+            }
+            if(member.getMenstruationStatus()!=null) {
+                contentValues.put("menstruationStatus", member.getMenstruationStatus());
+            }
             if (member.getElectioncardNumber() != null) {
                 contentValues.put("electioncardNumber", member.getElectioncardNumber());
             }
@@ -1076,8 +1155,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             String sql = "Insert into " + DBConstant.MEMBER_TABLE + "(emamtahealthId,emamtafamilyId,villageId,firstName,middleName," +
                     "lastName,isHead,relationwithheadId,gender,maritalStatus,birthDate,mobileNo,childof,wifeof,adoptedfpMethod," +
-                    "wanttoadoptfpMethod,plannedfpMethod,isPregnant,wantChild,memberStatus,menstruationStatus,electioncardNumber,pancardNumber,drivingcardNumer,passportcardNumber,createdbyuserId,createdDate,photo" +
-                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    "wanttoadoptfpMethod,plannedfpMethod,isPregnant,wantChild,memberStatus,menstruationStatus,electioncardNumber,pancardNumber,drivingcardNumer,passportcardNumber,createdbyuserId,createdDate,photo,isActive" +
+                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
@@ -1089,21 +1168,47 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             insert.bindString(5, familyMember.getMiddleName());
             insert.bindString(6, familyMember.getLastName());
             insert.bindString(7, familyMember.getIsHead());
-            insert.bindString(8, familyMember.getRelationwithheadId());
-            insert.bindString(9, familyMember.getGender());
-            insert.bindString(10, familyMember.getMaritalStatus());
-            insert.bindString(11, familyMember.getBirthDate());
-            insert.bindString(12, familyMember.getMobileNo());
-            insert.bindString(13, familyMember.getChildof());
-            insert.bindString(14, familyMember.getWifeof());
-            insert.bindString(15, familyMember.getAdoptedfpMethod());
-            insert.bindString(16, familyMember.getWantadoptedfpMethod());
-            insert.bindString(17, familyMember.getPlannedfpMethod());
-            insert.bindString(18, familyMember.getIsPregnant());
-            insert.bindString(19, familyMember.getWantChild());
-            insert.bindString(20, familyMember.getMemberStatus());
-            insert.bindString(21, familyMember.getMenstruationStatus());
+            if (familyMember.getRelationwithheadId() != null) {
+                insert.bindString(8, familyMember.getRelationwithheadId());
+            }
 
+            insert.bindString(9, familyMember.getGender());
+            if (familyMember.getMaritalStatus() != null) {
+                insert.bindString(10, familyMember.getMaritalStatus());
+            }
+            if (familyMember.getBirthDate() != null) {
+                insert.bindString(11, familyMember.getBirthDate());
+            }
+            if (familyMember.getMobileNo() != null) {
+                insert.bindString(12, familyMember.getMobileNo());
+            }
+            if (familyMember.getChildof() != null) {
+                insert.bindString(13, familyMember.getChildof());
+            }
+            if (familyMember.getWifeof() != null) {
+                insert.bindString(14, familyMember.getWifeof());
+            }
+            if (familyMember.getAdoptedfpMethod() != null) {
+                insert.bindString(15, familyMember.getAdoptedfpMethod());
+            }
+            if (familyMember.getWantadoptedfpMethod() != null) {
+                insert.bindString(16, familyMember.getWantadoptedfpMethod());
+            }
+            if (familyMember.getPlannedfpMethod() != null) {
+                insert.bindString(17, familyMember.getPlannedfpMethod());
+            }
+            if (familyMember.getIsPregnant() != null) {
+                insert.bindString(18, familyMember.getIsPregnant());
+            }
+            if (familyMember.getWantChild() != null) {
+                insert.bindString(19, familyMember.getWantChild());
+            }
+            if (familyMember.getMemberStatus() != null) {
+                insert.bindString(20, familyMember.getMemberStatus());
+            }
+            if (familyMember.getMenstruationStatus() != null) {
+                insert.bindString(21, familyMember.getMenstruationStatus());
+            }
             if (familyMember.getElectioncardNumber() != null) {
                 insert.bindString(22, familyMember.getElectioncardNumber());
             }
@@ -1121,6 +1226,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (familyMember.getUserImageArray() != null) {
                 insert.bindBlob(28, familyMember.getUserImageArray());
             }
+            insert.bindString(29, "1");
             insert.execute();
             mDataBase.setTransactionSuccessful();
         } catch (Exception e) {

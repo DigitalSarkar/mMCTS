@@ -10,6 +10,7 @@ import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 
 /**
@@ -51,5 +52,14 @@ public class Utils {
 
     public static void hideSoftKeyboard(Activity activity) {
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    public static void ButtonClickEffect(final View v)
+    {
+        AlphaAnimation obja = new AlphaAnimation(1.0f, 0.3f);
+        obja.setDuration(5);
+        obja.setFillAfter(false);
+        v.startAnimation(obja);
+
     }
 }

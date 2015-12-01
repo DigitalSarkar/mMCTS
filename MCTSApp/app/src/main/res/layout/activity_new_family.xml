@@ -234,8 +234,7 @@
                         <RadioButton
                             android:id="@+id/rdb_yes"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"/>
+                            android:layout_height="wrap_content"/>
 
                         <com.mcts.app.customview.MyTextView
                             android:id="@+id/lbl_yes"
@@ -560,8 +559,7 @@
                         <RadioButton
                             android:id="@+id/rdb_sex_Male"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"/>
+                            android:layout_height="wrap_content"/>
 
                         <com.mcts.app.customview.MyTextView
                             style="@style/ValueText"

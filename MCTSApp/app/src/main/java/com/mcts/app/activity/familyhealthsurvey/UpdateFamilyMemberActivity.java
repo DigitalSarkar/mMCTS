@@ -44,8 +44,10 @@ import com.mcts.app.db.DatabaseHelper;
 import com.mcts.app.model.MaritalStatus;
 import com.mcts.app.model.Member;
 import com.mcts.app.utils.DatePickerFragment;
+import com.mcts.app.utils.FormValidation;
 import com.mcts.app.utils.TakePictureUtils;
 import com.mcts.app.utils.Utils;
+import com.mcts.app.volley.CustomLoaderDialog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -68,8 +70,8 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
     DatabaseHelper databaseHelper;
     int FamilyNumber;
     private int familyHealthNumber;
-    private String isAns="1", familyHeadRelation;
-    private String gender="M", secondChild="1", isLiving="1", maritalStatus,isAdoptPlanning="0",isPregnent="0";
+    private String isAns="0", familyHeadRelation;
+    private String gender, secondChild="1", isLiving, maritalStatus,isAdoptPlanning="0",isPregnent;
     String electionNo, panNo, drivingNo, passportNo;
     String bankName,branchName,acNumber,IFSCCode,aadharNumber;
     private LinearLayout ll_masik,ll_isPregnant,ll_Family_welfare_user,ll_Want_Family_welfare,ll_Family_welfare,ll_whose_wife,ll_secong_child;
@@ -456,6 +458,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
 
     @Override
     public void onClick(View v) {
+        Utils.ButtonClickEffect(v);
         switch (v.getId()) {
             case R.id.bt_Please_Modern:
                 String name = ed_Name.getText().toString();
@@ -499,18 +502,25 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     image_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     userImagebyteArray = stream.toByteArray();
-                    Log.v(TAG,"Image length"+userImagebyteArray.length);
+                    Log.v(TAG, "Image length" + userImagebyteArray.length);
                 }
                 if (userImagebyteArray != null) {
                     familyMember.setUserImageArray(userImagebyteArray);
                 }
-                boolean flag=databaseHelper.updateFamilyMemberDetails(familyMember);
-                if(flag){
-                    String str=thisActivity.getResources().getString(R.string.member_update_success);
-                    CustomToast customToast=new CustomToast(thisActivity,str);
-                    customToast.show();
-                    thisActivity.finish();
+                String validateAddFamilyDetailForm = FormValidation.validateFamilyMemberRegistrationForm(familyMember, thisActivity);
+                if(validateAddFamilyDetailForm.length()!=0) {
+                    CustomLoaderDialog customLoaderDialog = new CustomLoaderDialog(thisActivity);
+                    customLoaderDialog.showValidationDialog(validateAddFamilyDetailForm);
+                }else {
+                    boolean flag=databaseHelper.updateFamilyMemberDetails(familyMember);
+                    if(flag){
+                        String str=thisActivity.getResources().getString(R.string.member_update_success);
+                        CustomToast customToast=new CustomToast(thisActivity,str);
+                        customToast.show();
+                        thisActivity.finish();
+                    }
                 }
+
                 break;
             case R.id.rdb_yes:
                 rdb_yes.setChecked(true);
@@ -613,6 +623,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                 bt_identity_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
                         dialog.dismiss();
 
                         electionNo =ed_election_no.getText().toString();
@@ -637,6 +648,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                 bt_save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
                         dialog.dismiss();
                         electionNo =ed_election_no.getText().toString();
                         panNo =ed_pan_no.getText().toString();
@@ -753,45 +765,79 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        LinearLayout linearLayout;
-        TextView textView;
-        switch (parent.getId()) {
-            case R.id.sp_family_head_relation:
-                linearLayout = (LinearLayout) view;
-                textView = (TextView) linearLayout.getChildAt(0);
-                familyHeadRelation = textView.getTag().toString();
-                break;
-            case R.id.sp_Marital_status:
-                linearLayout = (LinearLayout) view;
-                textView = (TextView) linearLayout.getChildAt(0);
-                maritalStatus = textView.getTag().toString();
-                break;
-            case R.id.sp_Whos_wife:
-                linearLayout = (LinearLayout) view;
-                textView = (TextView) linearLayout.getChildAt(0);
-                wifeOf = textView.getTag().toString();
-                break;
-            case R.id.sp_Whos_sun_daughter:
-                linearLayout = (LinearLayout) view;
-                textView = (TextView) linearLayout.getChildAt(0);
-                sunOf = textView.getTag().toString();
-                break;
-            case R.id.sp_Family_welfare:
-                linearLayout = (LinearLayout) view;
-                textView = (TextView) linearLayout.getChildAt(0);
-                familyWalfare = textView.getTag().toString();
-                break;
-            case R.id.sp_Family_welfare_user:
-                linearLayout = (LinearLayout) view;
-                textView = (TextView) linearLayout.getChildAt(0);
-                familyWalfareUser = textView.getTag().toString();
-                break;
-            case R.id.sp_periods_status:
-                linearLayout = (LinearLayout) view;
-                textView = (TextView) linearLayout.getChildAt(0);
-                periodeStatus = textView.getTag().toString();
-                break;
-        }
+
+            LinearLayout linearLayout;
+            TextView textView;
+            switch (parent.getId()) {
+                case R.id.sp_family_head_relation:
+                    if(position!=0) {
+                        linearLayout = (LinearLayout) view;
+                        textView = (TextView) linearLayout.getChildAt(0);
+                        familyHeadRelation = textView.getTag().toString();
+                    }else {
+                        familyHeadRelation=null;
+                    }
+
+                    break;
+                case R.id.sp_Marital_status:
+                    if(position!=0) {
+                        linearLayout = (LinearLayout) view;
+                        textView = (TextView) linearLayout.getChildAt(0);
+                        maritalStatus = textView.getTag().toString();
+                    }else{
+                        maritalStatus=null;
+                    }
+                    break;
+                case R.id.sp_Whos_wife:
+                    if(position!=0) {
+                        linearLayout = (LinearLayout) view;
+                        textView = (TextView) linearLayout.getChildAt(0);
+                        wifeOf = textView.getTag().toString();
+                    }else{
+                        wifeOf=null;
+                    }
+
+                    break;
+                case R.id.sp_Whos_sun_daughter:
+                    if(position!=0) {
+                        linearLayout = (LinearLayout) view;
+                        textView = (TextView) linearLayout.getChildAt(0);
+                        sunOf = textView.getTag().toString();
+                    }else{
+                        sunOf=null;
+                    }
+
+                    break;
+                case R.id.sp_Family_welfare:
+                    if(position!=0) {
+                        linearLayout = (LinearLayout) view;
+                        textView = (TextView) linearLayout.getChildAt(0);
+                        familyWalfare = textView.getTag().toString();
+                    }else {
+                        familyWalfare=null;
+                    }
+
+                    break;
+                case R.id.sp_Family_welfare_user:
+                    if(position!=0) {
+                        linearLayout = (LinearLayout) view;
+                        textView = (TextView) linearLayout.getChildAt(0);
+                        familyWalfareUser = textView.getTag().toString();
+                    }else{
+                        familyWalfareUser=null;
+                    }
+                    break;
+                case R.id.sp_periods_status:
+                    if(position!=0) {
+                        linearLayout = (LinearLayout) view;
+                        textView = (TextView) linearLayout.getChildAt(0);
+                        periodeStatus = textView.getTag().toString();
+                    }else{
+                        periodeStatus=null;
+                    }
+
+                    break;
+            }
     }
 
     @Override

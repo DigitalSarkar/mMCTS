@@ -228,6 +228,7 @@ public class FamilyHeathSurveyActivity extends AppCompatActivity implements View
     @Override
     public void onClick(View v) {
 
+        Utils.ButtonClickEffect(v);
         Intent intent = null;
         switch (v.getId()) {
 //            case R.id.bt_add_family:

@@ -121,6 +121,7 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
 
         switch (v.getId()){
             case R.id.ll_data_entry:
+                Utils.ButtonClickEffect(v);
                 Intent intent=new Intent(thisActivity,LoginActivity.class);
                 startActivity(intent);
                 break;

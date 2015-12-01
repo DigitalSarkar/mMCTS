@@ -112,6 +112,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+
+        Utils.ButtonClickEffect(v);
         switch (v.getId()){
             case R.id.bt_family_search:
 

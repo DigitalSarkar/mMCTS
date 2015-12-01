@@ -54,10 +54,12 @@ import com.mcts.app.model.Member;
 import com.mcts.app.model.Religion;
 import com.mcts.app.utils.Constants;
 import com.mcts.app.utils.DatePickerFragment;
+import com.mcts.app.utils.FormValidation;
 import com.mcts.app.utils.Messages;
 import com.mcts.app.utils.TakePictureUtils;
 import com.mcts.app.utils.Utils;
 import com.mcts.app.volley.BaseActivity;
+import com.mcts.app.volley.CustomLoaderDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,7 +85,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
     private ArrayList<Religion> religionArrayList;
     private ArrayList<Religion> faliyaArrayList;
     private EditText ed_house_number,ed_husband_name,ed_Sir_Name,ed_family_number,ed_landmark,ed_family_head_name,ed_Birth_date,ed_Mobile_number;
-    private String isAns="1",isGender="M";
+    private String isAns,isGender="M";
     private Location mLastLocation;
     private ImageView imgUserImage;
     private String villageId,villageName;
@@ -355,20 +357,46 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
 
 
         if(member!=null){
-            if(!member.getRaciald().equals("null")) {
-                int racialId = Integer.parseInt(member.getRaciald());
-                racialId=racialId-1;
-                sp_family_cast.setSelection(racialId);
+//            if(!member.getRaciald().equals("null")) {
+//                int racialId = Integer.parseInt(member.getRaciald());
+//                racialId=racialId-1;
+//                sp_family_cast.setSelection(racialId);
+//            }else{
+//                sp_family_cast.setSelection(0);
+//            }
+            if(member.getRaciald()!=null){
+//                int faliyaId = Integer.parseInt(member.getFamilyId());
+                for(int i=0;i<religionArrayList.size();i++){
+                    if(member.getRaciald().equalsIgnoreCase(religionArrayList.get(i).getId())){
+//                        faliyaId=faliyaId-1;
+                        sp_family_cast.setSelection(i);
+                    }
+                }
+
             }else{
                 sp_family_cast.setSelection(0);
             }
-            if (!member.getReligionId().equals("null")) {
-                int religionId = Integer.parseInt(member.getReligionId());
-                religionId=religionId-1;
-                sp_family_dharm.setSelection(religionId);
+//            if (!member.getReligionId().equals("null")) {
+//                int religionId = Integer.parseInt(member.getReligionId());
+//                religionId=religionId-1;
+//                sp_family_dharm.setSelection(religionId);
+//            }else{
+//                sp_family_dharm.setSelection(0);
+//            }
+
+            if(member.getReligionId()!=null){
+//                int faliyaId = Integer.parseInt(member.getFamilyId());
+                for(int i=0;i<castArrayList.size();i++){
+                    if(member.getReligionId().equalsIgnoreCase(castArrayList.get(i).getId())){
+//                        faliyaId=faliyaId-1;
+                        sp_family_dharm.setSelection(i);
+                    }
+                }
+
             }else{
                 sp_family_dharm.setSelection(0);
             }
+
             if(member.getFaliyu()!=null){
 //                int faliyaId = Integer.parseInt(member.getFamilyId());
                 for(int i=0;i<faliyaArrayList.size();i++){
@@ -426,7 +454,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-
+        Utils.ButtonClickEffect(v);
         switch (v.getId()){
             case R.id.bt_family_identity:
 
@@ -451,6 +479,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
                 bt_identity_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
                         dialog.dismiss();
 
                         bplNumber=ed_bpl_number.getText().toString();
@@ -475,6 +504,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
                 bt_save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
                         dialog.dismiss();
                         bplNumber=ed_bpl_number.getText().toString();
                         rationCardNumber=ed_bpl_card_number.getText().toString();
@@ -529,6 +559,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
                 rdb_risky_area_yes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
                         rdb_risky_area_yes.setChecked(true);
                         rdb_risky_area_no.setChecked(false);
                         isRisky="1";
@@ -537,6 +568,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
                 rdb_risky_area_no.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
                         rdb_risky_area_yes.setChecked(false);
                         rdb_risky_area_no.setChecked(true);
                         isRisky="0";
@@ -545,6 +577,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
                 bt_faliyu_save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
                         if(ed_street_name.getText().toString().length()!=0) {
                             String faliyaName = ed_street_name.getText().toString();
                             SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
@@ -575,6 +608,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
                 bt_faliyu_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
                         streetDialog.dismiss();
                     }
                 });
@@ -671,6 +705,12 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
                 familyMember.setRsbycardNumber(rsbyNumber);
                 familyMember.setMacardNumber(maaCardNumber);
                 familyMember.setAnganwadiId(aaganvadiId);
+                familyMember.setFirstName(ed_family_head_name.getText().toString());
+                familyMember.setMiddleName(ed_husband_name.getText().toString());
+                familyMember.setLastName(ed_Sir_Name.getText().toString());
+                familyMember.setGender(isGender);
+                familyMember.setMaritalStatus(member.getMaritalStatus());
+                familyMember.setBirthDate(ed_Birth_date.getText().toString());
                 if (mLastLocation != null) {
                     double latitude = mLastLocation.getLatitude();
                     double longitude = mLastLocation.getLongitude();
@@ -682,20 +722,26 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
                 if(strFaliyaId!=null){
                     familyMember.setFaliyu(strFaliyaId);
                 }
-
-                boolean isSave=databaseHelper.updateFamilyDetails(familyMember);
-                if(isSave){
-                    String str=thisActivity.getResources().getString(R.string.family_update_success);
-                    CustomToast customToast=new CustomToast(thisActivity, str);
-                    customToast.show();
-                    ed_house_number.setEnabled(false);
-                    ed_landmark.setEnabled(false);
-                    sp_family_cast.setEnabled(false);
-                    sp_family_dharm.setEnabled(false);
-                    rdb_no.setEnabled(false);
-                    rdb_yes.setEnabled(false);
-                    thisActivity.finish();
+                String validateAddFamilyDetailForm = FormValidation.validateFamilyRegistrationForm(familyMember, this);
+                if(validateAddFamilyDetailForm.length()!=0) {
+                    CustomLoaderDialog customLoaderDialog = new CustomLoaderDialog(thisActivity);
+                    customLoaderDialog.showValidationDialog(validateAddFamilyDetailForm);
+                }else {
+                    boolean isSave=databaseHelper.updateFamilyDetails(familyMember);
+                    if(isSave){
+                        String str=thisActivity.getResources().getString(R.string.family_update_success);
+                        CustomToast customToast=new CustomToast(thisActivity, str);
+                        customToast.show();
+                        ed_house_number.setEnabled(false);
+                        ed_landmark.setEnabled(false);
+                        sp_family_cast.setEnabled(false);
+                        sp_family_dharm.setEnabled(false);
+                        rdb_no.setEnabled(false);
+                        rdb_yes.setEnabled(false);
+                        thisActivity.finish();
+                    }
                 }
+
                 break;
             case R.id.bt_family_add_member:
                 Intent intent=new Intent(thisActivity,AddFamilyMemberActivity.class);
@@ -802,20 +848,38 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         if(parent.getId()==R.id.sp_family_cast){
-            Religion religion=castArrayList.get(position);
-            strCast=religion.getId();
+            if(position!=0) {
+                Religion religion = castArrayList.get(position);
+                strCast = religion.getId();
+            }else{
+                strCast=null;
+            }
 //            Toast.makeText(thisActivity,religion.getName(),Toast.LENGTH_SHORT).show();
         }else if(parent.getId()==R.id.sp_family_dharm){
-            Religion religion=religionArrayList.get(position);
-            strReligion=religion.getId();
+            if(position!=0) {
+                Religion religion=religionArrayList.get(position);
+                strReligion=religion.getId();
+            }else{
+                strReligion=null;
+            }
+
 //            Toast.makeText(thisActivity,religion.getName(),Toast.LENGTH_SHORT).show();
         }else if(parent.getId()==R.id.sp_street_name){
-            Religion religion=faliyaArrayList.get(position);
-            strFaliyaId=religion.getId();
+            if(position!=0) {
+                Religion religion = faliyaArrayList.get(position);
+                strFaliyaId = religion.getId();
+            }else{
+                strFaliyaId=null;
+            }
         }else if(parent.getId()==R.id.sp_aganvali){
-            LinearLayout linearLayout = (LinearLayout) view;
-            TextView textView = (TextView) linearLayout.getChildAt(0);
-            aaganvadiId = textView.getTag().toString();
+            if(position!=0) {
+                LinearLayout linearLayout = (LinearLayout) view;
+                TextView textView = (TextView) linearLayout.getChildAt(0);
+                aaganvadiId = textView.getTag().toString();
+            }else{
+                aaganvadiId=null;
+            }
+
         }
     }
 

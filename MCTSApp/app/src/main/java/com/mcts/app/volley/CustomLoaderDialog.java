@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.mcts.app.R;
@@ -31,12 +32,6 @@ public class CustomLoaderDialog {
  */
 	public void show(Boolean isCancelable) {
 		progressDialog = new Dialog(c, R.style.DialogTheme);
-//		dialog.hide();
-//		Drawable d = new ColorDrawable(Color.BLACK);
-//		d.setAlpha(130);
-//		dialog.getWindow().setBackgroundDrawable(d);
-
-
 		LayoutInflater mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View progressView = mInflater.inflate(R.layout.custom_progress_dialog, null);
 		TextView txt_protext = (TextView) progressView.findViewById(R.id.txt_protext);
@@ -66,23 +61,57 @@ public class CustomLoaderDialog {
 		lp.height = height;
 		progressDialog.getWindow().setAttributes(lp);
 		progressDialog.setContentView(progressView);
-
-
-
-
 		progressDialog.setCancelable(isCancelable);
-	//	progressDialog.setContentView(R.layout.custom_progress_dialog);
-
-//		ImageView imgSpoon = (ImageView) dialog.findViewById(R.id.imgSpoon);
-//		Animation animation = AnimationUtils.loadAnimation(c,R.anim.animloaderclock);
-//		imgSpoon.startAnimation(animation);
-
-//		ImageView imgFork = (ImageView) dialog.findViewById(R.id.imgFork);
-//		Animation animation1 = AnimationUtils.loadAnimation(c,R.anim.animloaderanticlock);
-//		imgFork.startAnimation(animation1);
-
 		progressDialog.show();
 	}
+
+	public void showValidationDialog(String validationString) {
+		progressDialog = new Dialog(c, R.style.DialogTheme);
+		LayoutInflater mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View progressView = mInflater.inflate(R.layout.custom_validation_dialog, null);
+		TextView txt_validation = (TextView) progressView.findViewById(R.id.txt_validation);
+		TextView txt_title = (TextView) progressView.findViewById(R.id.txt_title);
+		Button bt_yes = (Button) progressView.findViewById(R.id.bt_yes);
+		txt_validation.setText(validationString);
+		Typeface type = Typeface.createFromAsset(c.getAssets(), "SHRUTI.TTF");
+		txt_validation.setTypeface(type);
+		txt_title.setTypeface(type,Typeface.BOLD);
+		bt_yes.setTypeface(type);
+		progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+		progressDialog.setContentView(progressView);
+
+		WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE); // for activity use context instead of getActivity()
+		Display display = wm.getDefaultDisplay(); // getting the screen size of device
+		Point size = new Point();
+		display.getSize(size);
+		int width1 = WindowManager.LayoutParams.WRAP_CONTENT;
+		int height1 = WindowManager.LayoutParams.WRAP_CONTENT;
+
+		int tempValue = 0;
+		tempValue = ((size.x) * 200) / 1440;
+		int width = size.x - tempValue;  // Set your widths
+		int height = height1; // set your heights
+
+		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+		lp.copyFrom(progressDialog.getWindow().getAttributes());
+
+		lp.width = width;
+		lp.height = height;
+		progressDialog.getWindow().setAttributes(lp);
+		progressDialog.setContentView(progressView);
+		progressDialog.setCancelable(false);
+		progressDialog.show();
+
+		bt_yes.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				progressDialog.dismiss();
+			}
+		});
+
+	}
+
 	/*public View showAlert(View view1) {
 
 		dialog = new Dialog(c, android.R.style.Animation_Dialog);
