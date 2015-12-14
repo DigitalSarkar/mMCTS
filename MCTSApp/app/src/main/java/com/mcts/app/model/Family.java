@@ -19,7 +19,15 @@ public class Family {
     String memberId;
     byte[] userImageArray;
     String emamtahealthId;
+    String photo;
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
     public byte[] getUserImageArray() {
         return userImageArray;

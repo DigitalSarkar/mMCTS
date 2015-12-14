@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mcts.app.R;
+import com.mcts.app.activity.ImageCroppingActivity;
 import com.mcts.app.adapter.StatusAdapter;
 import com.mcts.app.customview.CustomToast;
 import com.mcts.app.db.DatabaseHelper;
@@ -48,6 +49,7 @@ import com.mcts.app.model.Member;
 import com.mcts.app.utils.Constants;
 import com.mcts.app.utils.DatePickerFragment;
 import com.mcts.app.utils.FormValidation;
+import com.mcts.app.utils.TakePictureUtils;
 import com.mcts.app.utils.Utils;
 import com.mcts.app.volley.CustomLoaderDialog;
 
@@ -231,10 +233,12 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
         }
 
         ArrayList<MaritalStatus> familyWalfareList = databaseHelper.getFamilyPlanningData();
+        ArrayList<MaritalStatus> familyUserWalfareList = databaseHelper.getFamilyUserPlanningData();
         if (familyWalfareList != null) {
             StatusAdapter familyWalfareAdapter = new StatusAdapter(thisActivity, familyWalfareList);
+            StatusAdapter familyUserWalfareAdapter = new StatusAdapter(thisActivity, familyUserWalfareList);
             sp_Family_welfare.setAdapter(familyWalfareAdapter);
-            sp_Family_welfare_user.setAdapter(familyWalfareAdapter);
+            sp_Family_welfare_user.setAdapter(familyUserWalfareAdapter);
 
 
             sp_Family_welfare.setOnItemSelectedListener(this);
@@ -336,14 +340,16 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                 familyMember.setMemberStatus(memStatus);
                 String prdStatus = periodeStatus;
                 familyMember.setMenstruationStatus(prdStatus);
-                if (receipt_bitmap != null) {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    receipt_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    userImagebyteArray = stream.toByteArray();
+                if(receipt_bitmap!=null) {
+//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                    image_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                    userImagebyteArray = stream.toByteArray();
+//                    Log.v(TAG, "Image length" + userImagebyteArray.length);
+                    familyMember.setPhoto(imageRealPath);
                 }
-                if (userImagebyteArray != null) {
-                    familyMember.setUserImageArray(userImagebyteArray);
-                }
+//                if (userImagebyteArray != null) {
+//                    familyMember.setUserImageArray(userImagebyteArray);
+//                }
 
                 String validateAddFamilyDetailForm = FormValidation.validateFamilyMemberRegistrationForm(familyMember, this);
                 if(validateAddFamilyDetailForm.length()!=0) {
@@ -652,8 +658,22 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
 
     public void captureImage() {
 
-        try {
+        /*try {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, TAKE_PICTURE);
+        } catch (ActivityNotFoundException e) {
+            Log.e(this + "", "cannot take picture " + e);
+        } catch (Exception ex) {
+            Log.e(this + "", "cannot take picture " + ex);
+        }*/
+
+        imageName = "picture_" + "" + System.currentTimeMillis();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            Uri mImageCaptureUri = null;
+            mImageCaptureUri = Uri.fromFile(new File(getExternalFilesDir("temp"), imageName + ".png"));
+            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+            intent.putExtra("return-data", true);
             startActivityForResult(intent, TAKE_PICTURE);
         } catch (ActivityNotFoundException e) {
             Log.e(this + "", "cannot take picture " + e);
@@ -663,28 +683,9 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (resultCode == RESULT_OK) {
-//            if (requestCode == TAKE_PICTURE) {
-//
-//                imageRealPath = new File(getExternalFilesDir("temp"),
-//                        imageName + ".png").getPath();
-//                compressFile = new File(imageRealPath);
-//                txt_take_image.setVisibility(View.GONE);
-//                imgUserImage.setVisibility(View.VISIBLE);
-//                receipt_bitmap = TakePictureUtils.decodeFile(compressFile);
-////                receipt_bitmap = Bitmap.createScaledBitmap(receipt_bitmap, width, height, true);
-//                imgUserImage.setImageBitmap(receipt_bitmap);
-////                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-////                receipt_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-////                userImagebyteArray= stream.toByteArray();
-//            }
-//        } else {
-//            Toast.makeText(getApplicationContext(), "No any image selected", Toast.LENGTH_SHORT).show();
-//        }
-        if (resultCode == RESULT_OK) {
-            if (requestCode == TAKE_PICTURE) {
+        if (requestCode == TAKE_PICTURE) {
 
-                try {
+             /*   try {
                     Bitmap bmp = (Bitmap) data.getExtras().get("data");
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bmp.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -715,9 +716,16 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
 
                 } catch (Exception e) {
 
-                }
-            } else if (requestCode == CROP_PIC) {
-                // get the returned data
+                }*/
+
+            String selectedImagePath =  new File(getExternalFilesDir("temp"),
+                    imageName + ".png").getPath();;
+            Intent intent = new Intent(this, ImageCroppingActivity.class);
+            intent.putExtra("imagePath", selectedImagePath);
+            startActivityForResult(intent, CROP_PIC);
+
+        } else if (requestCode == CROP_PIC) {
+                /*// get the returned data
                 Bundle extras = data.getExtras();
                 // get the cropped bitmap
                 Bitmap bitmap = extras.getParcelable("data");
@@ -726,10 +734,10 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                 imgUserImage.setVisibility(View.VISIBLE);
                 imgUserImage.setImageBitmap(bitmap);
 
-                receipt_bitmap = extras.getParcelable("data");
+                image_bitmap = extras.getParcelable("data");
 
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                receipt_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                image_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
                 //you can create a new file name "test.jpg" in sdcard folder.
                 String dir = Environment.getExternalStorageDirectory() + File.separator + thisActivity.getResources().getString(R.string.app_name) + File.separator + "Images";
@@ -740,7 +748,7 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                 //you can create a new file name "test.jpg" in sdcard folder.
                 File f = new File(appDir + "/" + File.separator + "MCTS_" + System.currentTimeMillis() + ".jpg");
 
-                Log.d(TAG, "onActivity : File Name" + receipt_bitmap);
+                Log.d(TAG, "onActivity : File Name" + image_bitmap);
                 if (f.exists())
                     f.delete();
                 else
@@ -754,176 +762,14 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                         fo.close();
                     } catch (IOException e) {
                         e.printStackTrace();
-                    }
-
-            }
-
+                    }*/
+            txt_take_image.setVisibility(View.GONE);
+            imgUserImage.setVisibility(View.VISIBLE);
+            imageRealPath=data.getStringExtra("imagePath");
+            Uri uri=Uri.parse(imageRealPath);
+            receipt_bitmap = TakePictureUtils.decodeFile(new File(uri.getPath()));
+            imgUserImage.setImageBitmap(receipt_bitmap);
         }
     }
 
-    private void performCrop() {
-        // take care of exceptions
-        try {
-            // call the standard crop action intent (the user device may not
-            // support it)
-            Intent cropIntent = new Intent("com.android.camera.action.CROP");
-            // indicate image type and Uri
-            cropIntent.setDataAndType(picUri, "image/*");
-            // set crop properties
-            cropIntent.putExtra("crop", "true");
-            // indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
-            // indicate output X and Y
-            cropIntent.putExtra("outputX", 256);
-            cropIntent.putExtra("outputY", 256);
-            // retrieve data on return
-            cropIntent.putExtra("return-data", true);
-            // start the activity - we handle returning in onActivityResult
-            startActivityForResult(cropIntent, CROP_PIC);
-        }
-        // respond to users whose devices do not support the crop action
-        catch (ActivityNotFoundException anfe) {
-            Toast toast = Toast
-                    .makeText(this, "This device doesn't support the crop action!", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }
-
-//    @SuppressLint("NewApi")
-//    private Bitmap getBitmap(String path) {
-//        int orientation;
-//        Uri uri = getTempUri();
-//        InputStream in = null;
-//        try {
-//            final int IMAGE_MAX_SIZE = 200000; // 1.2MP
-//            ContentResolver mContentResolver = getContentResolver();
-//            in = mContentResolver.openInputStream(uri);
-//
-//            // Decode image size
-//            BitmapFactory.Options o = new BitmapFactory.Options();
-//            o.inJustDecodeBounds = true;
-//            BitmapFactory.decodeStream(in, null, o);
-//            in.close();
-//
-//
-//            int scale = 1;
-//            while ((o.outWidth * o.outHeight) * (1 / Math.pow(scale, 2)) >
-//                    IMAGE_MAX_SIZE){
-//                scale++;
-//            }
-//            //Log.d(TAG, "scale = " + scale + ", orig-width: " + o.outWidth + ", orig-height: " + o.outHeight);
-//
-//            Bitmap b = null;
-//            in = mContentResolver.openInputStream(uri);
-//            if (scale > 1) {
-//                scale--;
-//                // scale to max possible inSampleSize that still yields an image
-//                // larger than target
-//                o = new BitmapFactory.Options();
-//                o.inSampleSize = scale;
-//                b = BitmapFactory.decodeStream(in, null, o);
-//
-//                // resize to desired dimensions
-//                int height = b.getHeight();
-//                int width = b.getWidth();
-//                //   Log.d(TAG, "1th scale operation dimenions - width: " + width + ",height: " + height);
-//
-//                double y = Math.sqrt(IMAGE_MAX_SIZE
-//                        / (((double) width) / height));
-//                double x = (y / height) * width;
-//
-//                Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, (int) x,
-//                        (int) y, true);
-//                b.recycle();
-//                b = scaledBitmap;
-//
-//                System.gc();
-//            } else {
-//                b = BitmapFactory.decodeStream(in);
-//            }
-//            in.close();
-//
-//            //  Log.d(TAG, "bitmap size - width: " +b.getWidth() + ", height: " +  b.getHeight());
-//
-//
-//            Bitmap bm = b;
-//            Bitmap bitmap = bm;
-//
-//            ExifInterface exif = new ExifInterface(path);
-//
-//            orientation = exif
-//                    .getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-//
-//            Log.e("ExifInteface .........", "rotation =" + orientation);
-//
-//            //            exif.setAttribute(ExifInterface.ORIENTATION_ROTATE_90, 90);
-//
-//            Log.e("orientation", "" + orientation);
-//            Matrix m = new Matrix();
-//
-//            if ((orientation == ExifInterface.ORIENTATION_ROTATE_180)) {
-//                m.postRotate(180);
-//                //                m.postScale((float) bm.getWidth(), (float) bm.getHeight());
-//                // if(m.preRotate(90)){
-//                Log.e("in orientation", "" + orientation);
-//                try {
-//                    bitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(),
-//                            bm.getHeight(), m, true);
-//                    // return bitmap;
-//                } catch (OutOfMemoryError e) {
-//                    bitmap.recycle();
-//                    bitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(),
-//                            bm.getHeight(), m, true);
-//                    // return bitmap;
-//                }
-//
-//            } else if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-//                m.postRotate(90);
-//                Log.e("in orientation", "" + orientation);
-//                try {
-//
-//                    bitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(),
-//                            bm.getHeight(), m, true);
-//                    // return bitmap;
-//                } catch (OutOfMemoryError e) {
-//                    bitmap.recycle();
-//                    bitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(),
-//                            bm.getHeight(), m, true);
-//                    // return bitmap;
-//                }
-//
-//            } else if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-//                m.postRotate(270);
-//                Log.e("in orientation", "" + orientation);
-//                try {
-//                    bitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(),
-//                            bm.getHeight(), m, true);
-//                    // return bitmap;
-//
-//                } catch (OutOfMemoryError e) {
-//                    bitmap.recycle();
-//                    bitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(),
-//                            bm.getHeight(), m, true);
-//                    // return bitmap;
-//                }
-//
-//            }
-//
-//            FileOutputStream out = null;
-//            String filename = path;// getFilename();
-//            try {
-//                out = new FileOutputStream(filename);
-//                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
-//                Log.e("finalbitmap",""+bitmap.getByteCount());
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//            camera_pathname = filename;
-//
-//            return bitmap;
-//        } catch (Exception e) {
-//            return null;
-//        }
-//    }
 }

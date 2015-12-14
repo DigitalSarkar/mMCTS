@@ -101,6 +101,23 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
             bt_add_family.setVisibility(View.GONE);
         }
 
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Utils.hideSoftKeyboard(thisActivity);
+        if(isFamily==0) {
+            String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
+            new GetDefaultFamily().execute(searchString,strVillageId);
+        }else{
+            String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
+            new GetDefaultFamilyMember().execute(searchString, strVillageId);
+
+        }
     }
 
     @Override
@@ -210,6 +227,83 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         protected String doInBackground(String... params) {
 
             familyArrayList = databaseHelper.searchFamilyMember(params[0], params[1]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            cm.hide();
+            String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
+            if (familyArrayList.size() != 0) {
+                SearchFamilyMemberAdapter searchFamilyMemberAdapter = new SearchFamilyMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName,searchString);
+                list_members.setAdapter(searchFamilyMemberAdapter);
+            } else {
+                SearchFamilyMemberAdapter searchFamilyMemberAdapter = new SearchFamilyMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName,searchString);
+                list_members.setAdapter(searchFamilyMemberAdapter);
+                String str=thisActivity.getResources().getString(R.string.no_match);
+                CustomToast customToast = new CustomToast(thisActivity, str);
+                customToast.show();
+            }
+        }
+
+    }
+
+    private class GetDefaultFamily extends AsyncTask<String,String,String>{
+
+        ArrayList<Family> familyArrayList;
+        CustomLoaderDialog cm;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            cm=new CustomLoaderDialog(thisActivity);
+            cm.show(true);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            familyArrayList=new ArrayList<>();
+            familyArrayList = databaseHelper.searchDefaultFamilyMember( params[1]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            cm.hide();
+            if (familyArrayList.size() != 0) {
+                String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
+                SearchMemberAdapter searchMemberAdapter = new SearchMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName,searchString);
+                list_members.setAdapter(searchMemberAdapter);
+            } else {
+                String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
+                SearchMemberAdapter searchMemberAdapter = new SearchMemberAdapter(thisActivity, familyArrayList, strVillageId, strVillageName,searchString);
+                list_members.setAdapter(searchMemberAdapter);
+                String str=thisActivity.getResources().getString(R.string.no_match);
+                CustomToast customToast = new CustomToast(thisActivity, str);
+                customToast.show();
+            }
+        }
+
+    }
+
+    private class GetDefaultFamilyMember extends AsyncTask<String,String,String>{
+
+        ArrayList<Family> familyArrayList;
+        CustomLoaderDialog cm;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            cm=new CustomLoaderDialog(thisActivity);
+            cm.show(true);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            familyArrayList=new ArrayList<>();
+            familyArrayList = databaseHelper.searchDefaultFamilyMember( params[1]);
             return null;
         }
 

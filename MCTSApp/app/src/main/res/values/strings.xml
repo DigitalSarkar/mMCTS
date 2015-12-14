@@ -109,11 +109,14 @@
     <string name="aasha_name">આશાનું નામ</string>
     <string name="family_address">સરનામું</string>
     <string name="family_cast">જ્ઞાતિ</string>
+    <string name="select_family_cast">-- જ્ઞાતિ પસંદ કરો --</string>
     <string name="family_dharm">ધર્મ</string>
+    <string name="select_family_dharm">-- ધર્મ પસંદ કરો --</string>
     <string name="family_bpl">બીપીએલ છે?</string>
     <string name="main_member_photo">મુખ્ય સભ્યનો ફોટો</string>
     <string name="landmark">લેન્ડમાર્ક</string>
     <string name="aaganvadi_no">આંગણવાડી નં.</string>
+    <string name="select_aaganvadi">-- આંગણવાડી પસંદ કરો --</string>
     <string name="family_yes">હા</string>
     <string name="family_no">ના</string>
     <string name="family_identity">ઓળખપત્ર</string>
@@ -146,6 +149,7 @@
     <string name="family_head">કુટુુંબના વડા છે?</string>
     <string name="family_head_relation">કુટુુંબના વડા સાથેનો સબંધ</string>
     <string name="Marital_status">વૈવાહિક દરજ્જો</string>
+    <string name="Select_Marital_status">વૈવાહિક દરજ્જો પસંદ કરો</string>
     <string name="Birth_date">જન્મ તારીખ</string>
     <string name="Mobile_number">મોબાઇલ નંબર</string>
     <string name="Whos_wife">કોની પત્ની છે?</string>
@@ -157,6 +161,7 @@
     <string name="isPregnent">હાલમાં સગર્ભા છે?</string>
     <string name="Current_Status">હાલની સ્થિતી</string>
     <string name="periods_status">માસિકની સ્થિતી</string>
+    <string name="select_periods_status">-- માસિકની સ્થિતી--</string>
     <string name="Please_Modern">અધતન કરો</string>
     <string name="Cancel">રદ કરો</string>
     <string name="Please_migration">સ્થળાતર કરો</string>
@@ -248,6 +253,9 @@
     <string name="line_separator">\n</string>
     <string name="missing_fields">નીચેની માહિતી પૂર્ણ કરો :</string>
     <string name="missing_street">માહિતી પૂર્ણ કરો</string>
+    <string name="try_again">ફરી પ્રયત્ન કરો</string>
+    <string name="valid_mobile">10 આંકડાનો મોબાઇલ નંબર નાખો</string>
+    <string name="title_activity_image_cropping">ImageCroppingActivity</string>
 </resources>
 
 

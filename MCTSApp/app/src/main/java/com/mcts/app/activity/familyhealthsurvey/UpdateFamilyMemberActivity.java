@@ -38,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mcts.app.R;
+import com.mcts.app.activity.ImageCroppingActivity;
 import com.mcts.app.adapter.StatusAdapter;
 import com.mcts.app.customview.CustomToast;
 import com.mcts.app.db.DatabaseHelper;
@@ -220,12 +221,13 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
             ed_Birth_date.setText(member.getBirthDate());
             ed_Mobile_number.setText(member.getMobileNo());
 
-            if(member.getUserImageArray()!=null) {
-                if(member.getUserImageArray().length>5) {
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(member.getUserImageArray(), 0, member.getUserImageArray().length);
-                    imgUserImage.setImageBitmap(bitmap);
+            if(member.getPhoto()!=null) {
+                if(member.getPhoto().length()>5) {
                     txt_take_image.setVisibility(View.GONE);
                     imgUserImage.setVisibility(View.VISIBLE);
+                    Uri uri=Uri.parse(member.getPhoto());
+                    Bitmap image_bitmap = TakePictureUtils.decodeFile(new File(uri.getPath()));
+                    imgUserImage.setImageBitmap(image_bitmap);
                 }
             }
 
@@ -254,16 +256,18 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                     ll_Family_welfare_user.setVisibility(View.GONE);
                 }
             }
-            if(member.getIsPregnant().equals("1")){
-                isPregnent="1";
-                rdb_isPregnent_yes.setChecked(true);
-                rdb_isPregnent_no.setChecked(false);
-                ll_secong_child.setVisibility(View.GONE);
-            }else{
-                isPregnent="0";
-                rdb_isPregnent_yes.setChecked(false);
-                rdb_isPregnent_no.setChecked(true);
-                ll_secong_child.setVisibility(View.VISIBLE);
+            if(member.getIsPregnant()!=null) {
+                if (member.getIsPregnant().equals("1")) {
+                    isPregnent = "1";
+                    rdb_isPregnent_yes.setChecked(true);
+                    rdb_isPregnent_no.setChecked(false);
+                    ll_secong_child.setVisibility(View.GONE);
+                } else {
+                    isPregnent = "0";
+                    rdb_isPregnent_yes.setChecked(false);
+                    rdb_isPregnent_no.setChecked(true);
+                    ll_secong_child.setVisibility(View.VISIBLE);
+                }
             }
 
             if(member.getWantChild()!=null) {
@@ -499,14 +503,18 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                 String prdStatus=periodeStatus;
                 familyMember.setMenstruationStatus(prdStatus);
                 if(image_bitmap!=null) {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    image_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    userImagebyteArray = stream.toByteArray();
-                    Log.v(TAG, "Image length" + userImagebyteArray.length);
+//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                    image_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                    userImagebyteArray = stream.toByteArray();
+//                    Log.v(TAG, "Image length" + userImagebyteArray.length);
+                    familyMember.setPhotoValue(imageRealPath);
+                    Uri uri=Uri.parse(imageRealPath);
+                    String Name=new File(uri.getPath()).getName();
+                    familyMember.setPhoto(Name);
                 }
-                if (userImagebyteArray != null) {
-                    familyMember.setUserImageArray(userImagebyteArray);
-                }
+//                if (userImagebyteArray != null) {
+//                    familyMember.setUserImageArray(userImagebyteArray);
+//                }
                 String validateAddFamilyDetailForm = FormValidation.validateFamilyMemberRegistrationForm(familyMember, thisActivity);
                 if(validateAddFamilyDetailForm.length()!=0) {
                     CustomLoaderDialog customLoaderDialog = new CustomLoaderDialog(thisActivity);
@@ -845,134 +853,24 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
 
     }
 
-    /*public void captureImage() {
-
-        try {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, TAKE_PICTURE);
-        } catch (ActivityNotFoundException e) {
-            Log.e(this + "", "cannot take picture " + e);
-        } catch (Exception ex) {
-            Log.e(this + "", "cannot take picture " + ex);
-        }
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (resultCode == RESULT_OK) {
-            if (requestCode == TAKE_PICTURE) {
-
-                try{
-                    Bitmap bmp = (Bitmap)data.getExtras().get("data");
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-                    String dir = Environment.getExternalStorageDirectory() + File.separator + thisActivity.getResources().getString(R.string.app_name) + File.separator + "Images";
-                    File appDir = new File(dir);
-                    if (!appDir.exists())
-                        appDir.mkdirs();
-
-                    //you can create a new file name "test.jpg" in sdcard folder.
-                    File f = new File(appDir+"/"+File.separator + "MCTS_" + System.currentTimeMillis() + ".jpg");
-                    Log.d(TAG, "onActivity : File Name" + bmp);
-                    if(f.exists())
-                        f.delete();
-                    else
-                        f.createNewFile();
-                    //write the bytes in file
-                    FileOutputStream fo = new FileOutputStream(f);
-                    fo.write(bytes.toByteArray());
-
-                    // remember close de FileOutput
-                    fo.close();
-
-//                    picUri = Uri.fromFile(f);
-                    picUri = data.getData();
-                    Log.d(TAG, "onActivity : Camera File Path"+picUri.getPath());
-                    performCrop();
-
-                }
-                catch(Exception e) {
-
-                }
-            } else if (requestCode == CROP_PIC) {
-                // get the returned data
-                Bundle extras = data.getExtras();
-                // get the cropped bitmap
-                Bitmap bitmap = extras.getParcelable("data");
-                bitmap = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
-                txt_take_image.setVisibility(View.GONE);
-                imgUserImage.setVisibility(View.VISIBLE);
-                imgUserImage.setImageBitmap(bitmap);
-
-                image_bitmap = extras.getParcelable("data");
-
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                image_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-                //you can create a new file name "test.jpg" in sdcard folder.
-                String dir = Environment.getExternalStorageDirectory() + File.separator + thisActivity.getResources().getString(R.string.app_name) + File.separator + "Images";
-                File appDir = new File(dir);
-                if (!appDir.exists())
-                    appDir.mkdirs();
-
-                //you can create a new file name "test.jpg" in sdcard folder.
-                File f = new File(appDir+"/"+File.separator + "MCTS_" + System.currentTimeMillis() + ".jpg");
-
-                Log.d(TAG, "onActivity : File Name" + image_bitmap);
-                if(f.exists())
-                    f.delete();
-                else
-                    try {
-                        f.createNewFile();
-                        //write the bytes in file
-                        FileOutputStream fo = new FileOutputStream(f);
-                        fo.write(bytes.toByteArray());
-
-                        // remember close de FileOutput
-                        fo.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-            }
-
-        }
-    }
-
-    private void performCrop() {
-        // take care of exceptions
-        try {
-            // call the standard crop action intent (the user device may not
-            // support it)
-            Intent cropIntent = new Intent("com.android.camera.action.CROP");
-            // indicate image type and Uri
-            cropIntent.setDataAndType(picUri, "image*//*");
-            // set crop properties
-            cropIntent.putExtra("crop", "true");
-            // indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
-            // indicate output X and Y
-            cropIntent.putExtra("outputX", 256);
-            cropIntent.putExtra("outputY", 256);
-            // retrieve data on return
-            cropIntent.putExtra("return-data", true);
-            // start the activity - we handle returning in onActivityResult
-            startActivityForResult(cropIntent, CROP_PIC);
-        }
-        // respond to users whose devices do not support the crop action
-        catch (ActivityNotFoundException anfe) {
-            Toast toast = Toast
-                    .makeText(this, "This device doesn't support the crop action!", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }*/
-
     public void captureImage() {
 
-        try {
+        /*try {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, TAKE_PICTURE);
+        } catch (ActivityNotFoundException e) {
+            Log.e(this + "", "cannot take picture " + e);
+        } catch (Exception ex) {
+            Log.e(this + "", "cannot take picture " + ex);
+        }*/
+
+        imageName = "picture_" + "" + System.currentTimeMillis();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            Uri mImageCaptureUri = null;
+            mImageCaptureUri = Uri.fromFile(new File(getExternalFilesDir("temp"), imageName + ".png"));
+            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+            intent.putExtra("return-data", true);
             startActivityForResult(intent, TAKE_PICTURE);
         } catch (ActivityNotFoundException e) {
             Log.e(this + "", "cannot take picture " + e);
@@ -982,28 +880,10 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (resultCode == RESULT_OK) {
-//            if (requestCode == TAKE_PICTURE) {
-//
-//                imageRealPath = new File(getExternalFilesDir("temp"),
-//                        imageName + ".png").getPath();
-//                compressFile = new File(imageRealPath);
-//                txt_take_image.setVisibility(View.GONE);
-//                imgUserImage.setVisibility(View.VISIBLE);
-//                receipt_bitmap = TakePictureUtils.decodeFile(compressFile);
-////                receipt_bitmap = Bitmap.createScaledBitmap(receipt_bitmap, width, height, true);
-//                imgUserImage.setImageBitmap(receipt_bitmap);
-////                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-////                receipt_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-////                userImagebyteArray= stream.toByteArray();
-//            }
-//        } else {
-//            Toast.makeText(getApplicationContext(), "No any image selected", Toast.LENGTH_SHORT).show();
-//        }
         if (resultCode == RESULT_OK) {
             if (requestCode == TAKE_PICTURE) {
 
-                try {
+             /*   try {
                     Bitmap bmp = (Bitmap) data.getExtras().get("data");
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bmp.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -1034,9 +914,16 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
 
                 } catch (Exception e) {
 
-                }
+                }*/
+
+                String selectedImagePath =  new File(getExternalFilesDir("temp"),
+                        imageName + ".png").getPath();;
+                Intent intent = new Intent(this, ImageCroppingActivity.class);
+                intent.putExtra("imagePath", selectedImagePath);
+                startActivityForResult(intent, CROP_PIC);
+
             } else if (requestCode == CROP_PIC) {
-                // get the returned data
+                /*// get the returned data
                 Bundle extras = data.getExtras();
                 // get the cropped bitmap
                 Bitmap bitmap = extras.getParcelable("data");
@@ -1073,8 +960,14 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                         fo.close();
                     } catch (IOException e) {
                         e.printStackTrace();
-                    }
+                    }*/
+                txt_take_image.setVisibility(View.GONE);
+                imgUserImage.setVisibility(View.VISIBLE);
+                imageRealPath=data.getStringExtra("imagePath");
+                Uri uri=Uri.parse(imageRealPath);
+                image_bitmap = TakePictureUtils.decodeFile(new File(uri.getPath()));
 
+                imgUserImage.setImageBitmap(image_bitmap);
             }
 
         }
@@ -1087,7 +980,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
             // support it)
             Intent cropIntent = new Intent("com.android.camera.action.CROP");
             // indicate image type and Uri
-            cropIntent.setDataAndType(picUri, "image/*");
+            cropIntent.setDataAndType(picUri, "image");
             // set crop properties
             cropIntent.putExtra("crop", "true");
             // indicate aspect of desired crop
@@ -1110,6 +1003,41 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
     }
 
 
+   /* public void captureImage() {
+
+        imageName = "picture_" + "" + System.currentTimeMillis();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            Uri mImageCaptureUri = null;
+            mImageCaptureUri = Uri.fromFile(new File(getExternalFilesDir("temp"), imageName + ".png"));
+            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+            intent.putExtra("return-data", true);
+            startActivityForResult(intent, TAKE_PICTURE);
+        } catch (ActivityNotFoundException e) {
+            Log.e(this  + "", "cannot take picture " + e);
+        } catch (Exception ex) {
+            Log.e(this + "", "cannot take picture " + ex);
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TAKE_PICTURE) {
+            if (resultCode == RESULT_OK) {
+
+                imageRealPath = new File(getExternalFilesDir("temp"),
+                        imageName + ".png").getPath();
+                compressFile = new File(imageRealPath);
+                txt_take_image.setVisibility(View.GONE);
+                imgUserImage.setVisibility(View.VISIBLE);
+                image_bitmap = TakePictureUtils.decodeFile(compressFile);
+                image_bitmap = Bitmap.createScaledBitmap(image_bitmap, width, height, true);
+                imgUserImage.setImageBitmap(image_bitmap);
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), "No any image selected", Toast.LENGTH_SHORT).show();
+        }
+    }
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

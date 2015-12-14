@@ -753,22 +753,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    public void captureImage() {
 
-        imageName = "picture_" + "" + System.currentTimeMillis();
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            Uri mImageCaptureUri = null;
-            mImageCaptureUri = Uri.fromFile(new File(getExternalFilesDir("temp"), imageName + ".png"));
-            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-            intent.putExtra("return-data", true);
-            startActivityForResult(intent, TAKE_PICTURE);
-        } catch (ActivityNotFoundException e) {
-            Log.e(this  + "", "cannot take picture " + e);
-        } catch (Exception ex) {
-            Log.e(this + "", "cannot take picture " + ex);
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -909,6 +894,23 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
                     + "/" + String.valueOf(year));
         }
     };
+
+    public void captureImage() {
+
+        imageName = "picture_" + "" + System.currentTimeMillis();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            Uri mImageCaptureUri = null;
+            mImageCaptureUri = Uri.fromFile(new File(getExternalFilesDir("temp"), imageName + ".png"));
+            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+            intent.putExtra("return-data", true);
+            startActivityForResult(intent, TAKE_PICTURE);
+        } catch (ActivityNotFoundException e) {
+            Log.e(this  + "", "cannot take picture " + e);
+        } catch (Exception ex) {
+            Log.e(this + "", "cannot take picture " + ex);
+        }
+    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == TAKE_PICTURE) {

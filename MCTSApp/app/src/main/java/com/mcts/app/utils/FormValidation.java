@@ -48,6 +48,10 @@ public class FormValidation {
             validString += context.getString(R.string.line_separator) + context.getString(R.string.Marital_status);
         }if (familyMember.getBirthDate() == null || ((familyMember.getBirthDate() != null && familyMember.getBirthDate().length() <= 0) )) {
             validString += context.getString(R.string.line_separator) + context.getString(R.string.Birth_date);
+        }if (familyMember.getMobileNo() != null && familyMember.getMobileNo().length() != 0) {
+            if(familyMember.getMobileNo().length() != 10) {
+                validString += context.getString(R.string.line_separator) + context.getString(R.string.valid_mobile);
+            }
         }
 
         return validString;
@@ -80,6 +84,10 @@ public class FormValidation {
             validString += context.getString(R.string.line_separator) + context.getString(R.string.Birth_date);
         }if (familyMember.getMemberStatus() == null || ((familyMember.getMemberStatus() != null && familyMember.getMemberStatus().length() <= 0) )) {
             validString += context.getString(R.string.line_separator) + context.getString(R.string.Current_Status);
+        }if (familyMember.getMobileNo() != null && familyMember.getMobileNo().length() != 0) {
+            if(familyMember.getMobileNo().length() != 10) {
+                validString += context.getString(R.string.line_separator) + context.getString(R.string.valid_mobile);
+            }
         }
 
         return validString;

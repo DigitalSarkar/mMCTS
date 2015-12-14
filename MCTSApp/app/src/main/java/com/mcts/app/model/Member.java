@@ -52,10 +52,19 @@ public class Member {
     String lattitudes;
     String longitude;
     String bplNumber,rationcardNrumber,rsbycardNumber,macardNumber;
-    byte[] userImageArray;
     String subCenterId;
     String userId;
     String anganwadiId;
+    String photoValue;
+
+
+    public String getPhotoValue() {
+        return photoValue;
+    }
+
+    public void setPhotoValue(String photoValue) {
+        this.photoValue = photoValue;
+    }
 
     public String getUserId() {
         return userId;
@@ -71,14 +80,6 @@ public class Member {
 
     public void setSubCenterId(String subCenterId) {
         this.subCenterId = subCenterId;
-    }
-
-    public byte[] getUserImageArray() {
-        return userImageArray;
-    }
-
-    public void setUserImageArray(byte[] userImageArray) {
-        this.userImageArray = userImageArray;
     }
 
     public String getMemberId() {
