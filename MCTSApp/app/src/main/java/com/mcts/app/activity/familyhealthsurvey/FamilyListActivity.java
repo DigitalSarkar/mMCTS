@@ -133,9 +133,9 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         Utils.ButtonClickEffect(v);
         switch (v.getId()){
             case R.id.bt_family_search:
-
+                Utils.hideSoftKeyboard(thisActivity);
                 if(ed_family_number.getText().toString().length()>1){
-                    Utils.hideSoftKeyboard(thisActivity);
+
                     if(isFamily==0) {
                         String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
                         new GetFamilyDetails().execute(searchString,strVillageId);

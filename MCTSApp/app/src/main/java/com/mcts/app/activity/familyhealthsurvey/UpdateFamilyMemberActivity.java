@@ -225,7 +225,7 @@ public class UpdateFamilyMemberActivity extends AppCompatActivity implements Vie
                 if(member.getPhoto().length()>5) {
                     txt_take_image.setVisibility(View.GONE);
                     imgUserImage.setVisibility(View.VISIBLE);
-                    Uri uri=Uri.parse(member.getPhoto());
+                    Uri uri=Uri.parse(member.getPhotoValue());
                     Bitmap image_bitmap = TakePictureUtils.decodeFile(new File(uri.getPath()));
                     imgUserImage.setImageBitmap(image_bitmap);
                 }

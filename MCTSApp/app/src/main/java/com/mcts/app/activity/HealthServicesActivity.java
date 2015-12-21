@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mcts.app.R;
+import com.mcts.app.activity.maternalhealthservice.MaternalHealthServiceActivity;
 import com.mcts.app.customview.CustomToast;
 import com.mcts.app.db.DatabaseHelper;
 import com.mcts.app.model.Member;
@@ -47,13 +48,12 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
     private Toolbar mToolbar;
     private TextView mTitle;
     private LinearLayout ll_health_servey, ll_sagarbha_seva, ll_bal_seva, ll_kutumnb_kalyan_seva;
-    private Button bt_send_data, bt_get_data;
+    private LinearLayout ll_upload_data, ll_download_data;
     private TextView txt_last_data_send, txt_last_data_get;
     private JSONObject jsonObject;
     private int webIndex = 0;
     private ImageView img_pic;
     CustomLoaderDialog customLoaderDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +77,8 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
 
     private void init() {
 
-        bt_send_data = (Button) findViewById(R.id.bt_send_data);
-        bt_get_data = (Button) findViewById(R.id.bt_get_data);
+        ll_upload_data = (LinearLayout) findViewById(R.id.ll_upload_data);
+        ll_download_data = (LinearLayout) findViewById(R.id.ll_download_data);
         txt_last_data_send = (TextView) findViewById(R.id.txt_last_data_send);
         txt_last_data_get = (TextView) findViewById(R.id.txt_last_data_get);
         ll_health_servey = (LinearLayout) findViewById(R.id.ll_health_servey);
@@ -89,8 +89,8 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
 
         Utils.findAllTextView(thisActivity, (ViewGroup) findViewById(R.id.ll_health_seva));
 
-        bt_get_data.setOnClickListener(this);
-        bt_send_data.setOnClickListener(this);
+        ll_upload_data.setOnClickListener(this);
+        ll_download_data.setOnClickListener(this);
         ll_health_servey.setOnClickListener(this);
         ll_sagarbha_seva.setOnClickListener(this);
         ll_kutumnb_kalyan_seva.setOnClickListener(this);
@@ -130,10 +130,10 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
                 startActivity(intent);
                 break;
             case R.id.ll_sagarbha_seva:
-                intent = new Intent(thisActivity, MainActivity.class);
+                intent = new Intent(thisActivity, MaternalHealthServiceActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.bt_get_data:
+            case R.id.ll_download_data:
                 Map<String, String> params = new HashMap<>();
                 try {
                     SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
@@ -150,26 +150,30 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
                 }
 
                 break;
-            case R.id.bt_send_data:
+            case R.id.ll_upload_data:
                 DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
                 JSONArray jsonArray = databaseHelper.familyMamberData();
-                Log.v("Post Data", jsonArray.toString());
-                Map<String, String> imageParams = new HashMap<>();
-                try {
-                    imageParams.put("details", jsonArray.toString());
-                    getWebData(Constants.MEMBER_POST, imageParams);
-                    customLoaderDialog = new CustomLoaderDialog(thisActivity);
-                    customLoaderDialog.show(false);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if(jsonArray.length()!=0) {
+                    Log.v("Post Data", jsonArray.toString());
+                    Map<String, String> imageParams = new HashMap<>();
+                    try {
+                        imageParams.put("details", jsonArray.toString());
+                        getWebData(Constants.MEMBER_POST, imageParams);
+                        customLoaderDialog = new CustomLoaderDialog(thisActivity);
+                        customLoaderDialog.show(false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    String str = getResources().getString(R.string.no_data_to_uploaded);
+                    CustomToast customToast = new CustomToast(thisActivity, str);
+                    customToast.show();
                 }
 
                 break;
             case R.id.ll_bal_seva:
                 intent = new Intent(thisActivity, MainActivity.class);
                 startActivity(intent);
-//                Map<String, String> params1 = new HashMap<>();
-//                getWebData("postimg", params1);
                 break;
             case R.id.ll_kutumnb_kalyan_seva:
                 intent = new Intent(thisActivity, MainActivity.class);
@@ -274,6 +278,28 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
                     JSONArray jsonArray = jsonFamily.getJSONArray("anganwadidetails");
                     if (databaseHelper.insertAganwadi(jsonArray)) {
                         params.put("subcenterid", jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId"));
+                        getWebData(Constants.webApiArrayList[webIndex], params);
+                    } else {
+                        String str = getResources().getString(R.string.try_again);
+                        CustomToast customToast = new CustomToast(thisActivity, str);
+                        customToast.show();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else if(ResponseTag.equalsIgnoreCase(Constants.webApiArrayList[4])){
+            Log.v(Constants.EMPLOYEE_DETAILS, mRes);
+            webIndex++;
+            Map<String, String> params = new HashMap<>();
+            try {
+                DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
+                databaseHelper.deleteEmployeeDetails();
+                JSONObject jsonFmployee = new JSONObject(mRes);
+                if (jsonFmployee.getString("status").equals("ok")) {
+                    JSONArray jsonArray = jsonFmployee.getJSONArray(Constants.EMPLOYEE_DETAILS);
+                    if (databaseHelper.insertEmployeeDetails(jsonArray)) {
+                        params.put("subcenterid", jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId"));
                         webIndex = 0;
                         customLoaderDialog.hide();
                         String str = thisActivity.getResources().getString(R.string.data_download_success);
@@ -292,9 +318,21 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        } else if (ResponseTag.equalsIgnoreCase(Constants.MEMBER_POST)) {
+        }else if (ResponseTag.equalsIgnoreCase(Constants.MEMBER_POST)) {
             customLoaderDialog.hide();
             Log.v("membermodify Res", mRes);
+            try {
+                JSONObject jsonObject=new JSONObject(mRes);
+                if (jsonObject.getString("status").equalsIgnoreCase("ok")) {
+                    DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
+                    databaseHelper.updateMemberTable();
+                    String str = thisActivity.getResources().getString(R.string.data_uploaded);
+                    CustomToast customToast = new CustomToast(thisActivity, str);
+                    customToast.show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         } else if (ResponseTag.equalsIgnoreCase("postimg")) {
             Log.v("Image Res", mRes);
             try {
@@ -306,7 +344,7 @@ public class HealthServicesActivity extends BaseActivity implements View.OnClick
                     byte[] decodedString = Base64.decode(image.getString("photo"), Base64.DEFAULT);
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     img_pic.setImageBitmap(decodedByte);
-                    String filePath = Utils.saveIamge(decodedByte, "MCTS", "Profile Pic");
+                    String filePath = Utils.saveIamge(decodedByte, Constants.APP_NAME, Constants.PROFILE_PIC);
                     DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
                     boolean isStored = databaseHelper.storeImage(filePath);
                 }

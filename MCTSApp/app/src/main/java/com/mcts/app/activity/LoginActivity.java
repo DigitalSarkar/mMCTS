@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
@@ -64,9 +66,54 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         super.onCreate(savedInstanceState);
         mContext = this;
         setContentView(R.layout.activity_login);
+
+
+
         setToolBar();
         init();
         setProgressDialog();
+        getScreenResolutuon();
+    }
+
+    private void getScreenResolutuon() {
+
+        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        int width = metrics.widthPixels;
+        int height = metrics.heightPixels;
+
+        Log.v("Device height x width =",""+height+" x "+width);
+
+        float dens = getResources().getDisplayMetrics().density;
+        Log.e("Resolution density",""+dens);
+
+        int density = getResources().getDisplayMetrics().densityDpi;
+        switch (density) {
+            case DisplayMetrics.DENSITY_LOW:
+//                Toast.makeText(this, "LDPI", Toast.LENGTH_SHORT).show();
+                Log.e("Resolution","LDPI");
+                break;
+            case DisplayMetrics.DENSITY_MEDIUM:
+//                Toast.makeText(this, "MDPI", Toast.LENGTH_SHORT).show();
+                Log.e("Resolution","MDPI");
+                break;
+            case DisplayMetrics.DENSITY_HIGH:
+//                Toast.makeText(this, "HDPI", Toast.LENGTH_SHORT).show();
+                Log.e("Resolution","HDPI");
+                break;
+            case DisplayMetrics.DENSITY_XHIGH:
+//                Toast.makeText(this, "XHDPI", Toast.LENGTH_SHORT).show();
+                Log.e("Resolution","XHDPI");
+                break;
+            case DisplayMetrics.DENSITY_XXHIGH:
+                Log.e("Resolution","XXHDPI");
+                break;
+            case DisplayMetrics.DENSITY_XXXHIGH:
+                Log.e("Resolution","XXXHDPI");
+                break;
+        }
     }
 
     private void setToolBar() {
@@ -324,7 +371,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         ed_pin.setText("");
                         strPinText = new StringBuilder();
                         txt_password.setText(strPinText);
-                        String str=thisActivity.getResources().getString(R.string.wrong_pass);
+                        String str = thisActivity.getResources().getString(R.string.wrong_pass);
                         CustomToast customToast = new CustomToast(thisActivity, str);
                         customToast.show();
                     }
@@ -342,7 +389,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         callVolley(thisActivity, Constant.POST_REQUEST, Constants.USER_LOGIN, Constants.BASE_URL + Constants.USER_LOGIN, params, Constant.CALL_TIME_OUT, Constant.SHOULD_CACHE, Constant.VOLLEY_RETRY_COUNT, false, Constant.IS_PROGRESSDAILOG_CANCELABLE, mContext);
 
                     } else {
-                        String str=thisActivity.getResources().getString(R.string.no_internet);
+                        String str = thisActivity.getResources().getString(R.string.no_internet);
                         CustomToast customToast = new CustomToast(thisActivity, str);
                         customToast.show();
                         isStart = false;
@@ -410,7 +457,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 ed_pin.setText("");
                 strPinText = new StringBuilder();
                 txt_password.setText(strPinText);
-                String str=thisActivity.getResources().getString(R.string.wrong_pass);
+                String str = thisActivity.getResources().getString(R.string.wrong_pass);
                 CustomToast customToast = new CustomToast(thisActivity, str);
                 customToast.show();
             }

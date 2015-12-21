@@ -60,12 +60,13 @@
     <string name="title_activity_sagrbhavstha">SagrbhavsthaActivity</string>
 
     <!-- Sagarbha Seva-->
-    <string name="masik_sevry">માસિક સર્વે</string>
-    <string name="new_pregnancy">નવી\nસગર્ભા\nનોધણી</string>
-    <string name="pregnancy_first_test">સગર્ભાની\nપ્રથમ\nતપાસ</string>
-    <string name="pregnancy_second_test">સગર્ભાની\nબીજી\nતપાસ</string>
-    <string name="pregnancy_third_test">સગર્ભાની\nત્રીજી\nતપાસ</string>
+    <string name="maternal_health">માતૃ આરોગ્ય સેવાઓ</string>
+    <string name="new_pregnancy">સગર્ભા માતાની નોધણી</string>
+    <string name="pregnancy_services">સગર્ભા માતાની સેવાઓ</string>
+    <string name="delivery_registration">પ્રસુતિ નોધણી</string>
+    <string name="post_delivery_services">પ્રસુતિ બાદની સેવાઓ</string>
     <string name="pregnancy_forth_test">સગર્ભાની\nચોથી\nતપાસ</string>
+    <string name="pregnant_register">સગર્ભા નોધો</string>
     <string name="tt_1">ટીટી-1</string>
     <string name="tt_2">ટીટી-2</string>
     <string name="tt_booster">ટીટી-બુસ્ટર</string>
@@ -255,7 +256,62 @@
     <string name="missing_street">માહિતી પૂર્ણ કરો</string>
     <string name="try_again">ફરી પ્રયત્ન કરો</string>
     <string name="valid_mobile">10 આંકડાનો મોબાઇલ નંબર નાખો</string>
+    <string name="data_uploaded">તમારો ડેટા સફળતાપૂર્વક મોકલેલ છે.</string>
+    <string name="no_data_to_uploaded">ડેટા મોકલવા ડેટા ઉપલબ્ધ નથી</string>
     <string name="title_activity_image_cropping">ImageCroppingActivity</string>
+    <string name="title_activity_new_pragnancy">NewPragnancyActivity</string>
+    <string name="village">ગામ</string>
+    <string name="year">વર્ષ</string>
+
+    <string name="title_activity_pragnent_women_registration">PragnentWomenRegistrationActivity
+    </string>
+    <string name="masik_sevry">માસિક સર્વે</string>
+    <string name="new_pregnancy_number">સગર્ભા નોધણી નંબર</string>
+    <string name="anc_registration">નવી સગર્ભા નોંધણી</string>
+    <string name="anc_service">સગર્ભાવસ્થાની સેવાઓ</string>
+    <string name="highrisk_mother">જોખમી માતાની વિગત</string>
+    <string name="anc_regd_date">સગર્ભા નોંધણી તારીખ</string>
+    <string name="lmp_date">છેલ્લા માસિકની તારીખ</string>
+    <string name="edd_date">પ્રસુતિની સંભવિત તારીખ</string>
+    <string name="anc_name">સગર્ભા માતાનું નામ</string>
+    <string name="anc_member_photo">સગર્ભા માતાનો ફોટો</string>
+    <string name="anc_gravida">ગ્રેવિડા</string>
+    <string name="anc_para">પારા</string>
+    <string name="anc_live_male">પુરૂષ</string>
+    <string name="anc_live_female">સ્ત્રી </string>
+    <string name="anc_abortion">ગર્ભપાત </string>
+    <string name="anc_live_child">જીવીત બાળકો</string>
+    <string name="anc_prev_highrisk"></string>
+    <string name="anc_current_highrisk"></string>
+    <string name="anc_current_sickness"></string>
+    <string name="pregnancy_first_test">સગર્ભાની\nપ્રથમ\nતપાસ</string>
+    <string name="pregnancy_second_test">સગર્ભાની\nબીજી\nતપાસ</string>
+    <string name="pregnancy_third_test">સગર્ભાની\nત્રીજી\nતપાસ</string>
+    <string name="valid_lmp_date">સગર્ભા નોંધણી તારીખ છેલ્લા માસિકની તારીખ કરતાં વધુ નાખો</string>
+    <string name="valid_gravida">મહેરબાની કરીને ડેટા ચકાસો</string>
+    <string name="select_asha_name">આશાનું નામ પસંદ કરો</string>
+    <string name="asha_name">આશાનું નામ </string>
+    <string name="high_risk_mom">જોખમી સગર્ભાનાં ચિન્હો</string>
+    <string name="chiranjivi">ચિરંજીવી લાભાર્થી છે ?</string>
+    <string name="live_male">જીવીત બાળક પુરૂષ</string>
+    <string name="live_female">જીવીત બાળક સ્ત્રી</string>
+
+    <string-array name="gravida_range">
+        <item>પસંદ કરો</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
 </resources>
 
 

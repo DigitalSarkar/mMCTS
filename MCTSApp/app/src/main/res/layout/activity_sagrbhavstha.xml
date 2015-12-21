@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_maternal_health"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,301 +10,124 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="#4285F5" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:id="@+id/ll_new_pregnancy"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/scale_60"
+                android:layout_margin="@dimen/scale_10"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/bt_masik_sevry"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/masik_sevry"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
+                <TextView
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_new_pregnancy"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/new_pregnancy"
                     android:textColor="@color/black"
                     android:textSize="@dimen/menu_font" />
+
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <View
+                android:layout_width="3dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:background="#4285F5" />
 
-                <Button
-                    android:id="@+id/bt_pregnancy_first_test"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/pregnancy_first_test"
+            <LinearLayout
+                android:id="@+id/ll_pregnancy_services"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/scale_60"
+                android:layout_margin="@dimen/scale_10"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pregnancy_services"
                     android:textColor="@color/black"
                     android:textSize="@dimen/menu_font" />
+
             </LinearLayout>
+
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="#4285F5" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:id="@+id/ll_delivery_registration"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/scale_60"
+                android:layout_margin="@dimen/scale_10"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/bt_pregnancy_second_test"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/pregnancy_second_test"
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/delivery_registration"
                     android:textColor="@color/black"
-                    />
+                    android:textSize="@dimen/menu_font" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:background="#4285F5" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:id="@+id/ll_post_delivery_services"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/scale_60"
+                android:layout_margin="@dimen/scale_10"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/bt_pregnancy_third_test"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/pregnancy_third_test"
-                    android:textColor="@color/black"/>
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/post_delivery_services"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/menu_font" />
+
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_pregnancy_forth_test"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/pregnancy_forth_test"
-                    android:textColor="@color/black" />
-            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_tt_1"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/tt_1"
-                    android:textColor="@color/black"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_tt_2"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/tt_2"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_tt_booster"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/tt_booster"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_risky_mom"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/risky_mom"
-                    android:textColor="@color/black" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_Kortikostiroidasa"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/Kortikostiroidasa"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_height="3dp"
+            android:background="#4285F5" />
     </LinearLayout>
 </LinearLayout>

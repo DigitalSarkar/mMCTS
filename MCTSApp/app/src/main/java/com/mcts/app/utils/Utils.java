@@ -119,4 +119,46 @@ public class Utils {
 //	    FILENAME = file.getName();
         return file.getPath();
     }
+
+    public static String saveImageWithName(Bitmap finalBitmap,String Name,String rootDir,String subDir) {
+
+        File mediaStorageDir=null;
+        if(rootDir!=null && rootDir.length()>0)
+            mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),rootDir);
+        else
+            mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"TempImages");
+
+        File myDir=null;
+        if(subDir!=null && subDir.length()>0)
+            myDir= new File(mediaStorageDir + "/" + subDir);
+        else
+            myDir= new File(mediaStorageDir+"");
+
+//		deletFile(myDir);
+//	    myDir.mkdirs();
+        if(!myDir.exists())
+            myDir.mkdirs();
+
+
+
+        //String fname = "Image-"+ n +".jpg";
+        File file = new File(myDir, Name);
+        if (file.exists ())
+            file.delete ();
+        try {
+
+            if(finalBitmap!=null)
+            {
+                FileOutputStream out = new FileOutputStream(file);
+                finalBitmap.compress(Bitmap.CompressFormat.JPEG, 60, out);
+                out.flush();
+                out.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//	    FILENAME = file.getName();
+        return file.getPath();
+    }
 }

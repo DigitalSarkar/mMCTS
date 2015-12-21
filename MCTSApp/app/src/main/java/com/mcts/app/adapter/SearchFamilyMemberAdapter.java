@@ -121,7 +121,7 @@ public class SearchFamilyMemberAdapter extends BaseAdapter implements View.OnCli
 
         if (familyArrayList.get(position).getPhoto() != null) {
             if(familyArrayList.get(position).getPhoto().length()>4) {
-                Uri uri=Uri.parse(familyArrayList.get(position).getPhoto());
+                Uri uri = Uri.parse(familyArrayList.get(position).getPhotoValue());
                 Bitmap image_bitmap = TakePictureUtils.decodeFile(new File(uri.getPath()));
                 viewHolder.img_member.setImageBitmap(image_bitmap);
             }else {

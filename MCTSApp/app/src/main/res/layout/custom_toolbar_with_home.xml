@@ -41,7 +41,7 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/home"
+            android:src="@drawable/ic_launcher"
             android:visibility="visible"
             android:id="@+id/img_icon_home"
             android:layout_centerVertical="true"

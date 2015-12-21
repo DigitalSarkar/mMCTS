@@ -56,7 +56,15 @@ public class Member {
     String userId;
     String anganwadiId;
     String photoValue;
+    int ageDifference;
 
+    public int getAgeDifference() {
+        return ageDifference;
+    }
+
+    public void setAgeDifference(int ageDifference) {
+        this.ageDifference = ageDifference;
+    }
 
     public String getPhotoValue() {
         return photoValue;

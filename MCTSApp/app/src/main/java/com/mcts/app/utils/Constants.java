@@ -31,13 +31,17 @@ public class Constants {
     public static final String VILLAGE="villagedetails";
     public static final String AGANWADI="anganwadi";
     public static final String MEMBER_POST="membermodify";
+    public static final String APP_NAME="MCTS";
+    public static final String PROFILE_PIC="Profile Pic";
+    public static final String EMPLOYEE_DETAILS="employeedetails";
 
 // web service call array
     public static String[] webApiArrayList=new String[]{
         MEMBER_DETAIL,
         FAMILY_DETAIL,
         VILLAGE,
-        AGANWADI
+        AGANWADI,
+        EMPLOYEE_DETAILS
 
     };
 

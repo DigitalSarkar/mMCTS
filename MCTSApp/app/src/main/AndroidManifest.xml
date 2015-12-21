@@ -64,7 +64,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".activity.MaternalServiceActivity"
+            android:name=".activity.maternalhealthservice.MaternalHealthServiceActivity"
             android:label="@string/title_activity_sagrbhavstha"
             android:screenOrientation="portrait" >
         </activity>
@@ -113,6 +113,14 @@
         <activity
             android:name=".activity.ImageCroppingActivity"
             android:label="@string/title_activity_image_cropping" >
+        </activity>
+        <activity
+            android:name=".activity.maternalhealthservice.NewPragnencyActivity"
+            android:label="@string/title_activity_new_pragnancy" >
+        </activity>
+        <activity
+            android:name=".activity.maternalhealthservice.PregnantWomenRegistrationActivity"
+            android:label="@string/title_activity_pragnent_women_registration" >
         </activity>
     </application>
 

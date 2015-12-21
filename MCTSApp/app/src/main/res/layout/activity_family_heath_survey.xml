@@ -7,309 +7,6 @@
 
     <include layout="@layout/custom_toolbar_with_home"></include>
 
-    <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_add_family"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/add_family"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_edit_family"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/edit_family"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_delete_family"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/delete_family"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_transfer_family"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/transfer_family"
-                    android:textColor="@color/black"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_identity_family"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/identity_family"
-                    android:textColor="@color/black"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_location_family"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/location_family"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_add_family_member"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/add_family_member"
-                    android:textColor="@color/black"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_edit_family_member"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/edit_family_member"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_delete_family_member"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/delete_family_member"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_locate_family_member"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/locate_family_member"
-                    android:textColor="@color/black" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_identity_family_member"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/identity_family_member"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_bank_detail"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:textSize="@dimen/menu_font"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/bank_detail"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -324,157 +21,199 @@
             android:spinnerMode="dialog"></Spinner>
     </LinearLayout>
 
-    <View
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="#4285F5" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/ll_family_detail"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/scale_60"
-            android:layout_margin="@dimen/scale_10"
-            android:gravity="center_vertical|center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/family_detail"
-                android:textColor="@color/black"
-                android:textSize="@dimen/menu_font" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="#4285F5" />
-
-        <LinearLayout
-            android:id="@+id/ll_family_member_detail"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/scale_60"
-            android:layout_margin="@dimen/scale_10"
-            android:gravity="center_vertical|center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/family_member_detail"
-                android:textColor="@color/black"
-                android:textSize="@dimen/menu_font" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="#4285F5" />
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/ll_identity_family"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/scale_60"
-                android:layout_margin="@dimen/scale_10"
-                android:layout_weight="1"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal">
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/ll_family_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="#1fbbff"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24">
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/identity_family"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
+                    <ImageView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/family_details" />
+
+                    <com.mcts.app.customview.MyTextView
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/scale_5"
+                        android:gravity="center_horizontal"
+                        android:text="@string/family_detail" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_family_member_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="#c500ff"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/member_details" />
+
+                    <com.mcts.app.customview.MyTextView
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/scale_5"
+                        android:gravity="center_horizontal"
+                        android:text="@string/family_member_detail" />
+                </LinearLayout>
 
             </LinearLayout>
 
-            <View
-                android:layout_width="3dp"
-                android:layout_height="match_parent"
-                android:background="#4285F5" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_identity_family"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="#00a000"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24">
+
+                    <ImageView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/family_identity" />
+
+                    <com.mcts.app.customview.MyTextView
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/scale_5"
+                        android:gravity="center_horizontal"
+                        android:text="@string/identity_family" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_identity_family_member"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="#7b00ff"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/member_details" />
+
+                    <com.mcts.app.customview.MyTextView
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/scale_5"
+                        android:gravity="center_horizontal"
+                        android:text="@string/identity_family_member" />
+                </LinearLayout>
+
+            </LinearLayout>
+
 
             <LinearLayout
-                android:id="@+id/ll_identity_family_member"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/scale_60"
-                android:layout_margin="@dimen/scale_10"
-                android:layout_weight="1"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal">
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/ll_location_family"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    android:background="#d62d20"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24">
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/identity_family_member"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
+                    <ImageView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/family_identity" />
+
+                    <com.mcts.app.customview.MyTextView
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/scale_5"
+                        android:gravity="center_horizontal"
+                        android:text="@string/location_family" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_bank_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    android:background="#1e6ee4"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/member_details" />
+
+                    <com.mcts.app.customview.MyTextView
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/scale_5"
+                        android:gravity="center_horizontal"
+                        android:text="@string/bank_detail" />
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="#4285F5" />
-
-        <LinearLayout
-            android:id="@+id/ll_location_family"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/scale_60"
-            android:layout_margin="@dimen/scale_10"
-            android:gravity="center_vertical|center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/location_family"
-                android:textColor="@color/black"
-                android:textSize="@dimen/menu_font" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="#4285F5" />
-
-        <LinearLayout
-            android:id="@+id/ll_bank_detail"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/scale_60"
-            android:layout_margin="@dimen/scale_10"
-            android:gravity="center_vertical|center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/bank_detail"
-                android:textColor="@color/black"
-                android:textSize="@dimen/menu_font" />
-        </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

@@ -7,6 +7,7 @@ import android.app.AlertDialog.Builder;
 import com.mcts.app.R;
 import com.mcts.app.activity.familyhealthsurvey.AddFamilyMemberActivity;
 import com.mcts.app.model.Member;
+import com.mcts.app.model.PregnantWomen;
 
 /**
  * Created by Raj on 12/1/2015.
@@ -89,6 +90,46 @@ public class FormValidation {
                 validString += context.getString(R.string.line_separator) + context.getString(R.string.valid_mobile);
             }
         }
+
+        return validString;
+    }
+
+    public static String pregnantWomenRegister(PregnantWomen pregnantWomen, Context context) {
+        validString = "";
+        if (pregnantWomen.getIsBpl() == null || ((pregnantWomen.getIsBpl() != null && pregnantWomen.getIsBpl().length() <= 0) )) {
+            validString += context.getString(R.string.line_separator) + context.getString(R.string.family_bpl);
+        }if (pregnantWomen.getAncDate() == null || ((pregnantWomen.getAncDate() != null && pregnantWomen.getAncDate().length() <= 0) )) {
+            validString += context.getString(R.string.line_separator) + context.getString(R.string.anc_regd_date);
+        }if (pregnantWomen.getLmpDate() == null || ((pregnantWomen.getLmpDate() != null && pregnantWomen.getLmpDate().length() <= 0) )) {
+            validString += context.getString(R.string.line_separator) + context.getString(R.string.lmp_date);
+        }if (pregnantWomen.getGravida() == 0 ) {
+            validString += context.getString(R.string.line_separator) + context.getString(R.string.anc_gravida);
+        }
+//        int temp = pregnantWomen.getGravida() - 1;
+        if (pregnantWomen.getTempTotal()<0) {
+            validString += context.getString(R.string.line_separator) + context.getString(R.string.anc_para);
+        }
+        if (pregnantWomen.getTempTotal()<0) {
+            validString += context.getString(R.string.line_separator) + context.getString(R.string.anc_abortion);
+        }
+        if (pregnantWomen.getMale() <0){
+            validString += context.getString(R.string.line_separator) + context.getString(R.string.live_male);
+
+        }if (pregnantWomen.getFemale() <0){
+            validString += context.getString(R.string.line_separator) + context.getString(R.string.live_female);
+        }
+//        if (pregnantWomen.getMale()==0) {
+//            validString += context.getString(R.string.line_separator) + context.getString(R.string.live_male);
+//        }if (pregnantWomen.getFemale()==0) {
+//            validString += context.getString(R.string.line_separator) + context.getString(R.string.live_female);
+//        }
+        /*if (pregnantWomen.getHighRiskMother()== null || ((pregnantWomen.getHighRiskMother() != null && pregnantWomen.getHighRiskMother().length() <= 0) )) {
+            validString += context.getString(R.string.line_separator) + context.getString(R.string.high_risk_mom);
+        }*/if (pregnantWomen.getIsChiranjivi()== null || ((pregnantWomen.getIsChiranjivi() != null && pregnantWomen.getIsChiranjivi().length() <= 0) )) {
+            validString += context.getString(R.string.line_separator) + context.getString(R.string.chiranjivi);
+        }/*if (pregnantWomen.getAshaName()== null || ((pregnantWomen.getAshaName() != null && pregnantWomen.getAshaName().length() <= 0) )) {
+            validString += context.getString(R.string.line_separator) + context.getString(R.string.asha_name);
+        }*/
 
         return validString;
     }

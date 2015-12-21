@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +32,10 @@ import com.mcts.app.db.DatabaseHelper;
 import com.mcts.app.model.Family;
 import com.mcts.app.model.MaritalStatus;
 import com.mcts.app.utils.Messages;
+import com.mcts.app.utils.TakePictureUtils;
 import com.mcts.app.utils.Utils;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -103,10 +106,23 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
         viewHolder.txt_delete.setTag(familyArrayList.get(position).getEmamtaFamilyId());
         viewHolder.txt_migrate.setTag(familyArrayList.get(position).getEmamtaFamilyId());
 
-        if (familyArrayList.get(position).getUserImageArray() != null) {
-            if(familyArrayList.get(position).getUserImageArray().length>5) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(familyArrayList.get(position).getUserImageArray(), 0, familyArrayList.get(position).getUserImageArray().length);
-                viewHolder.img_member.setImageBitmap(bitmap);
+//        if (familyArrayList.get(position).getUserImageArray() != null) {
+//            if(familyArrayList.get(position).getUserImageArray().length>5) {
+//                Bitmap bitmap = BitmapFactory.decodeByteArray(familyArrayList.get(position).getUserImageArray(), 0, familyArrayList.get(position).getUserImageArray().length);
+//                viewHolder.img_member.setImageBitmap(bitmap);
+//            }else {
+//                viewHolder.img_member.setImageResource(R.drawable.ic_launcher);
+//            }
+//        }else{
+//            viewHolder.img_member.setImageResource(R.drawable.ic_launcher);
+//        }
+        if (familyArrayList.get(position).getPhoto() != null) {
+            if(familyArrayList.get(position).getPhoto().length() > 5) {
+                if(familyArrayList.get(position).getPhoto()!=null) {
+                    Uri uri = Uri.parse(familyArrayList.get(position).getPhotoValue());
+                    Bitmap image_bitmap = TakePictureUtils.decodeFile(new File(uri.getPath()));
+                    viewHolder.img_member.setImageBitmap(image_bitmap);
+                }
             }else {
                 viewHolder.img_member.setImageResource(R.drawable.ic_launcher);
             }

@@ -29,9 +29,14 @@ import android.util.Log;
 
 import com.mcts.app.R;
 import com.mcts.app.model.Family;
+import com.mcts.app.model.HighRiskSymtoms;
 import com.mcts.app.model.MaritalStatus;
 import com.mcts.app.model.Member;
+import com.mcts.app.model.PregnantWomen;
 import com.mcts.app.model.Religion;
+import com.mcts.app.model.WomenHighRisk;
+import com.mcts.app.utils.Constants;
+import com.mcts.app.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -305,7 +310,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (member.getAnganwadiId() != null) {
                 insert.bindString(19, member.getAnganwadiId());
             }
-            insert.bindString(20,"1");
+            insert.bindString(20, "1");
             insert.execute();
             mDataBase.setTransactionSuccessful();
         } catch (Exception e) {
@@ -353,7 +358,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             insert.bindString(13, member.getUserId());
             insert.bindString(14, dateFormat.format(date));
             insert.bindString(15, "1");
-            insert.bindString(16,member.getEmamtahealthId());
+            insert.bindString(16, member.getEmamtahealthId());
             insert.execute();
             mDataBase.setTransactionSuccessful();
         } catch (Exception e) {
@@ -584,8 +589,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "emrNumber,photo,firstName,middleName,lastName,firstnameEng,middlenameEng,lastnameEng,isHead,relationwithheadId," +
                     "gender,maritalStatus,birthDate,mobileNo,childof,wifeof,adoptedfpMethod,wanttoadoptfpMethod,plannedfpMethod,isPregnant" +
                     ",wantChild,memberStatus,menstruationStatus,adharcardNumber,electioncardNumber,pancardNumber,drivingcardNumer,passportcardNumber" +
-                    ",migratedemamtafamilyId,migratedemamtamemberId,createdbyuserId,createdDate,updatedDate,subcentreId,isActive" +
-                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    ",migratedemamtafamilyId,migratedemamtamemberId,createdbyuserId,createdDate,updatedDate,subcentreId,isActive," +
+                    "migratedvillagId,migrationtypeId,isUpdated,photovalue" +
+                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 //            String sql = "Insert into " + DBConstant.MEMBER_TABLE + "(memberId,emamtahealthId,familyId,emamtafamilyId,villageId," +
 //                    "emrNumber,photo,firstName,middleName,lastName,firstnameEng,middlenameEng,lastnameEng,isHead,relationwithheadId," +
 //                    "gender,maritalStatus,birthDate,mobileNo,childof,wifeof,adoptedfpMethod,wanttoadoptfpMethod,plannedfpMethod,isPregnant" +
@@ -638,6 +644,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 insert.bindString(38, jsonObject.getString("updatedDate"));
                 insert.bindString(39, jsonObject.getString("subcentreId"));
                 insert.bindString(40, jsonObject.getString("isActive"));
+                insert.bindString(41, jsonObject.getString("migratedvillagId"));
+                insert.bindString(42, jsonObject.getString("migrationtypeId"));
+                insert.bindString(43, jsonObject.getString("isUpdated"));
+                if (jsonObject.getString("photovalue") != null) {
+                    byte[] decodedString = Base64.decode(jsonObject.getString("photovalue"), Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    String filePath = Utils.saveImageWithName(decodedByte, jsonObject.getString("photo"), Constants.APP_NAME, Constants.PROFILE_PIC);
+                    insert.bindString(44, filePath);
+                }
+
                 insert.execute();
             }
             mDataBase.setTransactionSuccessful();
@@ -661,8 +677,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             String sql = "Insert into " + DBConstant.FAMILY_TABLE + "(familyId,emamtafamilyId,villageId,migratedvillagId," +
                     "houseNumber,faliyaId,landmark,racialId,religionId,isBpl,migrationtypeId,bplNumber,rationcardNrumber,rsbycardNumber," +
-                    "macardNumber,mavatsalyacardNumber,lattitudes,longitude,createdbyuserId,createdDate,updatedDate,faliyaId,isActive" +
-                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    "macardNumber,mavatsalyacardNumber,lattitudes,longitude,createdbyuserId,createdDate,updatedDate,faliyaId,isActive,isUpdated" +
+                    ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             SQLiteStatement insert = mDataBase.compileStatement(sql);
 
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -690,6 +706,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 insert.bindString(21, jsonObject.getString("updatedDate"));
                 insert.bindString(22, jsonObject.getString("faliyaId"));
                 insert.bindString(23, jsonObject.getString("isActive"));
+                insert.bindString(24, jsonObject.getString("isUpdated"));
                 insert.execute();
             }
             mDataBase.setTransactionSuccessful();
@@ -861,12 +878,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     family.setEmamtahealthId(cursor.getString(cursor.getColumnIndex("emamtahealthId")));
                     family.setMemberName(cursor.getString(cursor.getColumnIndex("firstName")) + " " + cursor.getString(cursor.getColumnIndex("middleName")) + " " + cursor.getString(cursor.getColumnIndex("lastName")));
 //                    family.setUserImageArray(cursor.getBlob(cursor.getColumnIndex("photo")));
-                    if (cursor.getBlob(cursor.getColumnIndex("photo")) != null) {
-                        if (cursor.getBlob(cursor.getColumnIndex("photo")).length > 5) {
-                            family.setUserImageArray(cursor.getBlob(cursor.getColumnIndex("photo")));
-                        } else {
-
-                        }
+                    if (cursor.getString(cursor.getColumnIndex("photo")) != null) {
+                        family.setPhoto(cursor.getString(cursor.getColumnIndex("photo")));
+                        family.setPhotoValue(cursor.getString(cursor.getColumnIndex("photovalue")));
                     }
                     familyArrayList.add(family);
                 } while (cursor.moveToNext());
@@ -885,7 +899,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<Family> familyArrayList = new ArrayList<>();
         readDatabase();
         try {
-            String selectQuery = "SELECT m.memberId,fm.familyId,fm.emamtafamilyId,m.emamtafamilyId,m.emamtahealthId,m.firstName,m.middleName,m.lastName,m.photo\n" +
+            String selectQuery = "SELECT m.memberId,fm.familyId,fm.emamtafamilyId,m.emamtafamilyId,m.emamtahealthId,m.firstName,m.middleName,m.lastName,m.photo,m.photovalue\n" +
                     "FROM tbl_member m inner join tbl_family fm " +
                     "on m.emamtafamilyId=fm.emamtafamilyId " +
                     "WHERE fm.migrationtypeId!='0' and m.isActive=1 and fm.villageId='" + strVillageId + "' LIMIT 10";
@@ -909,6 +923,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //                    family.setUserImageArray(cursor.getBlob(cursor.getColumnIndex("photo")));
                     if (cursor.getString(cursor.getColumnIndex("photo")) != null) {
                         family.setPhoto(cursor.getString(cursor.getColumnIndex("photo")));
+                        family.setPhotoValue(cursor.getString(cursor.getColumnIndex("photovalue")));
                     }
                     familyArrayList.add(family);
                 } while (cursor.moveToNext());
@@ -932,7 +947,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "m.maritalStatus,m.birthDate,m.mobileNo,f.houseNumber,m.wifeof,m.childof," +
                     "f.faliyaId,m.photo,f.landmark,f.religionId,f.racialId,f.isBpl,f.lattitudes,f.longitude,f.bplNumber,f.rationcardNrumber," +
                     "f.rsbycardNumber, f.macardNumber,m.adoptedfpMethod,m.wanttoadoptfpMethod,m.plannedfpMethod,m.isPregnant,m.wantChild,m.memberStatus,m.menstruationStatus," +
-                    "m.adharcardNumber,m.electioncardNumber,m.pancardNumber,m.drivingcardNumer,m.passportcardNumber,m.relationwithheadId " +
+                    "m.adharcardNumber,m.electioncardNumber,m.pancardNumber,m.drivingcardNumer,m.passportcardNumber,m.relationwithheadId,m.photovalue " +
                     "from tbl_member as m inner join tbl_family as f on f.emamtafamilyId=m.emamtafamilyId " +
                     "where memberId='" + memberId + "'";
             Log.v("getFamilyMember", selectQuery);
@@ -979,7 +994,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     member.setDrivingcardNumer(cursor.getString(cursor.getColumnIndex("drivingcardNumer")));
                     member.setPassportcardNumber(cursor.getString(cursor.getColumnIndex("passportcardNumber")));
                     member.setRelationwithheadId(cursor.getString(cursor.getColumnIndex("relationwithheadId")));
-                    member.setPhoto(cursor.getString(cursor.getColumnIndex("photo")));
+                    if (cursor.getString(cursor.getColumnIndex("photo")) != null) {
+                        member.setPhoto(cursor.getString(cursor.getColumnIndex("photo")));
+                        member.setPhotoValue(cursor.getString(cursor.getColumnIndex("photovalue")));
+                    }
 
                 } while (cursor.moveToNext());
             }
@@ -1165,42 +1183,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             contentValues.put("middleName", member.getMiddleName());
             contentValues.put("lastName", member.getLastName());
             contentValues.put("isHead", member.getIsHead());
-            if(member.getRelationwithheadId()!=null) {
+            if (member.getRelationwithheadId() != null) {
                 contentValues.put("relationwithheadId", member.getRelationwithheadId());
             }
             contentValues.put("gender", member.getGender());
             contentValues.put("maritalStatus", member.getMaritalStatus());
-            if(member.getBirthDate()!=null) {
+            if (member.getBirthDate() != null) {
                 contentValues.put("birthDate", member.getBirthDate());
             }
-            if(member.getMobileNo()!=null) {
+            if (member.getMobileNo() != null) {
                 contentValues.put("mobileNo", member.getMobileNo());
             }
-            if(member.getWifeof()!=null) {
+            if (member.getWifeof() != null) {
                 contentValues.put("wifeof", member.getWifeof());
             }
-            if(member.getChildof()!=null) {
+            if (member.getChildof() != null) {
                 contentValues.put("childof", member.getChildof());
             }
-            if(member.getAdoptedfpMethod()!=null) {
+            if (member.getAdoptedfpMethod() != null) {
                 contentValues.put("adoptedfpMethod", member.getAdoptedfpMethod());
             }
-            if(member.getWantadoptedfpMethod()!=null) {
+            if (member.getWantadoptedfpMethod() != null) {
                 contentValues.put("wanttoadoptfpMethod", member.getWantadoptedfpMethod());
             }
-            if(member.getPlannedfpMethod()!=null) {
+            if (member.getPlannedfpMethod() != null) {
                 contentValues.put("plannedfpMethod", member.getPlannedfpMethod());
             }
-            if(member.getIsPregnant()!=null) {
+            if (member.getIsPregnant() != null) {
                 contentValues.put("isPregnant", member.getIsPregnant());
             }
-            if(member.getWantChild()!=null) {
+            if (member.getWantChild() != null) {
                 contentValues.put("wantChild", member.getWantChild());
             }
-            if(member.getMemberStatus()!=null) {
+            if (member.getMemberStatus() != null) {
                 contentValues.put("memberStatus", member.getMemberStatus());
             }
-            if(member.getMenstruationStatus()!=null) {
+            if (member.getMenstruationStatus() != null) {
                 contentValues.put("menstruationStatus", member.getMenstruationStatus());
             }
             if (member.getElectioncardNumber() != null) {
@@ -1515,6 +1533,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String selectQuery = "select villageId,village from tbl_village";
 
             Log.v("getVillageData Query", selectQuery);
+
+            MaritalStatus rel = new MaritalStatus();
+            rel.setId("000");
+            rel.setStatus(mContext.getResources().getString(R.string.village));
+            villageArray.add(rel);
+
             Cursor cursor = mDataBase.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
                 do {
@@ -1567,11 +1591,90 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean insertEmployeeDetails(JSONArray jsonArray) {
+        mDataBase = getWritableDatabase();
+        mDataBase.beginTransaction();
+
+        try {
+            String sql = "Insert into " + DBConstant.TABLE_EMPLOYEE_PROFILE + "(" +
+                    "employeeId,userId,sanctionId,departmentId,designationId,employmentstatusId,employmenttypeId,stateId," +
+                    "districtId,talukaId,phcId,subcenterId,villageId,firstName,middleName,lastnName,photo,gender,mobileNumber," +
+                    "racialId,religionId,birthDate,emailId,employmentstatus,PostHolding,pancardNumber,electioncardNumber,adharcardNumber," +
+                    "licensecardNumber,pfNumber,createdbyuserId,createdDate,updatedDate,facilityId,isUpdated) " +
+                    "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            SQLiteStatement insert = mDataBase.compileStatement(sql);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                insert.bindLong(1, jsonObject.getInt("employeeId"));
+                insert.bindString(2, jsonObject.getString("userId"));
+                insert.bindString(3, jsonObject.getString("sanctionId"));
+                insert.bindString(4, jsonObject.getString("departmentId"));
+                insert.bindString(5, jsonObject.getString("designationId"));
+                insert.bindString(6, jsonObject.getString("employmentstatusId"));
+                insert.bindString(7, jsonObject.getString("employmenttypeId"));
+                insert.bindString(8, jsonObject.getString("stateId"));
+                insert.bindString(9, jsonObject.getString("districtId"));
+                insert.bindString(10, jsonObject.getString("talukaId"));
+                insert.bindString(11, jsonObject.getString("phcId"));
+                insert.bindString(12, jsonObject.getString("subcenterId"));
+                insert.bindString(13, jsonObject.getString("villageId"));
+                insert.bindString(14, jsonObject.getString("firstName"));
+                insert.bindString(15, jsonObject.getString("middleName"));
+                insert.bindString(16, jsonObject.getString("lastnName"));
+//                insert.bindString(17, jsonObject.getString("photo"));
+                insert.bindString(17, "null");
+                insert.bindString(18, jsonObject.getString("gender"));
+                insert.bindString(19, jsonObject.getString("mobileNumber"));
+                insert.bindString(20, jsonObject.getString("racialId"));
+                insert.bindString(21, jsonObject.getString("religionId"));
+                insert.bindString(22, jsonObject.getString("birthDate"));
+                insert.bindString(23, jsonObject.getString("emailId"));
+                insert.bindString(24, jsonObject.getString("employmentstatus"));
+                insert.bindString(25, jsonObject.getString("PostHolding"));
+                insert.bindString(26, jsonObject.getString("pancardNumber"));
+                insert.bindString(27, jsonObject.getString("electioncardNumber"));
+                insert.bindString(28, jsonObject.getString("adharcardNumber"));
+                insert.bindString(29, jsonObject.getString("licensecardNumber"));
+                insert.bindString(30, jsonObject.getString("pfNumber"));
+                insert.bindString(31, jsonObject.getString("createdbyuserId"));
+                insert.bindString(32, jsonObject.getString("createdDate"));
+                insert.bindString(33, jsonObject.getString("updatedDate"));
+                insert.bindString(34, jsonObject.getString("facilityId"));
+                insert.bindString(35, jsonObject.getString("isUpdated"));
+                insert.execute();
+            }
+            mDataBase.setTransactionSuccessful();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (mDataBase != null) {
+                mDataBase.endTransaction();
+                mDataBase.close();
+            }
+        }
+        return true;
+    }
+
     public void deleteUserDetails() {
 
         writeDatabase();
         try {
             mDataBase.delete(DBConstant.USER_TABLE, "1", null);
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+    }
+
+    public void deleteEmployeeDetails() {
+
+        writeDatabase();
+        try {
+            mDataBase.delete(DBConstant.TABLE_EMPLOYEE_PROFILE, "1", null);
         } catch (Exception e) {
             Log.i("Exe : ", e.getMessage());
             e.printStackTrace();
@@ -1688,7 +1791,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public JSONArray familyMamberData() {
 
-        JSONArray jsonArray=new JSONArray();
+        JSONArray jsonArray = new JSONArray();
         readDatabase();
         try {
             String selectQuery = "Select memberId,photo,photovalue,emamtahealthId,familyId,emamtafamilyId,villageId,employeeId,emrNumber," +
@@ -1711,9 +1814,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     member.put("familyId", cursor.getString(cursor.getColumnIndex("familyId")));
                     member.put("emamtafamilyId", cursor.getString(cursor.getColumnIndex("emamtafamilyId")));
                     member.put("villageId", cursor.getString(cursor.getColumnIndex("villageId")));
-                    if(cursor.getString(cursor.getColumnIndex("employeeId"))!=null) {
+                    if (cursor.getString(cursor.getColumnIndex("employeeId")) != null) {
                         member.put("employeeId", cursor.getString(cursor.getColumnIndex("employeeId")));
-                    }else{
+                    } else {
                         member.put("employeeId", "null");
                     }
                     member.put("emrNumber", cursor.getString(cursor.getColumnIndex("emrNumber")));
@@ -1750,19 +1853,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     member.put("updatedDate", cursor.getString(cursor.getColumnIndex("updatedDate")));
                     member.put("isActive", cursor.getString(cursor.getColumnIndex("isActive")));
                     member.put("subcentreId", cursor.getString(cursor.getColumnIndex("subcentreId")));
-                    if(cursor.getString(cursor.getColumnIndex("migratedvillagId"))!=null) {
+                    if (cursor.getString(cursor.getColumnIndex("migratedvillagId")) != null) {
                         member.put("migratedvillagId", cursor.getString(cursor.getColumnIndex("migratedvillagId")));
-                    }else{
+                    } else {
                         member.put("migratedvillagId", "null");
                     }
-                    if(cursor.getString(cursor.getColumnIndex("migrationtypeId"))!=null) {
+                    if (cursor.getString(cursor.getColumnIndex("migrationtypeId")) != null) {
                         member.put("migrationtypeId", cursor.getString(cursor.getColumnIndex("migrationtypeId")));
-                    }else{
+                    } else {
                         member.put("migrationtypeId", "null");
                     }
                     member.put("isUpdated", cursor.getString(cursor.getColumnIndex("isUpdated")));
 
-                    String File_path=cursor.getString(cursor.getColumnIndex("photovalue"));
+                    String File_path = cursor.getString(cursor.getColumnIndex("photovalue"));
                     if (File_path != null) {
                         byte[] byteArray = null;
                         try {
@@ -1774,12 +1877,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 bos.write(b, 0, bytesRead);
                             }
                             byteArray = bos.toByteArray();
-                            String ecodedFile= Base64.encodeToString(byteArray, 0);
+                            String ecodedFile = Base64.encodeToString(byteArray, 0);
                             member.put("photovalue", ecodedFile);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }else{
+                    } else {
                         member.put("photovalue", "null");
                     }
                     jsonArray.put(member);
@@ -1792,5 +1895,374 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         closeDataBase();
         SQLiteDatabase.releaseMemory();
         return jsonArray;
+    }
+
+    public boolean updateMemberTable() {
+
+        writeDatabase();
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("isUpdated", "0");
+            contentValues.put("updatedDate", dateFormat.format(date));
+            mDataBase.update(DBConstant.MEMBER_TABLE, contentValues, null, null);
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return true;
+    }
+
+    public ArrayList<Member> searchFemales(String searchString, String villageId) {
+        ArrayList<Member> womenMemberList = new ArrayList<>();
+        readDatabase();
+        try {
+            String selectQuery = "Select memberId,emamtafamilyId,emamtahealthId,firstName,middleName,lastName,birthDate,photo,photovalue " +
+                    "from tbl_member \n" +
+                    "where gender='F' and maritalStatus!='2' and villageId='" + villageId + "' and firstName LIKE '" + searchString + "%'";
+
+            Log.v("getVillageData Query", selectQuery);
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Member member = new Member();
+                    member.setMemberId(cursor.getString(cursor.getColumnIndex("memberId")));
+                    member.setEmamtafamilyId(cursor.getString(cursor.getColumnIndex("emamtafamilyId")));
+                    member.setEmamtahealthId(cursor.getString(cursor.getColumnIndex("emamtahealthId")));
+                    member.setFirstName(cursor.getString(cursor.getColumnIndex("firstName")));
+                    member.setMiddleName(cursor.getString(cursor.getColumnIndex("middleName")));
+                    member.setLastName(cursor.getString(cursor.getColumnIndex("lastName")));
+                    member.setBirthDate(cursor.getString(cursor.getColumnIndex("birthDate")));
+                    if (cursor.getString(cursor.getColumnIndex("photo")) != null) {
+                        member.setPhoto(cursor.getString(cursor.getColumnIndex("photo")));
+                        member.setPhotoValue(cursor.getString(cursor.getColumnIndex("photovalue")));
+                    }
+                    womenMemberList.add(member);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return womenMemberList;
+    }
+
+    public Member getPregnantWomenMember(String healthId) {
+
+        Member member = null;
+        readDatabase();
+        try {
+            String selectQuery = "Select m.emamtahealthId,m.memberId,fm.emamtafamilyId,m.firstName,m.middleName,m.lastName,m.birthDate,m.mobileNo,m.photo,m.photovalue,fm.isBpl,fm.racialId\n" +
+                    "FROM tbl_member m inner join tbl_family fm on m.emamtafamilyId=fm.emamtafamilyId \n" +
+                    "where emamtahealthId='" + healthId + "'";
+
+            Log.v("getPregnantWomenMember", selectQuery);
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    member = new Member();
+                    member.setMemberId(cursor.getString(cursor.getColumnIndex("memberId")));
+                    member.setEmamtafamilyId(cursor.getString(cursor.getColumnIndex("emamtafamilyId")));
+                    member.setEmamtahealthId(cursor.getString(cursor.getColumnIndex("emamtahealthId")));
+                    member.setFirstName(cursor.getString(cursor.getColumnIndex("firstName")));
+                    member.setMiddleName(cursor.getString(cursor.getColumnIndex("middleName")));
+                    member.setLastName(cursor.getString(cursor.getColumnIndex("lastName")));
+                    member.setBirthDate(cursor.getString(cursor.getColumnIndex("birthDate")));
+                    member.setRaciald(cursor.getString(cursor.getColumnIndex("racialId")));
+                    member.setIsBpl(cursor.getString(cursor.getColumnIndex("isBpl")));
+                    member.setMobileNo(cursor.getString(cursor.getColumnIndex("mobileNo")));
+                    if (cursor.getString(cursor.getColumnIndex("photo")) != null) {
+                        member.setPhoto(cursor.getString(cursor.getColumnIndex("photo")));
+                        member.setPhotoValue(cursor.getString(cursor.getColumnIndex("photovalue")));
+                    }
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return member;
+    }
+
+    public ArrayList<WomenHighRisk> getHighRiskCategory() {
+        ArrayList<WomenHighRisk> womenHighRiskArrayList = null;
+        readDatabase();
+        try {
+            String selectQuery = "select highriskcategoryId,highriskcategory from tbl_highriskcategory limit 2";
+
+            Log.v("getHighRiskCategory", selectQuery);
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+
+            if (cursor.moveToFirst()) {
+                womenHighRiskArrayList = new ArrayList<>();
+                do {
+                    WomenHighRisk womenHighRisk = new WomenHighRisk();
+                    womenHighRisk.setCategoryId(cursor.getString(cursor.getColumnIndex("highriskcategoryId")));
+                    womenHighRisk.setCategoryName(cursor.getString(cursor.getColumnIndex("highriskcategory")));
+                    womenHighRiskArrayList.add(womenHighRisk);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return womenHighRiskArrayList;
+    }
+
+    public ArrayList<WomenHighRisk> getHighRiskSymtoms(ArrayList<WomenHighRisk> womenHighRiskArray) {
+        ArrayList<HighRiskSymtoms> highRiskSymtomses = null;
+        readDatabase();
+        try {
+            String selectQuery = "select highriskcategoryId,highriskmothersymptomId,highriskmotherSymptom from tbl_highriskmothersymptom";
+
+            Log.v("getHighRiskSymtoms", selectQuery);
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+
+            if (cursor.moveToFirst()) {
+                for (int j = 0; j < womenHighRiskArray.size(); j++) {
+                    cursor.moveToFirst();
+                    highRiskSymtomses = new ArrayList<>();
+                    WomenHighRisk womenHighRisk = womenHighRiskArray.get(j);
+//                    do {
+                    for (int i = 0; i < cursor.getCount(); i++) {
+                        if (womenHighRisk.getCategoryId().equals(cursor.getString(cursor.getColumnIndex("highriskcategoryId")))) {
+                            HighRiskSymtoms highRiskSymtoms = new HighRiskSymtoms();
+                            highRiskSymtoms.setCategoryId(cursor.getString(cursor.getColumnIndex("highriskcategoryId")));
+                            highRiskSymtoms.setSymptomId(cursor.getString(cursor.getColumnIndex("highriskmothersymptomId")));
+                            highRiskSymtoms.setSymptomName(cursor.getString(cursor.getColumnIndex("highriskmotherSymptom")));
+                            highRiskSymtoms.setIsChecked("0");
+                            highRiskSymtomses.add(highRiskSymtoms);
+                            womenHighRisk.setHighRiskSymtomsArrayList(highRiskSymtomses);
+                        }
+                        cursor.moveToNext();
+                    }
+                    womenHighRiskArray.set(j, womenHighRisk);
+
+//                    } while (cursor.moveToNext());
+                }
+            }
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return womenHighRiskArray;
+    }
+
+    public boolean insertNewPagnentWomen(PregnantWomen pregnantWomen) {
+        mDataBase = getWritableDatabase();
+        mDataBase.beginTransaction();
+
+        try {
+            String sql = "Insert into " + DBConstant.TABLE_PREGNANT_WOMENREG + "(" +
+                    "pregnantwomanregdId,pregnantwomanregdDate,lmpDate,eddDate,age,gravida,para,livemale,livefemale,livetotal,abortion," +
+                    "emamtahealthId,ishighRisk,isJsy,isKpsy,isCy,employeeId,createdDate,createdbyuserId,isUpdated) " +
+                    "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            SQLiteStatement insert = mDataBase.compileStatement(sql);
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            insert.bindString(1, pregnantWomen.getPregnantwomanregdId());
+            insert.bindString(2, pregnantWomen.getAncDate());
+            insert.bindString(3, pregnantWomen.getLmpDate());
+            insert.bindString(4, pregnantWomen.getEddDate());
+            insert.bindString(5, pregnantWomen.getAge());
+            insert.bindLong(6, pregnantWomen.getGravida());
+            insert.bindLong(7, pregnantWomen.getPara());
+            insert.bindLong(8, pregnantWomen.getMale());
+            insert.bindLong(9, pregnantWomen.getFemale());
+            insert.bindLong(10, pregnantWomen.getMale() + pregnantWomen.getFemale());
+            insert.bindLong(11, pregnantWomen.getAbortion());
+            insert.bindString(12, pregnantWomen.getEmamtahealthId());
+            insert.bindString(13, pregnantWomen.getIsHighRisk());
+            insert.bindString(14, pregnantWomen.getIsJsy());
+            insert.bindString(15, pregnantWomen.getIsKpsy());
+            insert.bindString(16, pregnantWomen.getIsChiranjivi());
+            if (pregnantWomen.getEmamtaId() != null) {
+                insert.bindString(17, pregnantWomen.getEmployeeId());
+            }
+            insert.bindString(18, dateFormat.format(date));
+            insert.bindString(19, pregnantWomen.getUserId());
+            insert.bindString(20, "1");
+            insert.execute();
+
+            mDataBase.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (mDataBase != null) {
+                mDataBase.endTransaction();
+                mDataBase.close();
+            }
+        }
+        return true;
+    }
+
+    public boolean insertHighRiskPregnantWomen(PregnantWomen pregnantWomen) {
+        mDataBase = getWritableDatabase();
+        mDataBase.beginTransaction();
+
+        try {
+            String sql = "Insert into " + DBConstant.TABLE_HIGH_RISK_MOTHER + "(" +
+                    "highriskmothersymptomId,pregnantwomanregdId,ancserviceDate,createdDate,createdbyuserId,ancservicetypeId) " +
+                    "values (?,?,?,?,?,?)";
+            SQLiteStatement insert = mDataBase.compileStatement(sql);
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            if (pregnantWomen.getSymptomsId() != null) {
+                for (int i = 0; i < pregnantWomen.getSymptomsId().length; i++) {
+                    insert.bindString(1, pregnantWomen.getSymptomsId()[i]);
+                    insert.bindString(2, pregnantWomen.getPregnantwomanregdId());
+                    insert.bindString(3, pregnantWomen.getAncDate());
+                    insert.bindString(4, dateFormat.format(date));
+                    insert.bindString(5, pregnantWomen.getUserId());
+                    insert.bindString(6, "0");
+                    insert.execute();
+                }
+            }
+            mDataBase.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (mDataBase != null) {
+                mDataBase.endTransaction();
+                mDataBase.close();
+            }
+        }
+        return true;
+    }
+
+    public boolean insertAncServices(PregnantWomen pregnantWomen) {
+        mDataBase = getWritableDatabase();
+        mDataBase.beginTransaction();
+
+        try {
+            String sql = "Insert into " + DBConstant.TABLE_ANC_SERVICES + "(" +
+                    "pregnantwomanregdId,ancservicedueDate,createddate) " +
+                    "values (?,?,?)";
+            SQLiteStatement insert = mDataBase.compileStatement(sql);
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            if (pregnantWomen.getAncServices() != null) {
+                int j = 1;
+                for (int i = 0; i < pregnantWomen.getAncServices().length; i++) {
+                    insert.bindString(1, pregnantWomen.getPregnantwomanregdId());
+                    insert.bindString(2, pregnantWomen.getAncServices()[i]);
+//                    insert.bindLong(3, j++);
+                    insert.bindString(3, dateFormat.format(date));
+                    insert.execute();
+                }
+            }
+            mDataBase.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (mDataBase != null) {
+                mDataBase.endTransaction();
+                mDataBase.close();
+            }
+        }
+        return true;
+    }
+
+    public ArrayList<MaritalStatus> getAshaWorkers(String villageId) {
+
+        ArrayList<MaritalStatus> maritalStatusArrayList = new ArrayList<>();
+
+        MaritalStatus rel = new MaritalStatus();
+        rel.setId("000");
+        rel.setStatus(mContext.getResources().getString(R.string.select_asha_name));
+        maritalStatusArrayList.add(rel);
+
+        readDatabase();
+        try {
+            String selectQuery = "select employeeId,firstName,middleName,lastnName\n" +
+                    "from tbl_employeeprofile\n" +
+                    "where facilityId='101' and designationId='25' and villageId='" + villageId + "'";
+            Cursor cursor = mDataBase.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    MaritalStatus maritalStatus = new MaritalStatus();
+                    maritalStatus.setId(cursor.getString(cursor.getColumnIndex("employeeId")));
+                    maritalStatus.setStatus(cursor.getString(cursor.getColumnIndex("firstName")) + " " + cursor.getString(cursor.getColumnIndex("middleName")) + " " + cursor.getString(cursor.getColumnIndex("lastnName")));
+                    maritalStatusArrayList.add(maritalStatus);
+                } while (cursor.moveToNext());
+            }
+
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return maritalStatusArrayList;
+    }
+
+    public boolean updatePregnantWomanFamily(PregnantWomen pregnantWomen) {
+
+        writeDatabase();
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            ContentValues contentValues = new ContentValues();
+            if (pregnantWomen.getIsBpl() != null) {
+                contentValues.put("isBpl", pregnantWomen.getIsBpl());
+            }
+            contentValues.put("updatedDate", dateFormat.format(date));
+            contentValues.put("isUpdated", "2");
+            mDataBase.update(DBConstant.FAMILY_TABLE, contentValues, " emamtafamilyId='" + pregnantWomen.getEmamtaId() + "'", null);
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return true;
+    }
+
+    public boolean updatePregnantWomanMember(PregnantWomen pregnantWomen) {
+
+        writeDatabase();
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            ContentValues contentValues = new ContentValues();
+            if (pregnantWomen.getMobile() != null) {
+                contentValues.put("mobileNo", pregnantWomen.getMobile());
+            }
+            contentValues.put("updatedDate", dateFormat.format(date));
+            if (pregnantWomen.getPhoto() != null) {
+                contentValues.put("photo", pregnantWomen.getPhoto());
+            }
+            if (pregnantWomen.getPhotoValue() != null) {
+                contentValues.put("photovalue", pregnantWomen.getPhotoValue());
+            }
+            contentValues.put("isUpdated", "2");
+            mDataBase.update(DBConstant.MEMBER_TABLE, contentValues, " emamtahealthId='" + pregnantWomen.getMemberId() + "'", null);
+        } catch (Exception e) {
+            Log.i("Exe : ", e.getMessage());
+            e.printStackTrace();
+        }
+        closeDataBase();
+        SQLiteDatabase.releaseMemory();
+        return true;
     }
 }

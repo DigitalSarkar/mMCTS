@@ -181,7 +181,7 @@ public class FamilyHeathSurveyActivity extends AppCompatActivity implements View
             StatusAdapter masikAdapter = new StatusAdapter(thisActivity, villageArray);
             sp_village.setAdapter(masikAdapter);
         } else {
-            String str=thisActivity.getResources().getString(R.string.no_data);
+            String str = thisActivity.getResources().getString(R.string.no_data);
             CustomToast customToast = new CustomToast(thisActivity, str);
             customToast.show();
         }
@@ -240,20 +240,32 @@ public class FamilyHeathSurveyActivity extends AppCompatActivity implements View
 //                startActivity(intent);
 //                break;
             case R.id.ll_family_detail:
-                intent = new Intent(thisActivity, FamilyListActivity.class);
-                int isFamily = 0;
-                intent.putExtra("strVillageId", strVillageId);
-                intent.putExtra("strVillageName", strVillageName);
-                intent.putExtra("isFamily", isFamily);
-                startActivity(intent);
+                if (strVillageId != null) {
+                    intent = new Intent(thisActivity, FamilyListActivity.class);
+                    int isFamily = 0;
+                    intent.putExtra("strVillageId", strVillageId);
+                    intent.putExtra("strVillageName", strVillageName);
+                    intent.putExtra("isFamily", isFamily);
+                    startActivity(intent);
+                } else {
+                    String str = thisActivity.getResources().getString(R.string.select_village);
+                    CustomToast customToast = new CustomToast(thisActivity, str);
+                    customToast.show();
+                }
                 break;
             case R.id.ll_family_member_detail:
-                intent = new Intent(thisActivity, FamilyListActivity.class);
-                int family = 1;
-                intent.putExtra("strVillageId", strVillageId);
-                intent.putExtra("strVillageName", strVillageName);
-                intent.putExtra("isFamily", family);
-                startActivity(intent);
+                if (strVillageId != null) {
+                    intent = new Intent(thisActivity, FamilyListActivity.class);
+                    int family = 1;
+                    intent.putExtra("strVillageId", strVillageId);
+                    intent.putExtra("strVillageName", strVillageName);
+                    intent.putExtra("isFamily", family);
+                    startActivity(intent);
+                } else {
+                    String str = thisActivity.getResources().getString(R.string.select_village);
+                    CustomToast customToast = new CustomToast(thisActivity, str);
+                    customToast.show();
+                }
                 break;
 //            case R.id.bt_add_family_member:
 //                intent=new Intent(thisActivity,AddFamilyMemberActivity.class);
@@ -272,10 +284,12 @@ public class FamilyHeathSurveyActivity extends AppCompatActivity implements View
         TextView textView;
         switch (parent.getId()) {
             case R.id.sp_village:
-                linearLayout = (LinearLayout) view;
-                textView = (TextView) linearLayout.getChildAt(0);
-                strVillageId = textView.getTag().toString();
-                strVillageName = textView.getText().toString();
+                if (position != 0) {
+                    linearLayout = (LinearLayout) view;
+                    textView = (TextView) linearLayout.getChildAt(0);
+                    strVillageId = textView.getTag().toString();
+                    strVillageName = textView.getText().toString();
+                }
                 break;
         }
     }

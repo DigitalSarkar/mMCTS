@@ -20,6 +20,15 @@ public class Family {
     byte[] userImageArray;
     String emamtahealthId;
     String photo;
+    String photoValue;
+
+    public String getPhotoValue() {
+        return photoValue;
+    }
+
+    public void setPhotoValue(String photoValue) {
+        this.photoValue = photoValue;
+    }
 
     public String getPhoto() {
         return photo;
