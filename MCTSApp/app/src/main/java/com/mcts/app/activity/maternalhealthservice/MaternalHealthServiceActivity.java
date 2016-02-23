@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,6 +41,7 @@ public class MaternalHealthServiceActivity extends AppCompatActivity implements 
         mTitle.setText(thisActivity.getResources().getString(R.string.maternal_health));
         mTitle.setTypeface(type, Typeface.BOLD);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void init() {
@@ -57,6 +57,7 @@ public class MaternalHealthServiceActivity extends AppCompatActivity implements 
         ll_pregnancy_services.setOnClickListener(this);
         ll_delivery_registration.setOnClickListener(this);
         ll_post_delivery_services.setOnClickListener(this);
+
     }
 
     @Override
@@ -68,17 +69,14 @@ public class MaternalHealthServiceActivity extends AppCompatActivity implements 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            thisActivity.finish();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+        // Handle your other action bar items...
     }
 
     @Override
@@ -91,6 +89,24 @@ public class MaternalHealthServiceActivity extends AppCompatActivity implements 
                 intent =new Intent(thisActivity,NewPragnencyActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.ll_pregnancy_services:
+                intent =new Intent(thisActivity,PregnantWomenServicesActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.ll_delivery_registration:
+                intent =new Intent(thisActivity,DeliveryRegistrationActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.ll_children_list:
+                intent =new Intent(thisActivity,ChildListActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.ll_post_delivery_services:
+                intent =new Intent(thisActivity,PostNatalListActivity.class);
+                startActivity(intent);
+                break;
         }
     }
+
+
 }

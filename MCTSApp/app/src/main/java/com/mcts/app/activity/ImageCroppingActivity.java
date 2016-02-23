@@ -46,13 +46,20 @@ public class ImageCroppingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final Bitmap croppedImage = cropImageView.getCroppedImage();
+                if(croppedImage!=null) {
 //                saveIamge(croppedImage, "CropDemo", "CropDemo");
-                String filePath= Utils.saveIamge(croppedImage, "MCTS", "Profile Pic");
+                    String filePath = Utils.saveIamge(croppedImage, "MCTS", "Profile Pic");
 //                croppedImageView.setImageBitmap(croppedImage);
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("imagePath",filePath);
-                setResult(Activity.RESULT_OK,returnIntent);
-                finish();
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("imagePath", filePath);
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }else{
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("imagePath", "");
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
             }
         });
     }

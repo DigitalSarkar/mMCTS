@@ -486,6 +486,89 @@
                     android:hint="@string/high_risk_mom">></EditText>
             </LinearLayout>
 
+
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/weight" />
+
+                <EditText
+                    android:id="@+id/ed_weight"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:hint="@string/weight"
+                    android:inputType="number|text"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/height" />
+
+                <EditText
+                    android:id="@+id/ed_height"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:hint="@string/height"
+                    android:inputType="number|text"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/blood_group" />
+
+                <Spinner
+                    android:id="@+id/sp_blood_group_value"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:singleLine="true"
+                    android:spinnerMode="dialog"
+                    android:entries="@array/blood_group_value"></Spinner>
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

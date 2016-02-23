@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_delivery_places"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/header_dark"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/scale_5"
+        android:text="@string/delivery_place"
+        android:textColor="@color/black"
+        android:textSize="@dimen/medium_font" />
+
+
+    <Spinner
+        android:id="@+id/sp_delivery_place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/scale_5"
+        android:spinnerMode="dialog"></Spinner>
+
+    <Spinner
+        android:id="@+id/sp_del_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/scale_5"
+        android:spinnerMode="dialog"></Spinner>
+
+    <Spinner
+        android:id="@+id/sp_del_dirst"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/scale_5"
+        android:spinnerMode="dialog"></Spinner>
+
+    <Spinner
+        android:id="@+id/sp_del_tal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/scale_5"
+        android:spinnerMode="dialog"></Spinner>
+
+    <Spinner
+        android:id="@+id/sp_del_village"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/scale_5"
+        android:spinnerMode="dialog"></Spinner>
+
+    <Spinner
+        android:id="@+id/sp_del_person_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/scale_5"
+        android:spinnerMode="dialog"></Spinner>
+
+    <Button
+        android:id="@+id/bt_save_place"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/scale_5"
+        android:padding="@dimen/scale_10"
+        android:text="@string/save" />
+</LinearLayout>

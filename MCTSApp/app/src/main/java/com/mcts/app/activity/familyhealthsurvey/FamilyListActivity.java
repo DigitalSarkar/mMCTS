@@ -110,13 +110,26 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         super.onResume();
 
         Utils.hideSoftKeyboard(thisActivity);
-        if(isFamily==0) {
-            String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
-            new GetDefaultFamily().execute(searchString,strVillageId);
-        }else{
-            String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
-            new GetDefaultFamilyMember().execute(searchString, strVillageId);
+        if(ed_family_number.getText().toString().length()>1){
+            if(isFamily==0) {
+                String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
+                new GetFamilyDetails().execute(searchString,strVillageId);
 
+            }else{
+
+                String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
+                new GetFamilyMember().execute(searchString,strVillageId);
+
+            }
+        }else {
+            if (isFamily == 0) {
+                String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
+                new GetDefaultFamily().execute(searchString, strVillageId);
+            } else {
+                String searchString = sp_year.getSelectedItem().toString() + ed_family_number.getText().toString().trim();
+                new GetDefaultFamilyMember().execute(searchString, strVillageId);
+
+            }
         }
     }
 
@@ -264,7 +277,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         protected String doInBackground(String... params) {
 
             familyArrayList=new ArrayList<>();
-            familyArrayList = databaseHelper.searchDefaultFamilyMember( params[1]);
+            familyArrayList = databaseHelper.searchDefaultFamily( params[1]);
             return null;
         }
 

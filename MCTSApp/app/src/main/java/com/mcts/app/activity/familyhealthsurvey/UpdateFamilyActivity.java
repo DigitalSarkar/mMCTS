@@ -101,6 +101,10 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
     private Member member;
     private String isRisky="1";
     String bplNumber,rationCardNumber,rsbyNumber,maaCardNumber;
+    private ArrayList<Religion> streetArrayList;
+    ReligionAdapter streetAdapter;
+    ReligionAdapter faliyaAdapter;
+
     //    Image Capture
 //    ImageView userImage;
     private String imageName = "item_picture";
@@ -143,6 +147,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
         mTitle.setText(thisActivity.getResources().getString(R.string.edit_family));
         mTitle.setTypeface(type, Typeface.BOLD);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -326,7 +331,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
 
         faliyaArrayList=databaseHelper.getFaliyaList(villageId);
         if(faliyaArrayList!=null){
-            ReligionAdapter faliyaAdapter=new ReligionAdapter(thisActivity,faliyaArrayList);
+            faliyaAdapter=new ReligionAdapter(thisActivity,faliyaArrayList);
             sp_street_name.setAdapter(faliyaAdapter);
         }
 
@@ -334,7 +339,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
         String userDetail=sharedPreferences.getString(Constants.USER_ID, null);
         try {
             JSONObject jsonObject = new JSONObject(userDetail);
-            String subCenterId=jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId");
+            String subCenterId=jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcentreId");
             String userId=jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
             ArrayList<MaritalStatus> aganvadiList=databaseHelper.getAganvadi(villageId, subCenterId);
             StatusAdapter aganvadiAdapter=new StatusAdapter(thisActivity,aganvadiList);
@@ -364,17 +369,17 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
 //            }else{
 //                sp_family_cast.setSelection(0);
 //            }
-            if(member.getRaciald()!=null){
+            if(member.getReligionId()!=null){
 //                int faliyaId = Integer.parseInt(member.getFamilyId());
                 for(int i=0;i<religionArrayList.size();i++){
-                    if(member.getRaciald().equalsIgnoreCase(religionArrayList.get(i).getId())){
+                    if(member.getReligionId().equalsIgnoreCase(religionArrayList.get(i).getId())){
 //                        faliyaId=faliyaId-1;
-                        sp_family_cast.setSelection(i);
+                        sp_family_dharm.setSelection(i);
                     }
                 }
 
             }else{
-                sp_family_cast.setSelection(0);
+                sp_family_dharm.setSelection(0);
             }
 //            if (!member.getReligionId().equals("null")) {
 //                int religionId = Integer.parseInt(member.getReligionId());
@@ -384,17 +389,17 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
 //                sp_family_dharm.setSelection(0);
 //            }
 
-            if(member.getReligionId()!=null){
+            if(member.getRaciald()!=null){
 //                int faliyaId = Integer.parseInt(member.getFamilyId());
                 for(int i=0;i<castArrayList.size();i++){
-                    if(member.getReligionId().equalsIgnoreCase(castArrayList.get(i).getId())){
+                    if(member.getRaciald().equalsIgnoreCase(castArrayList.get(i).getId())){
 //                        faliyaId=faliyaId-1;
-                        sp_family_dharm.setSelection(i);
+                        sp_family_cast.setSelection(i);
                     }
                 }
 
             }else{
-                sp_family_dharm.setSelection(0);
+                sp_family_cast.setSelection(0);
             }
 
             if(member.getFaliyu()!=null){
@@ -439,17 +444,14 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            thisActivity.finish();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+        // Handle your other action bar items...
     }
 
     @Override
@@ -549,12 +551,59 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
 
                 final Dialog streetDialog = new Dialog(thisActivity);
                 LayoutInflater Inflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View streetView=Inflater.inflate(R.layout.add_faliyu_layout, null);
-                final EditText ed_street_name=(EditText)streetView.findViewById(R.id.ed_street_name);
-                final RadioButton rdb_risky_area_yes=(RadioButton)streetView.findViewById(R.id.rdb_risky_area_yes);
-                final RadioButton rdb_risky_area_no=(RadioButton)streetView.findViewById(R.id.rdb_risky_area_no);
-                Button bt_faliyu_save=(Button)streetView.findViewById(R.id.bt_faliyu_save);
-                Button bt_faliyu_cancel=(Button)streetView.findViewById(R.id.bt_faliyu_cancel);
+                View streetView = Inflater.inflate(R.layout.add_faliyu_layout, null);
+                final EditText ed_street_name = (EditText) streetView.findViewById(R.id.ed_street_name);
+                final RadioButton rdb_risky_area_yes = (RadioButton) streetView.findViewById(R.id.rdb_risky_area_yes);
+                final RadioButton rdb_risky_area_no = (RadioButton) streetView.findViewById(R.id.rdb_risky_area_no);
+                final Spinner sp_street_name_list = (Spinner) streetView.findViewById(R.id.sp_street_name_list);
+                Button bt_faliyu_save = (Button) streetView.findViewById(R.id.bt_faliyu_save);
+                Button bt_faliyu_cancel = (Button) streetView.findViewById(R.id.bt_faliyu_cancel);
+                Button bt_faliyu_delete = (Button) streetView.findViewById(R.id.bt_faliyu_delete);
+
+                String faliyaName = ed_street_name.getText().toString();
+                SharedPreferences streetPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
+                String streetUserDetail = streetPreferences.getString(Constants.USER_ID, null);
+
+                try {
+                    streetArrayList = new ArrayList<>();
+                    JSONObject jsonObject = new JSONObject(streetUserDetail);
+                    String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
+                    streetArrayList = databaseHelper.getFaliyaList(villageId);
+                    if (streetArrayList != null) {
+                        streetAdapter = new ReligionAdapter(thisActivity, streetArrayList);
+                        sp_street_name_list.setAdapter(streetAdapter);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                sp_street_name_list.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                        LinearLayout linearLayout = (LinearLayout) view;
+//                        TextView textView = (TextView) linearLayout.getChildAt(0);
+                        if (position != 0) {
+                            Religion street = streetArrayList.get(position);
+                            ed_street_name.setText(street.getName());
+                            if (street.getIsRisky().equals("1")) {
+                                rdb_risky_area_yes.setChecked(true);
+                                rdb_risky_area_no.setChecked(false);
+                            } else {
+                                rdb_risky_area_yes.setChecked(false);
+                                rdb_risky_area_no.setChecked(true);
+                            }
+                        } else {
+                            ed_street_name.setText("");
+                            rdb_risky_area_yes.setChecked(false);
+                            rdb_risky_area_yes.setChecked(false);
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
 
                 rdb_risky_area_yes.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -562,7 +611,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
                         Utils.ButtonClickEffect(v);
                         rdb_risky_area_yes.setChecked(true);
                         rdb_risky_area_no.setChecked(false);
-                        isRisky="1";
+                        isRisky = "1";
                     }
                 });
                 rdb_risky_area_no.setOnClickListener(new View.OnClickListener() {
@@ -571,44 +620,102 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
                         Utils.ButtonClickEffect(v);
                         rdb_risky_area_yes.setChecked(false);
                         rdb_risky_area_no.setChecked(true);
-                        isRisky="0";
+                        isRisky = "0";
                     }
                 });
                 bt_faliyu_save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Utils.ButtonClickEffect(v);
-                        if(ed_street_name.getText().toString().length()!=0) {
-                            String faliyaName = ed_street_name.getText().toString();
-                            SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
-                            String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
-                            try {
-                                JSONObject jsonObject = new JSONObject(userDetail);
-                                String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
-                                boolean flag = databaseHelper.insertFaliyu(villageId, faliyaName, isRisky, userId);
+                        if (sp_street_name_list.getSelectedItemPosition() == 0) {
+//                            Toast.makeText(thisActivity,"Insert",Toast.LENGTH_SHORT).show();
+                            if (ed_street_name.getText().toString().length() != 0) {
+
+                                String faliyaName = ed_street_name.getText().toString();
+                                SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
+                                String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
+                                try {
+                                    JSONObject jsonObject = new JSONObject(userDetail);
+                                    String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
+                                    boolean flag = databaseHelper.insertFaliyu(villageId, faliyaName, isRisky, userId);
+                                    if (flag) {
+                                        streetDialog.dismiss();
+                                        String str = thisActivity.getResources().getString(R.string.update);
+                                        CustomToast customToast = new CustomToast(thisActivity, str);
+                                        customToast.show();
+                                        faliyaArrayList=new ArrayList<Religion>();
+                                        faliyaArrayList = databaseHelper.getFaliyaList(villageId);
+                                        faliyaAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
+                                        sp_street_name.setAdapter(faliyaAdapter);
+                                    }
+                                    if (faliyaArrayList != null) {
+                                        ReligionAdapter religionAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
+                                        sp_street_name.setAdapter(religionAdapter);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                String str = thisActivity.getResources().getString(R.string.add_street);
+                                CustomToast customToast = new CustomToast(thisActivity, str);
+                                customToast.show();
+                            }
+                        } else {
+//                            Toast.makeText(thisActivity,"Update",Toast.LENGTH_SHORT).show();
+                            if (ed_street_name.getText().toString().length() != 0) {
+                                Religion street = streetArrayList.get(sp_street_name_list.getSelectedItemPosition());
+                                String faliyaName = ed_street_name.getText().toString();
+                                street.setName(faliyaName);
+                                street.setIsRisky(isRisky);
+                                boolean flag = databaseHelper.updateFaliya(street);
+                                streetArrayList.set(sp_street_name_list.getSelectedItemPosition(), street);
+                                streetAdapter.notifyDataSetChanged();
                                 if (flag) {
                                     streetDialog.dismiss();
+                                    faliyaArrayList=new ArrayList<Religion>();
                                     faliyaArrayList = databaseHelper.getFaliyaList(villageId);
+                                    faliyaAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
+                                    sp_street_name.setAdapter(faliyaAdapter);
+                                    String str = thisActivity.getResources().getString(R.string.update);
+                                    CustomToast customToast = new CustomToast(thisActivity, str);
+                                    customToast.show();
                                 }
-                                if (faliyaArrayList != null) {
-                                    ReligionAdapter religionAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
-                                    sp_street_name.setAdapter(religionAdapter);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            } else {
+                                String str = thisActivity.getResources().getString(R.string.add_street);
+                                CustomToast customToast = new CustomToast(thisActivity, str);
+                                customToast.show();
                             }
-                        }else{
-                            String str=thisActivity.getResources().getString(R.string.add_street);
-                            CustomToast customToast=new CustomToast(thisActivity, str);
-                            customToast.show();
-                        }
 
+
+                        }
                     }
                 });
+
+                bt_faliyu_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (sp_street_name_list.getSelectedItemPosition() != 0) {
+                            if (ed_street_name.getText().toString().length() != 0) {
+                                Religion street = streetArrayList.get(sp_street_name_list.getSelectedItemPosition());
+                                boolean flag = databaseHelper.deleteFaliya(street);
+                                streetArrayList.remove(sp_street_name_list.getSelectedItemPosition());
+                                streetAdapter.notifyDataSetChanged();
+                                if(flag) {
+                                    faliyaArrayList=new ArrayList<Religion>();
+                                    faliyaArrayList = databaseHelper.getFaliyaList(villageId);
+                                    faliyaAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
+                                    sp_street_name.setAdapter(faliyaAdapter);
+                                    String str = thisActivity.getResources().getString(R.string.delete_street);
+                                    CustomToast customToast = new CustomToast(thisActivity, str);
+                                    customToast.show();
+                                }
+                            }
+                        }
+                    }
+                });
+
                 bt_faliyu_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Utils.ButtonClickEffect(v);
                         streetDialog.dismiss();
                     }
                 });
@@ -639,6 +746,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
                 streetDialog.show();
 
                 break;
+
             case R.id.rdb_yes:
                 rdb_yes.setChecked(true);
                 rdb_no.setChecked(false);
@@ -874,6 +982,7 @@ public class UpdateFamilyActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void showDatePicker() {
+
         DatePickerFragment date = new DatePickerFragment();
         Calendar calender = Calendar.getInstance();
         Bundle args = new Bundle();

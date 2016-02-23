@@ -7,6 +7,15 @@ public class MaritalStatus {
 
     String id;
     String status;
+    String isChecked;
+
+    public String getIsChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(String isChecked) {
+        this.isChecked = isChecked;
+    }
 
     public String getId() {
         return id;

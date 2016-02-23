@@ -776,6 +776,30 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/health_problems" />
+
+                <EditText
+                    android:id="@+id/ed_health_problems"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:focusable="false"
+                    android:hint="@string/health_problems">></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <Button
                     android:id="@+id/bt_family_identity"
                     android:layout_width="0dp"
@@ -822,7 +846,7 @@
                     android:visibility="gone"
                     android:background="@drawable/button_selector"
                     android:padding="@dimen/scale_10"
-                    android:text="@string/Cancel" />
+                    android:text="@string/go_back" />
 
                 <Button
                     android:id="@+id/bt_Please_migration"

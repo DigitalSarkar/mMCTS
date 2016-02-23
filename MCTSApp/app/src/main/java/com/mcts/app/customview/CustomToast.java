@@ -2,6 +2,7 @@ package com.mcts.app.customview;
 
 import android.app.Activity;
 import android.graphics.Typeface;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ public class CustomToast {
         textView.setTypeface(type,Typeface.BOLD);
         Toast toast = new Toast(this.a);
         toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
         toast.setView(convertView);
         toast.show();
     }

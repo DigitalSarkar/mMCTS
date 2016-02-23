@@ -67,6 +67,7 @@ public class NewPragnencyActivity extends AppCompatActivity implements View.OnCl
         mTitle.setText(thisActivity.getResources().getString(R.string.new_pregnancy));
         mTitle.setTypeface(type, Typeface.BOLD);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void init() {
@@ -109,17 +110,14 @@ public class NewPragnencyActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            thisActivity.finish();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+        // Handle your other action bar items...
     }
 
     @Override
@@ -199,9 +197,9 @@ public class NewPragnencyActivity extends AppCompatActivity implements View.OnCl
                 for(int i=0;i<womenMemberArrayList.size();i++){
                     try {
                         SimpleDateFormat dateFormat = new SimpleDateFormat(
-                                "dd-MMM-yyyy");
+                                "dd/M/yyyy");
                         Date currentDate = new Date();
-                        Date date = dateFormat.parse(new SimpleDateFormat("dd-MMM-yyyy").format(currentDate));
+                        Date date = dateFormat.parse(new SimpleDateFormat("dd/M/yyyy").format(currentDate));
                         Date prevDate = dateFormat.parse(womenMemberArrayList.get(i).getBirthDate());
                         int year=getYear(prevDate, date);
 //                        Member member=womenMemberArrayList.get(i);

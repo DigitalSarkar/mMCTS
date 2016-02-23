@@ -21,20 +21,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/scale_30"
+                android:layout_margin="@dimen/scale_5"
+                android:background="@drawable/shadow_bottom"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <com.mcts.app.customview.CircleImageView
+                    android:id="@+id/img_user"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:layout_margin="@dimen/scale_10"
                     android:src="@drawable/ic_launcher" />
 
-                <ImageView
-                    android:id="@+id/img_pic"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_launcher"
-                    android:visibility="gone" />
+                    android:orientation="vertical">
+
+                    <com.mcts.app.customview.MyTextView
+                        android:id="@+id/txt_user_name"
+                        style="@style/ListText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/scale_3"
+                        android:layout_weight="1"
+                        android:text="@string/Name" />
+
+                    <com.mcts.app.customview.MyTextView
+                        android:id="@+id/txt_user_subcentre"
+                        style="@style/ListText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/scale_3"
+                        android:layout_weight="1"
+                        android:text="@string/aadhar_no" />
+
+                    <com.mcts.app.customview.MyTextView
+                        android:id="@+id/txt_user_mob"
+                        style="@style/ListText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/scale_3"
+                        android:layout_weight="1"
+                        android:text="@string/Mobile_number" />
+                </LinearLayout>
             </LinearLayout>
 
 
@@ -62,6 +92,7 @@
                         android:src="@drawable/upload_data" />
 
                     <com.mcts.app.customview.MyTextView
+                        android:id="@+id/txt_last_data_send"
                         style="@style/ValueText_Home"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -88,6 +119,7 @@
                         android:src="@drawable/download_data" />
 
                     <com.mcts.app.customview.MyTextView
+                        android:id="@+id/txt_last_data_get"
                         style="@style/ValueText_Home"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -90,6 +90,9 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<Religion> castArrayList;
     private ArrayList<Religion> religionArrayList;
     private ArrayList<Religion> faliyaArrayList;
+    private ArrayList<Religion> streetArrayList;
+    ReligionAdapter streetAdapter;
+    ReligionAdapter faliyaAdapter;
     private EditText ed_house_number, ed_husband_name, ed_Sir_Name, ed_family_number, ed_landmark, ed_family_head_name, ed_Birth_date, ed_Mobile_number;
     private String isAns, isGender;
     private Location mLastLocation;
@@ -114,7 +117,8 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
     Member familyMember = new Member();
     private String maritalStatus;
     private byte[] userImagebyteArray;
-    private String aaganvadiId,MemberId;
+    private String aaganvadiId, MemberId;
+    private Uri fileUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +152,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
         mTitle.setText(thisActivity.getResources().getString(R.string.add_family));
         mTitle.setTypeface(type, Typeface.BOLD);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -220,7 +225,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
         String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
         try {
             JSONObject jsonObject = new JSONObject(userDetail);
-            String subCenterId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId");
+            String subCenterId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcentreId");
             String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
             Random emamtaRandom = new Random();
             int emamId = emamtaRandom.nextInt(900) + 100;
@@ -260,13 +265,13 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
     private void getDataFromDB() {
 
         religionArrayList = databaseHelper.getReligionData();
-        if(religionArrayList!=null) {
+        if (religionArrayList != null) {
             ReligionAdapter religionAdapter = new ReligionAdapter(thisActivity, religionArrayList);
             sp_family_dharm.setAdapter(religionAdapter);
         }
 
         castArrayList = databaseHelper.getCastData();
-        if(castArrayList!=null) {
+        if (castArrayList != null) {
             ReligionAdapter castAdapter = new ReligionAdapter(thisActivity, castArrayList);
             sp_family_cast.setAdapter(castAdapter);
         }
@@ -274,7 +279,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
 
         faliyaArrayList = databaseHelper.getFaliyaList(villageId);
         if (faliyaArrayList != null) {
-            ReligionAdapter faliyaAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
+            faliyaAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
             sp_street_name.setAdapter(faliyaAdapter);
         }
 
@@ -289,7 +294,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
         String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
         try {
             JSONObject jsonObject = new JSONObject(userDetail);
-            String subCenterId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId");
+            String subCenterId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcentreId");
             String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
             ArrayList<MaritalStatus> aganvadiList = databaseHelper.getAganvadi(villageId, subCenterId);
             StatusAdapter aganvadiAdapter = new StatusAdapter(thisActivity, aganvadiList);
@@ -317,16 +322,16 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 Button bt_save = (Button) view.findViewById(R.id.bt_save);
                 Button bt_identity_cancel = (Button) view.findViewById(R.id.bt_identity_cancel);
 
-                if(familyMember.getBplNumber()!=null){
+                if (familyMember.getBplNumber() != null) {
                     ed_bpl_number.setText(familyMember.getBplNumber());
                 }
-                if(familyMember.getRationcardNrumber()!=null) {
+                if (familyMember.getRationcardNrumber() != null) {
                     ed_bpl_card_number.setText(familyMember.getRationcardNrumber());
                 }
-                if(familyMember.getRsbycardNumber()!=null) {
+                if (familyMember.getRsbycardNumber() != null) {
                     ed_rsby_number.setText(familyMember.getRsbycardNumber());
                 }
-                if(familyMember.getMacardNumber()!=null) {
+                if (familyMember.getMacardNumber() != null) {
                     ed_maa_card_number.setText(familyMember.getMacardNumber());
                 }
 
@@ -398,8 +403,55 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 final EditText ed_street_name = (EditText) streetView.findViewById(R.id.ed_street_name);
                 final RadioButton rdb_risky_area_yes = (RadioButton) streetView.findViewById(R.id.rdb_risky_area_yes);
                 final RadioButton rdb_risky_area_no = (RadioButton) streetView.findViewById(R.id.rdb_risky_area_no);
+                final Spinner sp_street_name_list = (Spinner) streetView.findViewById(R.id.sp_street_name_list);
                 Button bt_faliyu_save = (Button) streetView.findViewById(R.id.bt_faliyu_save);
                 Button bt_faliyu_cancel = (Button) streetView.findViewById(R.id.bt_faliyu_cancel);
+                Button bt_faliyu_delete = (Button) streetView.findViewById(R.id.bt_faliyu_delete);
+
+                String faliyaName = ed_street_name.getText().toString();
+                SharedPreferences streetPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
+                String streetUserDetail = streetPreferences.getString(Constants.USER_ID, null);
+
+                try {
+                    streetArrayList = new ArrayList<>();
+                    JSONObject jsonObject = new JSONObject(streetUserDetail);
+                    String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
+                    streetArrayList = databaseHelper.getFaliyaList(villageId);
+                    if (streetArrayList != null) {
+                        streetAdapter = new ReligionAdapter(thisActivity, streetArrayList);
+                        sp_street_name_list.setAdapter(streetAdapter);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                sp_street_name_list.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                        LinearLayout linearLayout = (LinearLayout) view;
+//                        TextView textView = (TextView) linearLayout.getChildAt(0);
+                        if (position != 0) {
+                            Religion street = streetArrayList.get(position);
+                            ed_street_name.setText(street.getName());
+                            if (street.getIsRisky().equals("1")) {
+                                rdb_risky_area_yes.setChecked(true);
+                                rdb_risky_area_no.setChecked(false);
+                            } else {
+                                rdb_risky_area_yes.setChecked(false);
+                                rdb_risky_area_no.setChecked(true);
+                            }
+                        } else {
+                            ed_street_name.setText("");
+                            rdb_risky_area_yes.setChecked(false);
+                            rdb_risky_area_yes.setChecked(false);
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
 
                 rdb_risky_area_yes.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -422,33 +474,91 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 bt_faliyu_save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (ed_street_name.getText().toString().length() != 0) {
+                        if (sp_street_name_list.getSelectedItemPosition() == 0) {
+//                            Toast.makeText(thisActivity,"Insert",Toast.LENGTH_SHORT).show();
+                            if (ed_street_name.getText().toString().length() != 0) {
 
-                            String faliyaName = ed_street_name.getText().toString();
-                            SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
-                            String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
-                            try {
-                                JSONObject jsonObject = new JSONObject(userDetail);
-                                String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
-                                boolean flag = databaseHelper.insertFaliyu(villageId, faliyaName, isRisky, userId);
+                                String faliyaName = ed_street_name.getText().toString();
+                                SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
+                                String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
+                                try {
+                                    JSONObject jsonObject = new JSONObject(userDetail);
+                                    String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
+                                    boolean flag = databaseHelper.insertFaliyu(villageId, faliyaName, isRisky, userId);
+                                    if (flag) {
+                                        streetDialog.dismiss();
+                                        String str = thisActivity.getResources().getString(R.string.update);
+                                        CustomToast customToast = new CustomToast(thisActivity, str);
+                                        customToast.show();
+                                        faliyaArrayList=new ArrayList<Religion>();
+                                        faliyaArrayList = databaseHelper.getFaliyaList(villageId);
+                                        faliyaAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
+                                        sp_street_name.setAdapter(faliyaAdapter);
+                                    }
+                                    if (faliyaArrayList != null) {
+                                        ReligionAdapter religionAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
+                                        sp_street_name.setAdapter(religionAdapter);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                String str = thisActivity.getResources().getString(R.string.add_street);
+                                CustomToast customToast = new CustomToast(thisActivity, str);
+                                customToast.show();
+                            }
+                        } else {
+//                            Toast.makeText(thisActivity,"Update",Toast.LENGTH_SHORT).show();
+                            if (ed_street_name.getText().toString().length() != 0) {
+                                Religion street = streetArrayList.get(sp_street_name_list.getSelectedItemPosition());
+                                String faliyaName = ed_street_name.getText().toString();
+                                street.setName(faliyaName);
+                                street.setIsRisky(isRisky);
+                                boolean flag = databaseHelper.updateFaliya(street);
+                                streetArrayList.set(sp_street_name_list.getSelectedItemPosition(), street);
+                                streetAdapter.notifyDataSetChanged();
                                 if (flag) {
                                     streetDialog.dismiss();
+                                    faliyaArrayList=new ArrayList<Religion>();
                                     faliyaArrayList = databaseHelper.getFaliyaList(villageId);
+                                    faliyaAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
+                                    sp_street_name.setAdapter(faliyaAdapter);
+                                    String str = thisActivity.getResources().getString(R.string.update);
+                                    CustomToast customToast = new CustomToast(thisActivity, str);
+                                    customToast.show();
                                 }
-                                if (faliyaArrayList != null) {
-                                    ReligionAdapter religionAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
-                                    sp_street_name.setAdapter(religionAdapter);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            } else {
+                                String str = thisActivity.getResources().getString(R.string.add_street);
+                                CustomToast customToast = new CustomToast(thisActivity, str);
+                                customToast.show();
                             }
-                        }else{
-                            String str=thisActivity.getResources().getString(R.string.add_street);
-                            CustomToast customToast=new CustomToast(thisActivity, str);
-                            customToast.show();
                         }
                     }
                 });
+
+                bt_faliyu_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (sp_street_name_list.getSelectedItemPosition() != 0) {
+                            if (ed_street_name.getText().toString().length() != 0) {
+                                Religion street = streetArrayList.get(sp_street_name_list.getSelectedItemPosition());
+                                boolean flag = databaseHelper.deleteFaliya(street);
+                                streetArrayList.remove(sp_street_name_list.getSelectedItemPosition());
+                                streetAdapter.notifyDataSetChanged();
+                                if(flag) {
+                                    faliyaArrayList=new ArrayList<Religion>();
+                                    faliyaArrayList = databaseHelper.getFaliyaList(villageId);
+                                    faliyaAdapter = new ReligionAdapter(thisActivity, faliyaArrayList);
+                                    sp_street_name.setAdapter(faliyaAdapter);
+                                    String str = thisActivity.getResources().getString(R.string.delete_street);
+                                    CustomToast customToast = new CustomToast(thisActivity, str);
+                                    customToast.show();
+                                }
+                            }
+                        }
+                    }
+                });
+
                 bt_faliyu_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -556,17 +666,13 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                 familyMember.setMobileNo(ed_Mobile_number.getText().toString());
                 familyMember.setEmamtafamilyId(ed_family_number.getText().toString());
                 familyMember.setAnganwadiId(aaganvadiId);
-                familyMember.setEmamtahealthId(""+familyHealthNumber);
-                if(receipt_bitmap!=null) {
-//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                    image_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                    userImagebyteArray = stream.toByteArray();
-//                    Log.v(TAG, "Image length" + userImagebyteArray.length);
-                    familyMember.setPhoto(imageRealPath);
+                familyMember.setEmamtahealthId("" + familyHealthNumber);
+                if (receipt_bitmap != null) {
+                    familyMember.setPhotoValue(imageRealPath);
+                    Uri uri = Uri.parse(imageRealPath);
+                    String Name = new File(uri.getPath()).getName();
+                    familyMember.setPhoto(Name);
                 }
-//                if (userImagebyteArray != null) {
-//                    familyMember.setUserImageArray(userImagebyteArray);
-//                }
                 if (mLastLocation != null) {
                     double latitude = mLastLocation.getLatitude();
                     double longitude = mLastLocation.getLongitude();
@@ -578,15 +684,15 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
                     familyMember.setFaliyu(strFaliyaId);
                 }
                 String validateAddFamilyDetailForm = FormValidation.validateFamilyRegistrationForm(familyMember, this);
-                if(validateAddFamilyDetailForm.length()!=0) {
+                if (validateAddFamilyDetailForm.length() != 0) {
                     CustomLoaderDialog customLoaderDialog = new CustomLoaderDialog(thisActivity);
                     customLoaderDialog.showValidationDialog(validateAddFamilyDetailForm);
-                }else {
+                } else {
                     SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
                     String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
                     try {
                         JSONObject jsonObject = new JSONObject(userDetail);
-                        familyMember.setSubCenterId(jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId"));
+                        familyMember.setSubCenterId(jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcentreId"));
                         String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
                         familyMember.setUserId(userId);
                     } catch (JSONException e) {
@@ -657,7 +763,7 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
             Log.e(this + "", "cannot take picture " + ex);
         }*/
 
-        imageName = "picture_" + "" + System.currentTimeMillis();
+        /*imageName = "picture_" + "" + System.currentTimeMillis();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
             Uri mImageCaptureUri = null;
@@ -669,7 +775,16 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
             Log.e(this + "", "cannot take picture " + e);
         } catch (Exception ex) {
             Log.e(this + "", "cannot take picture " + ex);
-        }
+        }*/
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        fileUri = getOutputMediaFileUri(Constants.MEDIA_TYPE_IMAGE);
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+        // start the image capture Intent
+        startActivityForResult(intent, TAKE_PICTURE);
     }
 
     /**
@@ -777,31 +892,31 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
         LinearLayout linearLayout;
         TextView textView;
         if (parent.getId() == R.id.sp_family_cast) {
-            if(position!=0) {
+            if (position != 0) {
                 Religion religion = castArrayList.get(position);
                 strCast = religion.getId();
             }
 //            Toast.makeText(thisActivity,religion.getName(),Toast.LENGTH_SHORT).show();
         } else if (parent.getId() == R.id.sp_family_dharm) {
-            if(position!=0) {
+            if (position != 0) {
                 Religion religion = religionArrayList.get(position);
                 strReligion = religion.getId();
             }
         } else if (parent.getId() == R.id.sp_street_name) {
-            if(position!=0) {
+            if (position != 0) {
                 Religion religion = faliyaArrayList.get(position);
                 strFaliyaId = religion.getId();
             }
 
         } else if (parent.getId() == R.id.sp_Marital_status) {
-            if(position!=0) {
+            if (position != 0) {
                 linearLayout = (LinearLayout) view;
                 textView = (TextView) linearLayout.getChildAt(0);
                 maritalStatus = textView.getTag().toString();
             }
 
         } else if (parent.getId() == R.id.sp_aganvali) {
-            if(position!=0) {
+            if (position != 0) {
                 linearLayout = (LinearLayout) view;
                 textView = (TextView) linearLayout.getChildAt(0);
                 aaganvadiId = textView.getTag().toString();
@@ -815,108 +930,71 @@ public class NewFamilyActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    /**
+     * Creating file uri to store image/video
+     */
+    public Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(Utils.getOutputMediaFile(type));
+    }
+
+    /**
+     * Here we store the file url as it will be null after returning from camera
+     * app
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // save file url in bundle as it will be null on scren orientation
+        // changes
+        outState.putParcelable("file_uri", fileUri);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // get the file url
+        fileUri = savedInstanceState.getParcelable("file_uri");
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == TAKE_PICTURE) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == TAKE_PICTURE) {
 
-             /*   try {
-                    Bitmap bmp = (Bitmap) data.getExtras().get("data");
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+//                String selectedImagePath =  new File(getExternalFilesDir("temp"),
+//                        imageName + ".png").getPath();;
+                String selectedImagePath = fileUri.getPath();
+                Intent intent = new Intent(this, ImageCroppingActivity.class);
+                intent.putExtra("imagePath", selectedImagePath);
+                startActivityForResult(intent, CROP_PIC);
 
-                    String dir = Environment.getExternalStorageDirectory() + File.separator + thisActivity.getResources().getString(R.string.app_name) + File.separator + "Images";
-                    File appDir = new File(dir);
-                    if (!appDir.exists())
-                        appDir.mkdirs();
+            } else if (requestCode == CROP_PIC) {
 
-                    //you can create a new file name "test.jpg" in sdcard folder.
-                    File f = new File(appDir + "/" + File.separator + "MCTS_" + System.currentTimeMillis() + ".jpg");
-                    Log.d(TAG, "onActivity : File Name" + bmp);
-                    if (f.exists())
-                        f.delete();
-                    else
-                        f.createNewFile();
-                    //write the bytes in file
-                    FileOutputStream fo = new FileOutputStream(f);
-                    fo.write(bytes.toByteArray());
+                File file = new File(fileUri.getPath());
+                boolean deleted = file.delete();
 
-                    // remember close de FileOutput
-                    fo.close();
-
-//                    picUri = Uri.fromFile(f);
-                    picUri = data.getData();
-                    Log.d(TAG, "onActivity : Camera File Path" + picUri.getPath());
-                    performCrop();
-
-                } catch (Exception e) {
-
-                }*/
-
-            String selectedImagePath =  new File(getExternalFilesDir("temp"),
-                    imageName + ".png").getPath();;
-            Intent intent = new Intent(this, ImageCroppingActivity.class);
-            intent.putExtra("imagePath", selectedImagePath);
-            startActivityForResult(intent, CROP_PIC);
-
-        } else if (requestCode == CROP_PIC) {
-                /*// get the returned data
-                Bundle extras = data.getExtras();
-                // get the cropped bitmap
-                Bitmap bitmap = extras.getParcelable("data");
-                bitmap = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
                 txt_take_image.setVisibility(View.GONE);
                 imgUserImage.setVisibility(View.VISIBLE);
-                imgUserImage.setImageBitmap(bitmap);
+                imageRealPath = data.getStringExtra("imagePath");
+                Uri uri = Uri.parse(imageRealPath);
+                receipt_bitmap = TakePictureUtils.decodeFile(new File(uri.getPath()));
 
-                image_bitmap = extras.getParcelable("data");
+                imgUserImage.setImageBitmap(receipt_bitmap);
+            }
 
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                image_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-                //you can create a new file name "test.jpg" in sdcard folder.
-                String dir = Environment.getExternalStorageDirectory() + File.separator + thisActivity.getResources().getString(R.string.app_name) + File.separator + "Images";
-                File appDir = new File(dir);
-                if (!appDir.exists())
-                    appDir.mkdirs();
-
-                //you can create a new file name "test.jpg" in sdcard folder.
-                File f = new File(appDir + "/" + File.separator + "MCTS_" + System.currentTimeMillis() + ".jpg");
-
-                Log.d(TAG, "onActivity : File Name" + image_bitmap);
-                if (f.exists())
-                    f.delete();
-                else
-                    try {
-                        f.createNewFile();
-                        //write the bytes in file
-                        FileOutputStream fo = new FileOutputStream(f);
-                        fo.write(bytes.toByteArray());
-
-                        // remember close de FileOutput
-                        fo.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }*/
-            txt_take_image.setVisibility(View.GONE);
-            imgUserImage.setVisibility(View.VISIBLE);
-            imageRealPath=data.getStringExtra("imagePath");
-            Uri uri=Uri.parse(imageRealPath);
-            receipt_bitmap = TakePictureUtils.decodeFile(new File(uri.getPath()));
-            imgUserImage.setImageBitmap(receipt_bitmap);
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            thisActivity.finish();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+        // Handle your other action bar items...
     }
 }

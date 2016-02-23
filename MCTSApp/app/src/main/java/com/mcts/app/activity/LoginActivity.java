@@ -68,7 +68,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         setContentView(R.layout.activity_login);
 
 
-
         setToolBar();
         init();
         setProgressDialog();
@@ -84,34 +83,34 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         int width = metrics.widthPixels;
         int height = metrics.heightPixels;
 
-        Log.v("Device height x width =",""+height+" x "+width);
+        Log.v("Device height x width =", "" + height + " x " + width);
 
         float dens = getResources().getDisplayMetrics().density;
-        Log.e("Resolution density",""+dens);
+        Log.e("Resolution density", "" + dens);
 
         int density = getResources().getDisplayMetrics().densityDpi;
         switch (density) {
             case DisplayMetrics.DENSITY_LOW:
 //                Toast.makeText(this, "LDPI", Toast.LENGTH_SHORT).show();
-                Log.e("Resolution","LDPI");
+                Log.e("Resolution", "LDPI");
                 break;
             case DisplayMetrics.DENSITY_MEDIUM:
 //                Toast.makeText(this, "MDPI", Toast.LENGTH_SHORT).show();
-                Log.e("Resolution","MDPI");
+                Log.e("Resolution", "MDPI");
                 break;
             case DisplayMetrics.DENSITY_HIGH:
 //                Toast.makeText(this, "HDPI", Toast.LENGTH_SHORT).show();
-                Log.e("Resolution","HDPI");
+                Log.e("Resolution", "HDPI");
                 break;
             case DisplayMetrics.DENSITY_XHIGH:
 //                Toast.makeText(this, "XHDPI", Toast.LENGTH_SHORT).show();
-                Log.e("Resolution","XHDPI");
+                Log.e("Resolution", "XHDPI");
                 break;
             case DisplayMetrics.DENSITY_XXHIGH:
-                Log.e("Resolution","XXHDPI");
+                Log.e("Resolution", "XXHDPI");
                 break;
             case DisplayMetrics.DENSITY_XXXHIGH:
-                Log.e("Resolution","XXXHDPI");
+                Log.e("Resolution", "XXXHDPI");
                 break;
         }
     }
@@ -380,11 +379,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         Log.i("call", "service");
                         Map<String, String> params = new HashMap<>();
                         params.put("password", s.toString());
+                        params.put("mobileNumber", "null");
                         String strMAC = Utils.getMacAddress(thisActivity);
-                        params.put("macid", strMAC);
+                        Log.e("MAC", strMAC);
+                        params.put("macid", "34:31:11:70:DF:58");
 //                        params.put("macid", "e4:90:7e:f0:40:5b");
                         String strIMEI = Utils.getIMEINumber(thisActivity);
-                        params.put("imeiid", strIMEI);
+                        Log.e("IMEI", strIMEI);
+                        params.put("imeiid", "352116062009715");
 //                        params.put("imeiid", "353327063688253");
                         callVolley(thisActivity, Constant.POST_REQUEST, Constants.USER_LOGIN, Constants.BASE_URL + Constants.USER_LOGIN, params, Constant.CALL_TIME_OUT, Constant.SHOULD_CACHE, Constant.VOLLEY_RETRY_COUNT, false, Constant.IS_PROGRESSDAILOG_CANCELABLE, mContext);
 

@@ -47,7 +47,7 @@ public class SearchFamilyMemberAdapter extends BaseAdapter implements View.OnCli
     private ArrayList<Family> familyArrayList;
     private String villageId, villageName, searchString;
     private String isParmenant = "0";
-    private String talukaID,villageID,dirstID;
+    private String talukaID,villageID,dirstID,stateId,subcentreId;
 
     public SearchFamilyMemberAdapter(Context mContext, ArrayList<Family> mFamilyArrayList, String strVillageId, String strVillageName, String mSearchString) {
         this.context = mContext;
@@ -120,7 +120,7 @@ public class SearchFamilyMemberAdapter extends BaseAdapter implements View.OnCli
         }*/
 
         if (familyArrayList.get(position).getPhoto() != null) {
-            if(familyArrayList.get(position).getPhoto().length()>4) {
+            if(familyArrayList.get(position).getPhoto().length()>5) {
                 Uri uri = Uri.parse(familyArrayList.get(position).getPhotoValue());
                 Bitmap image_bitmap = TakePictureUtils.decodeFile(new File(uri.getPath()));
                 viewHolder.img_member.setImageBitmap(image_bitmap);
@@ -252,18 +252,55 @@ public class SearchFamilyMemberAdapter extends BaseAdapter implements View.OnCli
                 LayoutInflater migrateInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View migrateView=migrateInflater.inflate(R.layout.custom_migration_layout, null);
                 Utils.findAllTextView(context, ((ViewGroup) migrateView.findViewById(R.id.ll_migrate)));
-                Spinner sp_dirst=(Spinner)migrateView.findViewById(R.id.sp_dirst);
+                final Spinner sp_dirst=(Spinner)migrateView.findViewById(R.id.sp_dirst);
                 final Spinner sp_taluka=(Spinner)migrateView.findViewById(R.id.sp_taluka);
                 final Spinner sp_migrate_village=(Spinner)migrateView.findViewById(R.id.sp_migrate_village);
                 final RadioButton rdb_parmenant=(RadioButton)migrateView.findViewById(R.id.rdb_parmenant);
                 final RadioButton rdb_temp=(RadioButton)migrateView.findViewById(R.id.rdb_temp);
                 Button bt_migrate=(Button)migrateView.findViewById(R.id.bt_migrate);
                 Button bt_cancel=(Button)migrateView.findViewById(R.id.bt_cancel);
+                final LinearLayout ll_out_state=(LinearLayout)migrateView.findViewById(R.id.ll_out_state);
+                final LinearLayout ll_migrate_type=(LinearLayout)migrateView.findViewById(R.id.ll_migrate_type);
+                final LinearLayout ll_place=(LinearLayout)migrateView.findViewById(R.id.ll_place);
+                final Spinner sp_migrate_place=(Spinner)migrateView.findViewById(R.id.sp_migrate_place);
+                final LinearLayout ll_select_state=(LinearLayout)migrateView.findViewById(R.id.ll_select_state);
+                final Spinner sp_state=(Spinner)migrateView.findViewById(R.id.sp_state);
 
-                DatabaseHelper databaseHelper=new DatabaseHelper(context);
-                ArrayList<MaritalStatus> districtArray=databaseHelper.getDistrictData();
-                StatusAdapter districtAdapter=new StatusAdapter(context,districtArray);
+                ll_out_state.setVisibility(View.VISIBLE);
+                ll_migrate_type.setVisibility(View.GONE);
+                ll_place.setVisibility(View.GONE);
+
+               /* sp_migrate_place.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                        if (position == 2) {
+
+                            ll_select_state.setVisibility(View.VISIBLE);
+                            LinearLayout linearLayout = (LinearLayout) view;
+                            TextView textView = (TextView) linearLayout.getChildAt(0);
+                            stateId = textView.getTag().toString();
+                        } else if (position == 1) {
+                            ll_out_state.setVisibility(View.VISIBLE);
+                            ll_select_state.setVisibility(View.GONE);
+
+                        } else {
+                            ll_out_state.setVisibility(View.VISIBLE);
+                            ll_select_state.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });*/
+
+                DatabaseHelper databaseHelper = new DatabaseHelper(context);
+                ArrayList<MaritalStatus> districtArray = databaseHelper.getDistrictData();
+                StatusAdapter districtAdapter = new StatusAdapter(context, districtArray);
                 sp_dirst.setAdapter(districtAdapter);
+
                 sp_dirst.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                     LinearLayout linearLayout;
@@ -271,6 +308,7 @@ public class SearchFamilyMemberAdapter extends BaseAdapter implements View.OnCli
 
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                         linearLayout = (LinearLayout) view;
                         textView = (TextView) linearLayout.getChildAt(0);
                         dirstID = textView.getTag().toString();
@@ -279,9 +317,11 @@ public class SearchFamilyMemberAdapter extends BaseAdapter implements View.OnCli
                         ArrayList<MaritalStatus> districtArray = databaseHelper.getTaluka(dirstID);
                         StatusAdapter districtAdapter = new StatusAdapter(context, districtArray);
                         sp_taluka.setAdapter(districtAdapter);
+
                         sp_taluka.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                                 linearLayout = (LinearLayout) view;
                                 textView = (TextView) linearLayout.getChildAt(0);
                                 talukaID = textView.getTag().toString();
@@ -294,9 +334,14 @@ public class SearchFamilyMemberAdapter extends BaseAdapter implements View.OnCli
                                 sp_migrate_village.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                     @Override
                                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                        linearLayout = (LinearLayout) view;
-                                        textView = (TextView) linearLayout.getChildAt(0);
-                                        villageID = textView.getTag().toString();
+                                        if(position!=0) {
+                                            linearLayout = (LinearLayout) view;
+                                            textView = (TextView) linearLayout.getChildAt(0);
+                                            String[] villageArray = textView.getTag().toString().split(",");
+                                            villageID = villageArray[0];
+                                            subcentreId = villageArray[1];
+                                        }
+
                                     }
 
                                     @Override
@@ -340,22 +385,21 @@ public class SearchFamilyMemberAdapter extends BaseAdapter implements View.OnCli
                     @Override
                     public void onClick(View v) {
 
-                        DatabaseHelper databaseHelper = new DatabaseHelper(context);
-                        boolean flag = databaseHelper.migrateFamilyMember(values[0],values[1],villageID,isParmenant);
-                        if(!flag){
-                            String str=context.getResources().getString(R.string.migrate_not_success);
-                            CustomToast customToast=new CustomToast((Activity) context,str);
-                            customToast.show();
-                            migrateDialog.dismiss();
-                        }else{
-                            migrateDialog.dismiss();
-                            String str=context.getResources().getString(R.string.migrate_success);
-                            CustomToast customToast=new CustomToast((Activity) context,str);
-                            customToast.show();
-                            familyArrayList = databaseHelper.searchFamily(searchString, villageId);
-                            notifyDataSetChanged();
+                            DatabaseHelper databaseHelper = new DatabaseHelper(context);
+                            boolean flag = databaseHelper.migrateMember(values[0], values[1], villageID,subcentreId, "0");
+                            if (!flag) {
+                                String str = context.getResources().getString(R.string.migrate_not_success);
+                                CustomToast customToast = new CustomToast((Activity) context, str);
+                                customToast.show();
+                                migrateDialog.dismiss();
+                            } else {
+                                migrateDialog.dismiss();
+                                String str = context.getResources().getString(R.string.migrate_success);
+                                CustomToast customToast = new CustomToast((Activity) context, str);
+                                customToast.show();
+                                familyArrayList = databaseHelper.searchFamily(searchString, villageId);
+                                notifyDataSetChanged();
                         }
-
                     }
                 });
 
@@ -365,6 +409,7 @@ public class SearchFamilyMemberAdapter extends BaseAdapter implements View.OnCli
                         migrateDialog.dismiss();
                     }
                 });
+
                 migrateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 migrateDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 migrateDialog.setContentView(migrateView);

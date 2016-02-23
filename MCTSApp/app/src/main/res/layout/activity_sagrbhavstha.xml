@@ -7,127 +7,176 @@
 
     <include layout="@layout/custom_toolbar"></include>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="#4285F5" />
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
 
             <LinearLayout
-                android:id="@+id/ll_new_pregnancy"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/scale_60"
-                android:layout_margin="@dimen/scale_10"
-                android:layout_weight="1"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/ll_new_pregnancy"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="#d62d20"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24">
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/new_pregnancy"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
+                    <TextView
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:lines="2"
+                        android:text="@string/new_pregnancy" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_pregnancy_services"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="#1e6ee4"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24">
+
+                    <TextView
+
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:lines="2"
+                        android:text="@string/pregnancy_services" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <View
-                android:layout_width="3dp"
-                android:layout_height="match_parent"
-                android:background="#4285F5" />
 
             <LinearLayout
-                android:id="@+id/ll_pregnancy_services"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/scale_60"
-                android:layout_margin="@dimen/scale_10"
-                android:layout_weight="1"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/ll_delivery_registration"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="#008744"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24">
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pregnancy_services"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
+                    <TextView
+
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:lines="2"
+                        android:text="@string/delivery_registration" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_post_delivery_services"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="#ffa700"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24">
+
+                    <TextView
+
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:lines="2"
+                        android:text="@string/post_delivery_services" />
+
+                </LinearLayout>
 
             </LinearLayout>
+
+
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_children_list"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="#3e3346"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24">
+
+                    <TextView
+
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:lines="2"
+                        android:text="@string/list_child" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="#3e3346"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:lines="2" />
+
+                </LinearLayout>
+
+            </LinearLayout>-->
+
 
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="#4285F5" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/ll_delivery_registration"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/scale_60"
-                android:layout_margin="@dimen/scale_10"
-                android:layout_weight="1"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="vertical">
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/delivery_registration"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="3dp"
-                android:layout_height="match_parent"
-                android:background="#4285F5" />
-
-            <LinearLayout
-                android:id="@+id/ll_post_delivery_services"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/scale_60"
-                android:layout_margin="@dimen/scale_10"
-                android:layout_weight="1"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="vertical">
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/post_delivery_services"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="#4285F5" />
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

@@ -7,4 +7,8 @@
     <color name="deep_purpel">#673AB7</color>
     <color name="header_one">#4BACC6</color>
     <color name="bg_color">#F3F3F3</color>
+    <color name="dark_blue">#180065</color>
+    <color name="light_blue">#334ee9ff</color>
+    <color name="medium_green">#3d853e</color>
+    <color name="light_green">#3c2ae668</color>
 </resources>

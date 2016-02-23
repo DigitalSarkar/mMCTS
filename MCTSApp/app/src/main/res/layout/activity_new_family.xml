@@ -305,7 +305,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="4"
-                    android:text="@string/family_identity" />
+                    android:text="@string/family_identity_prof" />
 
                 <Button
                     android:id="@+id/bt_family_identity"
@@ -315,7 +315,7 @@
                     android:layout_weight="6"
                     android:background="@drawable/button_selector"
                     android:padding="@dimen/scale_10"
-                    android:text="@string/family_identity" />
+                    android:text="@string/family_identity_prof" />
             </LinearLayout>
 
             <LinearLayout

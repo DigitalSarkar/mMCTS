@@ -32,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -41,11 +42,14 @@ import android.widget.Toast;
 
 import com.mcts.app.R;
 import com.mcts.app.activity.ImageCroppingActivity;
+import com.mcts.app.adapter.ExpandablaHistoryListAdapter;
 import com.mcts.app.adapter.StatusAdapter;
 import com.mcts.app.customview.CustomToast;
 import com.mcts.app.db.DatabaseHelper;
+import com.mcts.app.model.HighRiskSymtoms;
 import com.mcts.app.model.MaritalStatus;
 import com.mcts.app.model.Member;
+import com.mcts.app.model.WomenHighRisk;
 import com.mcts.app.utils.Constants;
 import com.mcts.app.utils.DatePickerFragment;
 import com.mcts.app.utils.FormValidation;
@@ -71,11 +75,12 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
     private static String TAG = "AddFamilyMemberActivity";
     private Toolbar mToolbar;
     private TextView mTitle, txt_family_number, txt_health_number, txt_take_image;
-    private EditText ed_Name, ed_husband_name, ed_Sir_Name, ed_Birth_date, ed_Mobile_number;
+    private EditText ed_Name, ed_husband_name, ed_Sir_Name, ed_Birth_date, ed_Mobile_number,ed_health_problems;
     private RadioButton rdb_yes, rdb_no, rdb_sex_Male, rdb_sex_Female, rdb_second_child_yes, rdb_second_child_no, rdb_Current_Status_yes, rdb_Current_Status_no;
     private RadioButton rdb_adopt_planning_yes, rdb_adopt_planning_no, rdb_isPregnent_yes, rdb_isPregnent_no;
     private Spinner sp_family_head_relation, sp_Marital_status, sp_Family_welfare, sp_Family_welfare_user, sp_periods_status, sp_Whos_sun_daughter, sp_Whos_wife;
     private Button bt_family_identity, bt_bank_detail, bt_Please_Modern, bt_Cancel, bt_Please_migration;
+    private TextView textTag;
     DatabaseHelper databaseHelper;
     int FamilyNumber;
     private int familyHealthNumber;
@@ -85,12 +90,13 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
     String bankName, branchName, acNumber, IFSCCode, aadharNumber;
     private LinearLayout ll_masik, ll_isPregnant, ll_Family_welfare_user, ll_Want_Family_welfare, ll_Family_welfare, ll_whose_wife, ll_secong_child;
     private Member familyMember;
+    private ArrayList<WomenHighRisk> memberHistoryArrayList;
 
     //    Image Capture
     ImageView imgUserImage;
     private String imageName = "item_picture";
     public static final int TAKE_PICTURE = 1;
-    private Uri picUri;
+    private Uri fileUri;
     private String imageRealPath = null;
     private File compressFile;
     private Bitmap receipt_bitmap;
@@ -102,15 +108,8 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
 
     //croping img................................
     private final int CROP_PIC = 2;
-    protected int outputX = 400;
-    protected int outputY = 600;
-    protected int aspectX = 2;
-    protected int aspectY = 2;
-    protected boolean return_data = false;
-    protected boolean scale = true;
-    protected boolean faceDetection = true;
     protected boolean circleCrop = false;
-    private String camera_pathname;
+    private Dialog progressDialog;
     //...................................................
 
 
@@ -127,13 +126,14 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
     private void setToolBar() {
 
         thisActivity = AddFamilyMemberActivity.this;
-
+        textTag = new TextView(thisActivity);
         Typeface type = Typeface.createFromAsset(getAssets(), "SHRUTI.TTF");
         mToolbar = (Toolbar) findViewById(R.id.anim_toolbar);
         mTitle = (TextView) mToolbar.findViewById(R.id.title_text);
         mTitle.setText(thisActivity.getResources().getString(R.string.add_family_member));
         mTitle.setTypeface(type, Typeface.BOLD);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -197,6 +197,7 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
         bt_Please_Modern = (Button) findViewById(R.id.bt_Please_Modern);
         bt_Cancel = (Button) findViewById(R.id.bt_Cancel);
         bt_Please_migration = (Button) findViewById(R.id.bt_Please_migration);
+        ed_health_problems = (EditText) findViewById(R.id.ed_health_problems);
 
 
         bt_Please_Modern.setOnClickListener(this);
@@ -217,6 +218,7 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
         ed_Birth_date.setOnClickListener(this);
         imgUserImage.setOnClickListener(this);
         txt_take_image.setOnClickListener(this);
+        ed_health_problems.setOnClickListener(this);
 
 
         txt_health_number.setText("" + familyHealthNumber);
@@ -272,6 +274,10 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
             sp_Whos_wife.setAdapter(sunDaughterAdapter);
             sp_Whos_wife.setOnItemSelectedListener(this);
         }
+
+        ArrayList<WomenHighRisk> womenHighRiskArray = databaseHelper.getHistoryType();
+        memberHistoryArrayList = databaseHelper.getMemberHistory(womenHighRiskArray);
+
     }
 
     @Override
@@ -283,17 +289,14 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            thisActivity.finish();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+        // Handle your other action bar items...
     }
 
     @Override
@@ -311,7 +314,7 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                 String Sir_Name = ed_Sir_Name.getText().toString();
                 familyMember.setLastName(Sir_Name);
                 String isHead = isAns;
-                familyMember.setIsHead(isHead);
+                familyMember.setIsHead("0");
                 String headRelation = familyHeadRelation;
                 familyMember.setRelationwithheadId(headRelation);
                 String sex = gender;
@@ -339,13 +342,15 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                 String memStatus = isLiving;
                 familyMember.setMemberStatus(memStatus);
                 String prdStatus = periodeStatus;
-                familyMember.setMenstruationStatus(prdStatus);
                 if(receipt_bitmap!=null) {
 //                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
 //                    image_bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 //                    userImagebyteArray = stream.toByteArray();
 //                    Log.v(TAG, "Image length" + userImagebyteArray.length);
-                    familyMember.setPhoto(imageRealPath);
+                    familyMember.setPhotoValue(imageRealPath);
+                    Uri uri=Uri.parse(imageRealPath);
+                    String Name=new File(uri.getPath()).getName();
+                    familyMember.setPhoto(Name);
                 }
 //                if (userImagebyteArray != null) {
 //                    familyMember.setUserImageArray(userImagebyteArray);
@@ -360,7 +365,7 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                     String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
                     try {
                         JSONObject jsonObject = new JSONObject(userDetail);
-                        familyMember.setSubCenterId(jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId"));
+                        familyMember.setSubCenterId(jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcentreId"));
                         String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
                         familyMember.setUserId(userId);
                         familyMember.setVillageId(villageId);
@@ -370,10 +375,22 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
 
                     boolean flag = databaseHelper.insertNewMember(familyMember);
                     if (flag) {
-                        String str=thisActivity.getResources().getString(R.string.member_new_success);
-                        CustomToast customToast=new CustomToast(thisActivity,str);
-                        customToast.show();
-                        thisActivity.finish();
+
+                        if (ed_health_problems.getText().length() != 0) {
+                            String[] historyArray = ed_health_problems.getTag().toString().split(",");
+                            String[] yeasArray = textTag.getTag().toString().split(",");
+                            DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
+                            boolean flagHistory = databaseHelper.insertMemberHistory(familyMember, historyArray, yeasArray);
+
+                            if(flagHistory){
+                                String str=thisActivity.getResources().getString(R.string.member_new_success);
+                                CustomToast customToast=new CustomToast(thisActivity,str);
+                                customToast.show();
+                                thisActivity.finish();
+                            }
+
+                        }
+
                     }
                 }
 
@@ -394,9 +411,9 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                 gender = "M";
                 ll_masik.setVisibility(View.GONE);
                 ll_isPregnant.setVisibility(View.GONE);
-                ll_Family_welfare.setVisibility(View.GONE);
-                ll_Family_welfare_user.setVisibility(View.GONE);
-                ll_Want_Family_welfare.setVisibility(View.GONE);
+//                ll_Family_welfare.setVisibility(View.GONE);
+//                ll_Family_welfare_user.setVisibility(View.GONE);
+//                ll_Want_Family_welfare.setVisibility(View.GONE);
                 ll_whose_wife.setVisibility(View.GONE);
                 ll_secong_child.setVisibility(View.GONE);
                 break;
@@ -405,9 +422,9 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                 rdb_sex_Female.setChecked(true);
                 ll_masik.setVisibility(View.VISIBLE);
                 ll_isPregnant.setVisibility(View.VISIBLE);
-                ll_Family_welfare.setVisibility(View.VISIBLE);
-                ll_Family_welfare_user.setVisibility(View.VISIBLE);
-                ll_Want_Family_welfare.setVisibility(View.VISIBLE);
+//                ll_Family_welfare.setVisibility(View.VISIBLE);
+//                ll_Family_welfare_user.setVisibility(View.VISIBLE);
+//                ll_Want_Family_welfare.setVisibility(View.VISIBLE);
                 ll_whose_wife.setVisibility(View.VISIBLE);
                 ll_secong_child.setVisibility(View.VISIBLE);
                 gender = "F";
@@ -465,6 +482,7 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                 final EditText ed_pan_no = (EditText) view.findViewById(R.id.ed_pan_no);
                 final EditText ed_driving_no = (EditText) view.findViewById(R.id.ed_driving_no);
                 final EditText ed_passport_no = (EditText) view.findViewById(R.id.ed_passport_no);
+                final EditText ed_aadhar_no = (EditText) view.findViewById(R.id.ed_aadhar_no);
                 Button bt_save = (Button) view.findViewById(R.id.bt_save);
                 Button bt_identity_cancel = (Button) view.findViewById(R.id.bt_identity_cancel);
 
@@ -480,6 +498,9 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                 if(familyMember.getDrivingcardNumer()!=null) {
                     ed_passport_no.setText(familyMember.getDrivingcardNumer());
                 }
+                if(familyMember.getAadharNo()!=null) {
+                    ed_aadhar_no.setText(familyMember.getAadharNo());
+                }
 
                 bt_identity_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -490,6 +511,7 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                         panNo = ed_pan_no.getText().toString();
                         drivingNo = ed_driving_no.getText().toString();
                         passportNo = ed_passport_no.getText().toString();
+                        aadharNumber = ed_aadhar_no.getText().toString();
 
                         if(!electionNo.equalsIgnoreCase(familyMember.getElectioncardNumber())){
                             familyMember.setElectioncardNumber(electionNo);
@@ -503,6 +525,9 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                         if(!passportNo.equalsIgnoreCase(familyMember.getPassportcardNumber())) {
                             familyMember.setPassportcardNumber(passportNo);
                         }
+                        if(!aadharNumber.equalsIgnoreCase(familyMember.getAadharNo())) {
+                            familyMember.setAadharNo(aadharNumber);
+                        }
 
                     }
                 });
@@ -514,10 +539,12 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                         panNo = ed_pan_no.getText().toString();
                         drivingNo = ed_driving_no.getText().toString();
                         passportNo = ed_passport_no.getText().toString();
+                        aadharNumber = ed_aadhar_no.getText().toString();
                         familyMember.setElectioncardNumber(electionNo);
                         familyMember.setPancardNumber(panNo);
                         familyMember.setDrivingcardNumer(drivingNo);
                         familyMember.setPassportcardNumber(passportNo);
+                        familyMember.setAadharNo(aadharNumber);
                     }
                 });
 
@@ -548,26 +575,109 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                 dialog.show();
                 break;
             case R.id.bt_bank_detail:
-//                AlertDialog.Builder bankAlertDialog = new AlertDialog.Builder(thisActivity);
-//                LayoutInflater layoutBankInflater
-//                        = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                View bankView = layoutBankInflater.inflate(R.layout.bank_detail_layout, null);
-//                Utils.findAllTextView(thisActivity, ((ViewGroup) bankView.findViewById(R.id.ll_alert)));
-//                bankAlertDialog.setView(bankView);
-//                bankAlertDialog.show();
-//                final Dialog bankDialog = new Dialog(thisActivity);
-//                LayoutInflater bankInflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                View bankView = bankInflater.inflate(R.layout.bank_detail_layout, null);
-//                Utils.findAllTextView(thisActivity, ((ViewGroup) bankView.findViewById(R.id.ll_alert)));
-//                final EditText ed_branch_name = (EditText) bankView.findViewById(R.id.ed_branch_name);
-//                final EditText ed_ac_number = (EditText) bankView.findViewById(R.id.ed_ac_number);
-//                final EditText ed_IFSC_Code = (EditText) bankView.findViewById(R.id.ed_IFSC_Code);
-//                final EditText ed_aadhar_no = (EditText) bankView.findViewById(R.id.ed_aadhar_no);
-//                Button bt_save_bank = (Button) bankView.findViewById(R.id.bt_save_bank);
-//                Button bt_cancel_bank = (Button) bankView.findViewById(R.id.bt_cancel_bank);
 
+                final Dialog bankDialog = new Dialog(thisActivity);
+                LayoutInflater bankInflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View bankView=bankInflater.inflate(R.layout.bank_detail_layout, null);
+                Utils.findAllTextView(thisActivity, ((ViewGroup) bankView.findViewById(R.id.ll_alert)));
+                final EditText ed_bank_name=(EditText)bankView.findViewById(R.id.ed_bank_name);
+                final EditText ed_branch_name=(EditText)bankView.findViewById(R.id.ed_branch_name);
+                final EditText ed_ac_number=(EditText)bankView.findViewById(R.id.ed_ac_number);
+                final EditText ed_IFSC_Code=(EditText)bankView.findViewById(R.id.ed_IFSC_Code);
+                final EditText bed_aadhar_no=(EditText)bankView.findViewById(R.id.ed_aadhar_no);
+                Button bt_save_bank=(Button)bankView.findViewById(R.id.bt_save_bank);
+                Button bt_cancel_bank=(Button)bankView.findViewById(R.id.bt_cancel_bank);
 
+                if(familyMember.getBankName()!=null){
+                    ed_bank_name.setText(familyMember.getBankName());
+                }
+                if(familyMember.getBranchName()!=null) {
+                    ed_branch_name.setText(familyMember.getBranchName());
+                }
+                if(familyMember.getAccountNo()!=null) {
+                    ed_ac_number.setText(familyMember.getAccountNo());
+                }
+                if(familyMember.getIfscCode()!=null) {
+                    ed_IFSC_Code.setText(familyMember.getIfscCode());
+                }
+                if(familyMember.getAadharNo()!=null) {
+                    bed_aadhar_no.setText(familyMember.getAadharNo());
+                }
+
+                bt_save_bank.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
+                        bankDialog.dismiss();
+                        bankName =ed_bank_name.getText().toString();
+                        branchName =ed_branch_name.getText().toString();
+                        acNumber =ed_ac_number.getText().toString();
+                        IFSCCode=ed_IFSC_Code.getText().toString();
+                        aadharNumber=bed_aadhar_no.getText().toString();
+                        familyMember.setBankName(bankName);
+                        familyMember.setBranchName(branchName);
+                        familyMember.setAccountNo(acNumber);
+                        familyMember.setIfscCode(IFSCCode);
+                        familyMember.setAadharNo(aadharNumber);
+                    }
+                });
+
+                bt_cancel_bank.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Utils.ButtonClickEffect(v);
+                        bankDialog.dismiss();
+
+                        bankName =ed_bank_name.getText().toString();
+                        branchName =ed_branch_name.getText().toString();
+                        acNumber =ed_ac_number.getText().toString();
+                        IFSCCode=ed_IFSC_Code.getText().toString();
+                        aadharNumber=bed_aadhar_no.getText().toString();
+
+                        if(!bankName.equalsIgnoreCase(familyMember.getBankName())){
+                            familyMember.setBankName(bankName);
+                        }
+                        if(!branchName.equalsIgnoreCase(familyMember.getBranchName())) {
+                            familyMember.setBranchName(branchName);
+                        }
+                        if(!acNumber.equalsIgnoreCase(familyMember.getAccountNo())) {
+                            familyMember.setAccountNo(acNumber);
+                        }
+                        if(!IFSCCode.equalsIgnoreCase(familyMember.getIfscCode())) {
+                            familyMember.setIfscCode(IFSCCode);
+                        }
+                        if(!aadharNumber.equalsIgnoreCase(familyMember.getAadharNo())) {
+                            familyMember.setAadharNo(aadharNumber);
+                        }
+                    }
+                });
+
+                bankDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                bankDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                bankDialog.setContentView(bankView);
+
+                WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE); // for activity use context instead of getActivity()
+                Display bankDisplay = windowManager.getDefaultDisplay(); // getting the screen size of device
+                Point bankSize = new Point();
+                bankDisplay.getSize(bankSize);
+                int bankwidth1 = WindowManager.LayoutParams.WRAP_CONTENT;
+                int bankheight1 = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                int bankTempValue = 0;
+                bankTempValue = ((bankSize.x) * 200) / 1440;
+                int bankwidth = bankSize.x - bankTempValue;  // Set your widths
+                int bankheight = bankheight1; // set your heights
+
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                layoutParams.copyFrom(bankDialog.getWindow().getAttributes());
+
+                layoutParams.width = bankwidth;
+                layoutParams.height = bankheight;
+                bankDialog.getWindow().setAttributes(layoutParams);
+                bankDialog.setCancelable(false);
+                bankDialog.show();
                 break;
+
             case R.id.ed_Birth_date:
                 showDatePicker();
                 break;
@@ -576,6 +686,9 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
                 break;
             case R.id.txt_take_image:
                 captureImage();
+                break;
+            case R.id.ed_health_problems:
+                memberHistory(memberHistoryArrayList, ed_health_problems, textTag);
                 break;
         }
     }
@@ -656,119 +769,144 @@ public class AddFamilyMemberActivity extends AppCompatActivity implements View.O
 
     }
 
+    public void memberHistory(ArrayList<WomenHighRisk> womenHighRiskArrayList, EditText ed_high_risk_mom, TextView textTag) {
+
+        progressDialog = new Dialog(thisActivity, R.style.DialogTheme);
+        LayoutInflater mInflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View progressView = mInflater.inflate(R.layout.custom_highrisk_women, null);
+        Utils.findAllTextView(thisActivity, (ViewGroup) progressView.findViewById(R.id.ll_high_risk_women));
+        ExpandableListView expandableListView = (ExpandableListView) progressView.findViewById(R.id.exp_category);
+        TextView txt_validation = (TextView) progressView.findViewById(R.id.txt_validation);
+        Button bt_save_high_risk = (Button) progressView.findViewById(R.id.bt_save_high_risk);
+        txt_validation.setText(thisActivity.getResources().getText(R.string.health_problems));
+
+        ExpandablaHistoryListAdapter expandablaListAdapter = new ExpandablaHistoryListAdapter(thisActivity, womenHighRiskArrayList, ed_high_risk_mom, textTag);
+        expandableListView.setAdapter(expandablaListAdapter);
+
+        Typeface type = Typeface.createFromAsset(thisActivity.getAssets(), "SHRUTI.TTF");
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        progressDialog.setContentView(progressView);
+
+        WindowManager wm = (WindowManager) thisActivity.getSystemService(Context.WINDOW_SERVICE); // for activity use context instead of getActivity()
+        Display display = wm.getDefaultDisplay(); // getting the screen size of device
+        Point size = new Point();
+        display.getSize(size);
+        int width1 = WindowManager.LayoutParams.WRAP_CONTENT;
+        int height1 = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        int tempValue = 0;
+        tempValue = ((size.x) * 200) / 1440;
+        int width = size.x - tempValue;  // Set your widths
+        int height = height1; // set your heights
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(progressDialog.getWindow().getAttributes());
+
+        lp.width = width;
+        lp.height = height;
+        progressDialog.getWindow().setAttributes(lp);
+        progressDialog.setContentView(progressView);
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+
+        bt_save_high_risk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                boolean flag = false;
+                for (int i = 0; i < memberHistoryArrayList.size(); i++) {
+                    for (int j = 0; j < memberHistoryArrayList.get(i).getHighRiskSymtomsArrayList().size(); j++) {
+                        HighRiskSymtoms highRiskSymtoms = memberHistoryArrayList.get(i).getHighRiskSymtomsArrayList().get(j);
+                        if (highRiskSymtoms.getIsChecked().equals("1")) {
+                            if(highRiskSymtoms.getYear() != null){
+                                flag = true;
+                            }else{
+                                flag = false;
+                            }
+                        }
+                    }
+                }
+                if (!flag) {
+                    String str = thisActivity.getResources().getString(R.string.insert_year);
+                    CustomToast customToast = new CustomToast(thisActivity, str);
+                    customToast.show();
+                }else{
+                    progressDialog.dismiss();
+                }
+
+            }
+        });
+
+    }
+
     public void captureImage() {
 
-        /*try {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, TAKE_PICTURE);
-        } catch (ActivityNotFoundException e) {
-            Log.e(this + "", "cannot take picture " + e);
-        } catch (Exception ex) {
-            Log.e(this + "", "cannot take picture " + ex);
-        }*/
 
-        imageName = "picture_" + "" + System.currentTimeMillis();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            Uri mImageCaptureUri = null;
-            mImageCaptureUri = Uri.fromFile(new File(getExternalFilesDir("temp"), imageName + ".png"));
-            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-            intent.putExtra("return-data", true);
-            startActivityForResult(intent, TAKE_PICTURE);
-        } catch (ActivityNotFoundException e) {
-            Log.e(this + "", "cannot take picture " + e);
-        } catch (Exception ex) {
-            Log.e(this + "", "cannot take picture " + ex);
-        }
+
+        fileUri = getOutputMediaFileUri(Constants.MEDIA_TYPE_IMAGE);
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+        // start the image capture Intent
+        startActivityForResult(intent, TAKE_PICTURE);
+    }
+
+    /**
+     * Creating file uri to store image/video
+     */
+    public Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(Utils.getOutputMediaFile(type));
+    }
+
+    /**
+     * Here we store the file url as it will be null after returning from camera
+     * app
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // save file url in bundle as it will be null on scren orientation
+        // changes
+        outState.putParcelable("file_uri", fileUri);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // get the file url
+        fileUri = savedInstanceState.getParcelable("file_uri");
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == TAKE_PICTURE) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == TAKE_PICTURE) {
 
-             /*   try {
-                    Bitmap bmp = (Bitmap) data.getExtras().get("data");
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+//                String selectedImagePath =  new File(getExternalFilesDir("temp"),
+//                        imageName + ".png").getPath();;
+                String selectedImagePath =  fileUri.getPath();
+                Intent intent = new Intent(this, ImageCroppingActivity.class);
+                intent.putExtra("imagePath", selectedImagePath);
+                startActivityForResult(intent, CROP_PIC);
 
-                    String dir = Environment.getExternalStorageDirectory() + File.separator + thisActivity.getResources().getString(R.string.app_name) + File.separator + "Images";
-                    File appDir = new File(dir);
-                    if (!appDir.exists())
-                        appDir.mkdirs();
+            } else if (requestCode == CROP_PIC) {
 
-                    //you can create a new file name "test.jpg" in sdcard folder.
-                    File f = new File(appDir + "/" + File.separator + "MCTS_" + System.currentTimeMillis() + ".jpg");
-                    Log.d(TAG, "onActivity : File Name" + bmp);
-                    if (f.exists())
-                        f.delete();
-                    else
-                        f.createNewFile();
-                    //write the bytes in file
-                    FileOutputStream fo = new FileOutputStream(f);
-                    fo.write(bytes.toByteArray());
+                File file = new File(fileUri.getPath());
+                boolean deleted = file.delete();
 
-                    // remember close de FileOutput
-                    fo.close();
-
-//                    picUri = Uri.fromFile(f);
-                    picUri = data.getData();
-                    Log.d(TAG, "onActivity : Camera File Path" + picUri.getPath());
-                    performCrop();
-
-                } catch (Exception e) {
-
-                }*/
-
-            String selectedImagePath =  new File(getExternalFilesDir("temp"),
-                    imageName + ".png").getPath();;
-            Intent intent = new Intent(this, ImageCroppingActivity.class);
-            intent.putExtra("imagePath", selectedImagePath);
-            startActivityForResult(intent, CROP_PIC);
-
-        } else if (requestCode == CROP_PIC) {
-                /*// get the returned data
-                Bundle extras = data.getExtras();
-                // get the cropped bitmap
-                Bitmap bitmap = extras.getParcelable("data");
-                bitmap = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
                 txt_take_image.setVisibility(View.GONE);
                 imgUserImage.setVisibility(View.VISIBLE);
-                imgUserImage.setImageBitmap(bitmap);
+                imageRealPath=data.getStringExtra("imagePath");
+                Uri uri=Uri.parse(imageRealPath);
+                receipt_bitmap = TakePictureUtils.decodeFile(new File(uri.getPath()));
 
-                image_bitmap = extras.getParcelable("data");
+                imgUserImage.setImageBitmap(receipt_bitmap);
+            }
 
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                image_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-                //you can create a new file name "test.jpg" in sdcard folder.
-                String dir = Environment.getExternalStorageDirectory() + File.separator + thisActivity.getResources().getString(R.string.app_name) + File.separator + "Images";
-                File appDir = new File(dir);
-                if (!appDir.exists())
-                    appDir.mkdirs();
-
-                //you can create a new file name "test.jpg" in sdcard folder.
-                File f = new File(appDir + "/" + File.separator + "MCTS_" + System.currentTimeMillis() + ".jpg");
-
-                Log.d(TAG, "onActivity : File Name" + image_bitmap);
-                if (f.exists())
-                    f.delete();
-                else
-                    try {
-                        f.createNewFile();
-                        //write the bytes in file
-                        FileOutputStream fo = new FileOutputStream(f);
-                        fo.write(bytes.toByteArray());
-
-                        // remember close de FileOutput
-                        fo.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }*/
-            txt_take_image.setVisibility(View.GONE);
-            imgUserImage.setVisibility(View.VISIBLE);
-            imageRealPath=data.getStringExtra("imagePath");
-            Uri uri=Uri.parse(imageRealPath);
-            receipt_bitmap = TakePictureUtils.decodeFile(new File(uri.getPath()));
-            imgUserImage.setImageBitmap(receipt_bitmap);
         }
     }
 

@@ -29,11 +29,13 @@ public class ExpandablaListAdapter implements ExpandableListAdapter {
     private Context _context;
     private ArrayList<WomenHighRisk> womenHighRiskArrayList;
     private EditText ed_high_risk_mom;
+    private boolean hivStatus;
 
-    public ExpandablaListAdapter(Context context, ArrayList<WomenHighRisk> mWomenHighRiskArrayList, EditText mEd_high_risk_mom) {
+    public ExpandablaListAdapter(Context context, ArrayList<WomenHighRisk> mWomenHighRiskArrayList, EditText mEd_high_risk_mom, boolean mHivStatus) {
         this._context = context;
         this.womenHighRiskArrayList = mWomenHighRiskArrayList;
         this.ed_high_risk_mom = mEd_high_risk_mom;
+        this.hivStatus = mHivStatus;
     }
 
     @Override
@@ -56,13 +58,23 @@ public class ExpandablaListAdapter implements ExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_item, null);
+            Utils.findAllTextView(_context, (ViewGroup) convertView.findViewById(R.id.ll_list_item));
         }
-        Utils.findAllTextView(_context, (ViewGroup) convertView.findViewById(R.id.ll_list_item));
+
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
+        Typeface type = Typeface.createFromAsset(_context.getAssets(), "SHRUTI.TTF");
+        txtListChild.setTypeface(type, Typeface.BOLD);
         CheckBox chk_symptoms = (CheckBox) convertView
                 .findViewById(R.id.chk_symptoms);
         chk_symptoms.setTag(highRiskSymtoms.getSymptomId() + "," + highRiskSymtoms.getCategoryId() + "," + highRiskSymtoms.getSymptomName());
+
+        if(highRiskSymtoms.getSymptomId().equals("10") && hivStatus==true){
+            chk_symptoms.setChecked(true);
+            highRiskSymtoms.setIsChecked("1");
+            setHighRiskValue();
+        }
+
         if (highRiskSymtoms.getIsChecked() == null || highRiskSymtoms.getIsChecked().equals("1")) {
             chk_symptoms.setChecked(true);
             highRiskSymtoms.setIsChecked("1");
@@ -87,10 +99,16 @@ public class ExpandablaListAdapter implements ExpandableListAdapter {
 //                    Toast.makeText(_context, "SymptomId=" + array[0] + "CategoryId=" + array[1] + "SymptomName=" + array[2], Toast.LENGTH_LONG).show();
                     setHighRiskValue();
                 } else {
-                    checkBox.setChecked(false);
-                    highRiskSymtoms.setIsChecked("0");
-                    womenHighRiskArrayList.get(groupPosition).getHighRiskSymtomsArrayList().set(childPosition, highRiskSymtoms);
-                    setHighRiskValue();
+                    if(highRiskSymtoms.getSymptomId().equals("10") && hivStatus==true){
+                        checkBox.setChecked(true);
+                        highRiskSymtoms.setIsChecked("1");
+                        setHighRiskValue();
+                    }else {
+                        checkBox.setChecked(false);
+                        highRiskSymtoms.setIsChecked("0");
+                        womenHighRiskArrayList.get(groupPosition).getHighRiskSymtomsArrayList().set(childPosition, highRiskSymtoms);
+                        setHighRiskValue();
+                    }
                 }
             }
         });
@@ -136,13 +154,15 @@ public class ExpandablaListAdapter implements ExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_group, null);
+            Utils.findAllTextView(_context, (ViewGroup) convertView.findViewById(R.id.ll_list_group));
         }
 
-        Utils.findAllTextView(_context, (ViewGroup) convertView.findViewById(R.id.ll_list_group));
+
 
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.lblListHeader);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
+        Typeface type = Typeface.createFromAsset(_context.getAssets(), "SHRUTI.TTF");
+        lblListHeader.setTypeface(type, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
 
         return convertView;

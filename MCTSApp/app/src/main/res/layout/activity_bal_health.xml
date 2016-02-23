@@ -1,71 +1,72 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_child_health"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <include layout="@layout/custom_toolbar"></include>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:id="@+id/ll_children_list"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_margin="@dimen/scale_5"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:background="#3e3346"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24">
 
-                    <Button
-                        android:id="@+id/bt_hbnc"
-                        android:layout_width="@dimen/circule"
-                        android:layout_height="@dimen/circule"
-                        android:background="@drawable/health_selector_bg"
-                        android:shadowColor="#A8A8A8"
-                        android:shadowDx="0"
-                        android:shadowDy="0"
-                        android:shadowRadius="5"
-                        android:text="@string/hbnc"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/menu_font" />
+                    <TextView
+
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:lines="2"
+                        android:text="@string/list_child" />
 
                 </LinearLayout>
+
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/ll_bal_vaccine"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
                     android:layout_margin="@dimen/scale_5"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:background="#1e6ee4"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/scale_24">
 
-                    <Button
-                        android:id="@+id/bt_imnci"
-                        android:layout_width="@dimen/circule"
-                        android:layout_height="@dimen/circule"
-                        android:background="@drawable/health_selector_bg"
-                        android:shadowColor="#A8A8A8"
-                        android:shadowDx="0"
-                        android:shadowDy="0"
-                        android:shadowRadius="5"
-                        android:text="@string/imnci"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/menu_font" />
+                    <TextView
+                        style="@style/ValueText_Home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="@string/bal_rasikaran_seva"
+                        android:lines="2" />
+
                 </LinearLayout>
 
-
             </LinearLayout>
-
         </LinearLayout>
+    </ScrollView>
 </LinearLayout>

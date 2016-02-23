@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
@@ -186,6 +187,8 @@ public class BaseActivity extends AppCompatActivity implements IVolleyRespose {
         }
         return result;
     }
+
+
 
     // check tablet or phone method..................................
     public boolean isTablet(Context context) {

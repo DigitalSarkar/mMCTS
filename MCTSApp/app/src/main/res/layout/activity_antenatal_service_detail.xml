@@ -1,0 +1,712 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_antenatal_service_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/custom_toolbar"></include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_5"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/anc_service_type" />
+
+                <Spinner
+                    android:id="@+id/sp_anc_service_type"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:entries="@array/anc_service_type"
+                    android:singleLine="true"
+                    android:spinnerMode="dialog"></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/anc_service_date" />
+
+                <EditText
+                    android:id="@+id/ed_anc_service_date"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:focusable="false"
+                    android:hint="@string/anc_service_date"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/tt_1" />
+
+                <EditText
+                    android:id="@+id/ed_tt1"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:focusable="false"
+                    android:hint="@string/tt_1"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/tt_2" />
+
+                <EditText
+                    android:id="@+id/ed_tt2"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:focusable="false"
+                    android:hint="@string/tt_2"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/tt_booster" />
+
+                <EditText
+                    android:id="@+id/ed_tt_booster"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:focusable="false"
+                    android:hint="@string/tt_booster"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/hb" />
+
+                <EditText
+                    android:id="@+id/ed_hb"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:hint="@string/hb"
+                    android:inputType="number|text"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/blood_group" />
+
+                <Spinner
+                    android:id="@+id/sp_blood_group_value"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:entries="@array/blood_group_value"
+                    android:singleLine="true"
+                    android:spinnerMode="dialog"></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/weight" />
+
+                <EditText
+                    android:id="@+id/ed_weight"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:hint="@string/weight"
+                    android:inputType="number|text"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/systolic_bp" />
+
+                <EditText
+                    android:id="@+id/ed_systolic_bp"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:hint="@string/systolic_bp"
+                    android:inputType="number|text"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/diastolic_bp" />
+
+                <EditText
+                    android:id="@+id/ed_diastolic_bp"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:hint="@string/diastolic_bp"
+                    android:inputType="number|text"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/urine_sugar" />
+
+                <Spinner
+                    android:id="@+id/sp_urine_sugar"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:entries="@array/urin_value"
+                    android:singleLine="true"
+                    android:spinnerMode="dialog"></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/urine_albumin" />
+
+                <Spinner
+                    android:id="@+id/sp_urine_albumin"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:entries="@array/urin_value"
+                    android:singleLine="true"
+                    android:spinnerMode="dialog"></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/rbs" />
+
+                <EditText
+                    android:id="@+id/ed_rbs"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:hint="@string/rbs"
+                    android:inputType="number|text"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/muac" />
+
+                <EditText
+                    android:id="@+id/ed_muac"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:hint="@string/muac"
+                    android:inputType="number|text"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/presentation" />
+
+                <Spinner
+                    android:id="@+id/sp_presentation"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:entries="@array/presantation_value"></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_ifa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/ifa" />
+
+                <EditText
+                    android:id="@+id/ed_ifa"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:hint="@string/ifa"
+                    android:inputType="number|text"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_pholik"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/pholik" />
+
+                <EditText
+                    android:id="@+id/ed_pholik"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:hint="@string/pholik"
+                    android:inputType="number|text"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/calcium_tab" />
+
+                <EditText
+                    android:id="@+id/ed_calcium_tab"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:hint="@string/calcium_tab"
+                    android:inputType="number|text"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_albedazole_tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/albedazole_tab" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rdb_albedazole_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <com.mcts.app.customview.MyTextView
+                            style="@style/ValueText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/scale_5"
+                            android:text="@string/family_yes" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rdb_albedazole_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <com.mcts.app.customview.MyTextView
+                            style="@style/ValueText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/scale_5"
+                            android:text="@string/family_no" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_inj_cortico"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/inj_cortico" />
+
+                <LinearLayout
+                    android:id="@+id/ll_albedize"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rdb_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <com.mcts.app.customview.MyTextView
+                            android:id="@+id/lbl_yes"
+                            style="@style/ValueText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/scale_5"
+                            android:text="@string/family_yes" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rdb_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <com.mcts.app.customview.MyTextView
+                            android:id="@+id/lbl_no"
+                            style="@style/ValueText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/scale_5"
+                            android:text="@string/family_no" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/hiv" />
+
+                <Spinner
+                    android:id="@+id/sp_hiv"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:entries="@array/hiv_value"></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mcts.app.customview.MyTextView
+                    style="@style/LabelText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="4"
+                    android:text="@string/vdrl_test" />
+
+                <Spinner
+                    android:id="@+id/sp_vdrl_test"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:entries="@array/vdrl_value"></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/bt_save"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_selector"
+                    android:hint="@string/save"
+                    android:padding="@dimen/scale_10" />
+
+                <Button
+                    android:id="@+id/bt_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_selector"
+                    android:padding="@dimen/scale_10"
+                    android:text="@string/Cancel" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

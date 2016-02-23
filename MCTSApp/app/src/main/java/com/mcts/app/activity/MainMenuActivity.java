@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,7 +29,7 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
     private static String TAG="MainMenuActivity";
     private Toolbar mToolbar;
     private TextView mTitle;
-    private LinearLayout ll_first,ll_data_entry;
+    private LinearLayout ll_first,ll_data_entry,ll_my_work_plan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +68,12 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         }
 
         ll_first=(LinearLayout)findViewById(R.id.ll_first);
+        ll_my_work_plan=(LinearLayout)findViewById(R.id.ll_my_work_plan);
         Utils.findAllTextView(thisActivity, (ViewGroup) findViewById(R.id.ll_first));
 
         ll_data_entry=(LinearLayout)findViewById(R.id.ll_data_entry);
         ll_data_entry.setOnClickListener(this);
+        ll_my_work_plan.setOnClickListener(this);
     }
 
     public static void setUpDirectories() {
@@ -119,10 +120,16 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
 
+        Intent intent;
         switch (v.getId()){
             case R.id.ll_data_entry:
                 Utils.ButtonClickEffect(v);
-                Intent intent=new Intent(thisActivity,LoginActivity.class);
+                intent=new Intent(thisActivity,LoginActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.ll_my_work_plan:
+                Utils.ButtonClickEffect(v);
+                intent=new Intent(thisActivity,MyWorkPlan.class);
                 startActivity(intent);
                 break;
         }

@@ -16,6 +16,7 @@
         android:text="@string/Please_migration" />
 
     <LinearLayout
+        android:id="@+id/ll_place"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/scale_5"
@@ -28,124 +29,191 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/scale_5"
             android:layout_weight="4"
-            android:text="@string/dist" />
+            android:text="@string/migrate_place" />
 
         <Spinner
-            android:id="@+id/sp_dirst"
+            android:id="@+id/sp_migrate_place"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/scale_5"
             android:layout_weight="6"
-            android:spinnerMode="dialog"></Spinner>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <com.mcts.app.customview.MyTextView
-            style="@style/LabelText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/scale_5"
-            android:layout_weight="4"
-            android:text="@string/taluko" />
-
-        <Spinner
-            android:id="@+id/sp_taluka"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/scale_5"
-            android:layout_weight="6"
+            android:entries="@array/migrate_array"
             android:spinnerMode="dialog"></Spinner>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_select_state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <com.mcts.app.customview.MyTextView
-            style="@style/LabelText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/scale_5"
-            android:layout_weight="4"
-            android:text="@string/select_village" />
-
-        <Spinner
-            android:id="@+id/sp_migrate_village"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/scale_5"
-            android:layout_weight="6"
-            android:spinnerMode="dialog"></Spinner>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <com.mcts.app.customview.MyTextView
-            style="@style/LabelText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/scale_5"
-            android:layout_weight="4"
-            android:text="@string/migrate_type" />
+        android:visibility="gone"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:orientation="vertical">
+            android:layout_marginTop="@dimen/scale_5"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <com.mcts.app.customview.MyTextView
+                style="@style/LabelText"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_margin="@dimen/scale_5"
+                android:layout_weight="4"
+                android:text="@string/state" />
 
-                <RadioButton
-                    android:id="@+id/rdb_parmenant"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <com.mcts.app.customview.MyTextView
-                    style="@style/ValueText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/scale_5"
-                    android:text="@string/parmenant" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <Spinner
+                android:id="@+id/sp_state"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/rdb_temp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <com.mcts.app.customview.MyTextView
-                    style="@style/ValueText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/scale_5"
-                    android:text="@string/temp" />
-            </LinearLayout>
+                android:layout_margin="@dimen/scale_5"
+                android:layout_weight="6"
+                android:spinnerMode="dialog"></Spinner>
         </LinearLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_out_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/scale_5"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.mcts.app.customview.MyTextView
+                style="@style/LabelText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/scale_5"
+                android:layout_weight="4"
+                android:text="@string/dist" />
+
+            <Spinner
+                android:id="@+id/sp_dirst"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/scale_5"
+                android:layout_weight="6"
+                android:spinnerMode="dialog"></Spinner>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.mcts.app.customview.MyTextView
+                style="@style/LabelText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/scale_5"
+                android:layout_weight="4"
+                android:text="@string/taluko" />
+
+            <Spinner
+                android:id="@+id/sp_taluka"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/scale_5"
+                android:layout_weight="6"
+                android:spinnerMode="dialog"></Spinner>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.mcts.app.customview.MyTextView
+                style="@style/LabelText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/scale_5"
+                android:layout_weight="4"
+                android:text="@string/select_village" />
+
+            <Spinner
+                android:id="@+id/sp_migrate_village"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/scale_5"
+                android:layout_weight="6"
+                android:spinnerMode="dialog"></Spinner>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_migrate_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.mcts.app.customview.MyTextView
+                style="@style/LabelText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/scale_5"
+                android:layout_weight="4"
+                android:text="@string/migrate_type" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rdb_parmenant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <com.mcts.app.customview.MyTextView
+                        style="@style/ValueText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/scale_5"
+                        android:text="@string/parmenant" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rdb_temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <com.mcts.app.customview.MyTextView
+                        style="@style/ValueText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/scale_5"
+                        android:text="@string/temp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -171,6 +239,6 @@
             android:layout_weight="1"
             android:background="@drawable/button_selector"
             android:padding="@dimen/scale_10"
-            android:text="@string/Cancel" />
+            android:text="@string/go_back" />
     </LinearLayout>
 </LinearLayout>

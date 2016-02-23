@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -17,7 +18,9 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
@@ -160,5 +163,91 @@ public class Utils {
         }
 //	    FILENAME = file.getName();
         return file.getPath();
+    }
+
+    /**
+     * returning image / video
+     */
+    public static File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                Constants.MCTS);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(Constants.MCTS, "Oops! Failed create "
+                        + Constants.PROFILE_PIC + " directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile = null;
+        if (type == Constants.MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        }
+
+        return mediaFile;
+    }
+
+    public static boolean checkAfterDate(Date ancServiceDate, Date regDate) {
+        if (ancServiceDate != null && regDate != null) {
+            if (ancServiceDate.after(regDate)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkBeforeDate(Date date1, Date date2) {
+        if (date1 != null && date2 != null) {
+            if (date1.before(date2)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public static boolean between(Date date, Date dateStart, Date dateEnd) {
+        if (date != null && dateStart != null && dateEnd != null) {
+            if (date.after(dateStart) && date.before(dateEnd)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public static String addDays(String date,int days){
+        SimpleDateFormat simpleDateFormat =
+                new SimpleDateFormat("dd/M/yyyy");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(simpleDateFormat.parse(date));
+            c.add(Calendar.DATE, days);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return simpleDateFormat.format(c.getTime());
+    }
+
+    public static int getYear(Date date1,Date date2){
+        SimpleDateFormat simpleDateformat = new SimpleDateFormat("yyyy");
+        Integer.parseInt(simpleDateformat.format(date1));
+
+        return Integer.parseInt(simpleDateformat.format(date2))- Integer.parseInt(simpleDateformat.format(date1));
+
     }
 }

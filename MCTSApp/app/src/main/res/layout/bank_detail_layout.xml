@@ -31,6 +31,16 @@
                     android:layout_weight="4"
                     android:text="@string/bank_name" />
 
+                <EditText
+                    android:id="@+id/ed_bank_name"
+                    style="@style/ValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/scale_5"
+                    android:layout_weight="6"
+                    android:hint="@string/bank_name"
+                    android:singleLine="true"></EditText>
+
                 <Spinner
                     android:id="@+id/sp_select_bank"
                     style="@style/ValueText"
@@ -38,6 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="6"
+                    android:visibility="gone"
                     android:hint="@string/bpl_number"
                     android:singleLine="true"></Spinner>
             </LinearLayout>
@@ -91,6 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="6"
+                    android:inputType="number"
                     android:hint="@string/ac_number"></EditText>
             </LinearLayout>
 
@@ -142,6 +154,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/scale_5"
                     android:layout_weight="6"
+                    android:maxLength="12"
+                    android:inputType="number"
                     android:hint="@string/aadhar_no"
                     android:singleLine="true"></EditText>
             </LinearLayout>
@@ -170,7 +184,7 @@
                     android:layout_margin="@dimen/scale_10"
                     android:layout_weight="1"
                     android:padding="@dimen/scale_10"
-                    android:text="@string/Cancel" />
+                    android:text="@string/go_back" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

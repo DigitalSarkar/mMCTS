@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_anc_adapter"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/scale_5"
+        android:orientation="vertical">
+
+        <com.mcts.app.customview.MyTextView
+            android:id="@+id/txt_anc_id"
+            style="@style/ListText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_3"
+            android:text="@string/new_pregnancy_number" />
+
+        <com.mcts.app.customview.MyTextView
+            android:id="@+id/txt_mother_name"
+            style="@style/ListText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_3"
+            android:text="@string/Name" />
+
+        <com.mcts.app.customview.MyTextView
+            android:id="@+id/txt_anc_due_date"
+            style="@style/ListText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_3"
+            android:text="@string/anc_regd_date" />
+
+        <com.mcts.app.customview.MyTextView
+            android:id="@+id/txt_anc_type_date"
+            style="@style/ListText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_3"
+            android:text="@string/anc_regd_date" />
+    </LinearLayout>
+</LinearLayout>

@@ -47,7 +47,7 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
     private ArrayList<Family> familyArrayList;
     private String villageId,villageName,searchString;
     private String isParmenant = "0";
-    private String talukaID,villageID,dirstID;
+    private String talukaID,villageID,dirstID,stateId,subcentreId;
 
     public SearchMemberAdapter(Context mContext, ArrayList<Family> mFamilyArrayList, String strVillageId, String strVillageName,String mSearchString){
         this.context=mContext;
@@ -104,7 +104,7 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
         viewHolder.txt_fm_number.setText(familyArrayList.get(position).getEmamtaFamilyId());
         viewHolder.txt_edit.setTag(familyArrayList.get(position).getMemberId());
         viewHolder.txt_delete.setTag(familyArrayList.get(position).getEmamtaFamilyId());
-        viewHolder.txt_migrate.setTag(familyArrayList.get(position).getEmamtaFamilyId());
+        viewHolder.txt_migrate.setTag(familyArrayList.get(position).getEmamtaFamilyId() + "," +familyArrayList.get(position).getEmamtahealthId());
 
 //        if (familyArrayList.get(position).getUserImageArray() != null) {
 //            if(familyArrayList.get(position).getUserImageArray().length>5) {
@@ -235,23 +235,58 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
             case R.id.txt_migrate:
 
                 TextView eMamta=(TextView)v;
-                final String eMamtaId=eMamta.getTag().toString();
+                String emamtastr = eMamta.getTag().toString();
+                final String values[] = emamtastr.split(",");
                 final Dialog migrateDialog = new Dialog(context);
                 LayoutInflater migrateInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View migrateView=migrateInflater.inflate(R.layout.custom_migration_layout, null);
                 Utils.findAllTextView(context, ((ViewGroup) migrateView.findViewById(R.id.ll_migrate)));
-                Spinner sp_dirst=(Spinner)migrateView.findViewById(R.id.sp_dirst);
+                final Spinner sp_migrate_place=(Spinner)migrateView.findViewById(R.id.sp_migrate_place);
+                final Spinner sp_dirst=(Spinner)migrateView.findViewById(R.id.sp_dirst);
                 final Spinner sp_taluka=(Spinner)migrateView.findViewById(R.id.sp_taluka);
                 final Spinner sp_migrate_village=(Spinner)migrateView.findViewById(R.id.sp_migrate_village);
                 final RadioButton rdb_parmenant=(RadioButton)migrateView.findViewById(R.id.rdb_parmenant);
                 final RadioButton rdb_temp=(RadioButton)migrateView.findViewById(R.id.rdb_temp);
+                final LinearLayout ll_out_state=(LinearLayout)migrateView.findViewById(R.id.ll_out_state);
+                final LinearLayout ll_select_state=(LinearLayout)migrateView.findViewById(R.id.ll_select_state);
+                final Spinner sp_state=(Spinner)migrateView.findViewById(R.id.sp_state);
                 Button bt_migrate=(Button)migrateView.findViewById(R.id.bt_migrate);
                 Button bt_cancel=(Button)migrateView.findViewById(R.id.bt_cancel);
 
-                DatabaseHelper databaseHelper=new DatabaseHelper(context);
-                ArrayList<MaritalStatus> districtArray=databaseHelper.getDistrictData();
-                StatusAdapter districtAdapter=new StatusAdapter(context,districtArray);
-                sp_dirst.setAdapter(districtAdapter);
+                DatabaseHelper databaseStateHelper=new DatabaseHelper(context);
+                final ArrayList<MaritalStatus> stateArray=databaseStateHelper.getStateData();
+                StatusAdapter stateAdapter=new StatusAdapter(context,stateArray);
+                sp_state.setAdapter(stateAdapter);
+
+                sp_migrate_place.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                        if (position == 2) {
+                            ll_out_state.setVisibility(View.GONE);
+                            ll_select_state.setVisibility(View.VISIBLE);
+
+                        } else if (position == 1) {
+                            ll_out_state.setVisibility(View.VISIBLE);
+                            ll_select_state.setVisibility(View.GONE);
+                            DatabaseHelper databaseHelper = new DatabaseHelper(context);
+                            ArrayList<MaritalStatus> districtArray = databaseHelper.getDistrictData();
+                            StatusAdapter districtAdapter = new StatusAdapter(context, districtArray);
+                            sp_dirst.setAdapter(districtAdapter);
+                        } else {
+                            ll_out_state.setVisibility(View.VISIBLE);
+                            ll_select_state.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
+
+
                 sp_dirst.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                     LinearLayout linearLayout;
@@ -259,6 +294,7 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
 
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                         linearLayout = (LinearLayout) view;
                         textView = (TextView) linearLayout.getChildAt(0);
                         dirstID = textView.getTag().toString();
@@ -282,9 +318,13 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
                                 sp_migrate_village.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                     @Override
                                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                        linearLayout = (LinearLayout) view;
-                                        textView = (TextView) linearLayout.getChildAt(0);
-                                        villageID = textView.getTag().toString();
+                                        if(position!=0) {
+                                            linearLayout = (LinearLayout) view;
+                                            textView = (TextView) linearLayout.getChildAt(0);
+                                            String[] villageArray = textView.getTag().toString().split(",");
+                                            villageID = villageArray[0];
+                                            subcentreId = villageArray[1];
+                                        }
                                     }
 
                                     @Override
@@ -328,20 +368,58 @@ public class SearchMemberAdapter extends BaseAdapter implements View.OnClickList
                     @Override
                     public void onClick(View v) {
 
-                        DatabaseHelper databaseHelper = new DatabaseHelper(context);
-                        boolean flag=databaseHelper.migrateFamily(eMamtaId,villageID,isParmenant);
-                        if(!flag){
-                            String str=context.getResources().getString(R.string.migrate_not_success);
-                            CustomToast customToast=new CustomToast((Activity) context,str);
-                            customToast.show();
-                            migrateDialog.dismiss();
-                        }else{
-                            migrateDialog.dismiss();
-                            String str=context.getResources().getString(R.string.migrate_success);
-                            CustomToast customToast=new CustomToast((Activity) context,str);
-                            customToast.show();
-                            familyArrayList = databaseHelper.searchFamily(searchString, villageId);
-                            notifyDataSetChanged();
+                        if(sp_migrate_place.getSelectedItemPosition()==1) {
+                            DatabaseHelper databaseHelper = new DatabaseHelper(context);
+                            if(isParmenant.equals("0")) {
+                                boolean flag = databaseHelper.migrateFamily(values[0], villageID,subcentreId, isParmenant);
+                                if (!flag) {
+                                    String str = context.getResources().getString(R.string.migrate_not_success);
+                                    CustomToast customToast = new CustomToast((Activity) context, str);
+                                    customToast.show();
+                                    migrateDialog.dismiss();
+                                } else {
+                                    migrateDialog.dismiss();
+                                    boolean flagMember = databaseHelper.migrateFamilyMember(values[0], values[1], villageID,subcentreId, isParmenant);
+                                    String str = context.getResources().getString(R.string.migrate_success);
+                                    CustomToast customToast = new CustomToast((Activity) context, str);
+                                    customToast.show();
+                                    familyArrayList = databaseHelper.searchFamily(searchString, villageId);
+                                    notifyDataSetChanged();
+                                }
+                            }else{
+                                boolean flag = databaseHelper.migrateFamilyTemp(values[0], villageID,subcentreId, isParmenant);
+                                if (!flag) {
+                                    String str = context.getResources().getString(R.string.migrate_not_success);
+                                    CustomToast customToast = new CustomToast((Activity) context, str);
+                                    customToast.show();
+                                    migrateDialog.dismiss();
+                                } else {
+                                    migrateDialog.dismiss();
+                                    boolean flagMember = databaseHelper.migrateFamilyMemberTemp(values[0], values[1], villageID, subcentreId, isParmenant);
+                                    String str = context.getResources().getString(R.string.migrate_success);
+                                    CustomToast customToast = new CustomToast((Activity) context, str);
+                                    customToast.show();
+                                    familyArrayList = databaseHelper.searchFamily(searchString, villageId);
+                                    notifyDataSetChanged();
+                                }
+                            }
+                        }else if(sp_migrate_place.getSelectedItemPosition()==2){
+                            DatabaseHelper databaseHelper = new DatabaseHelper(context);
+                            MaritalStatus state=stateArray.get(sp_state.getSelectedItemPosition());
+                            boolean flag = databaseHelper.migrateFamilyToState(values[0], state.getId(), isParmenant);
+                            if (!flag) {
+                                String str = context.getResources().getString(R.string.migrate_not_success);
+                                CustomToast customToast = new CustomToast((Activity) context, str);
+                                customToast.show();
+                                migrateDialog.dismiss();
+                            } else {
+                                migrateDialog.dismiss();
+                                String str = context.getResources().getString(R.string.migrate_success);
+                                CustomToast customToast = new CustomToast((Activity) context, str);
+                                customToast.show();
+                                familyArrayList = databaseHelper.searchFamily(searchString, villageId);
+                                notifyDataSetChanged();
+                            }
                         }
 
                     }

@@ -7,6 +7,15 @@ public class Religion {
 
     String id;
     String name;
+    String isRisky;
+
+    public String getIsRisky() {
+        return isRisky;
+    }
+
+    public void setIsRisky(String isRisky) {
+        this.isRisky = isRisky;
+    }
 
     public String getId() {
         return id;

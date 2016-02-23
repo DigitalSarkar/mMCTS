@@ -6,6 +6,35 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.mcts.app.customview.MyTextView
+
+            style="@style/LabelText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_5"
+            android:layout_weight="4"
+            android:text="@string/street_name_list" />
+
+        <Spinner
+            android:id="@+id/sp_street_name_list"
+            style="@style/ValueText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_5"
+            android:layout_weight="6"
+            android:spinnerMode="dialog"
+            android:text="@string/street_name_list"></Spinner>
+
+    </LinearLayout>
+
     <LinearLayout
 
         android:layout_width="match_parent"
@@ -105,19 +134,27 @@
             style="@style/ButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/scale_10"
+            android:layout_margin="@dimen/scale_5"
             android:layout_weight="1"
-            android:padding="@dimen/scale_10"
             android:text="@string/save" />
+
+        <Button
+            android:id="@+id/bt_faliyu_delete"
+            style="@style/ButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_5"
+            android:layout_weight="1"
+            android:text="@string/go_back" />
 
         <Button
             android:id="@+id/bt_faliyu_cancel"
             style="@style/ButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/scale_10"
+            android:layout_margin="@dimen/scale_5"
             android:layout_weight="1"
-            android:padding="@dimen/scale_10"
-            android:text="@string/Cancel" />
+            android:padding="@dimen/scale_5"
+            android:text="@string/go_back" />
     </LinearLayout>
 </LinearLayout>

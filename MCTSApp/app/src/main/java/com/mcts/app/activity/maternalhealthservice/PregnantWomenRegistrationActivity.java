@@ -17,6 +17,8 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -72,9 +74,9 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
     private static String TAG = "PregnantWomenRegistrationActivity";
     private Toolbar mToolbar;
     private TextView mTitle;
-    private EditText ed_Mobile_number, ed_anc_regd_date, ed_lmp_date, ed_edd_date, ed_high_risk_mom;
+    private EditText ed_Mobile_number, ed_anc_regd_date, ed_lmp_date, ed_edd_date, ed_high_risk_mom, ed_height, ed_weight;
     private TextView txt_village_name, txt_anc_name, txt_anc_regdnumber, txt_take_image;
-    private Spinner sp_anc_gravida, sp_anc_para, sp_anc_abortion, sp_live_male, sp_live_female, sp_asha_name;
+    private Spinner sp_anc_gravida, sp_anc_para, sp_anc_abortion, sp_live_male, sp_live_female, sp_asha_name, sp_blood_group_value;
     private RadioButton rdb_yes, rdb_no, rdb_chiranjivi_yes, rdb_chiranjivi_no;
     private String villageId, villageName, healthId, age;
     private String isAns, isChiranjivi;
@@ -85,6 +87,9 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
     private Dialog progressDialog;
     private ArrayList<WomenHighRisk> womenHighRiskArrayList;
     String ancserviceDate1, ancserviceDate2, ancserviceDate3, ancserviceDate4;
+    StringBuilder stringBuilderId = new StringBuilder();
+    String prefixId = "";
+    boolean hivStatus;
 
     //    Image Capture
     ImageView imgUserImage;
@@ -96,6 +101,7 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
     private File compressFile;
     private Bitmap image_bitmap;
     private String ashaWorkerId;
+    PregnantWomen pregnantWomen=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,10 +122,12 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
         mTitle.setText(thisActivity.getResources().getString(R.string.new_pregnancy));
         mTitle.setTypeface(type, Typeface.BOLD);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void init() {
 
+        pregnantWomen = new PregnantWomen();
         Typeface type = Typeface.createFromAsset(getAssets(), "SHRUTI.TTF");
         Utils.findAllTextView(thisActivity, (ViewGroup) findViewById(R.id.ll_pregnant_registration));
         txt_village_name = (TextView) findViewById(R.id.txt_village_name);
@@ -132,11 +140,14 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
         ed_edd_date = (EditText) findViewById(R.id.ed_edd_date);
         sp_asha_name = (Spinner) findViewById(R.id.sp_asha_name);
         ed_high_risk_mom = (EditText) findViewById(R.id.ed_high_risk_mom);
+        ed_weight = (EditText) findViewById(R.id.ed_weight);
+        ed_height = (EditText) findViewById(R.id.ed_height);
         sp_anc_gravida = (Spinner) findViewById(R.id.sp_anc_gravida);
         sp_anc_para = (Spinner) findViewById(R.id.sp_anc_para);
         sp_anc_abortion = (Spinner) findViewById(R.id.sp_anc_abortion);
         sp_live_male = (Spinner) findViewById(R.id.sp_live_male);
         sp_live_female = (Spinner) findViewById(R.id.sp_live_female);
+        sp_blood_group_value = (Spinner) findViewById(R.id.sp_blood_group_value);
         imgUserImage = (ImageView) findViewById(R.id.imgUserImage);
         rdb_yes = (RadioButton) findViewById(R.id.rdb_yes);
         rdb_no = (RadioButton) findViewById(R.id.rdb_no);
@@ -144,11 +155,14 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
         rdb_chiranjivi_no = (RadioButton) findViewById(R.id.rdb_chiranjivi_no);
         bt_prg_women_reg = (Button) findViewById(R.id.bt_prg_women_reg);
 
+        ed_weight.addTextChangedListener(new CustomTextWatcher(ed_weight));
+        ed_height.addTextChangedListener(new CustomTextWatcher(ed_height));
+
         SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
         String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
         try {
             JSONObject jsonObject = new JSONObject(userDetail);
-            String subCenterId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcenterId");
+            String subCenterId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("subcentreId");
             String userId = jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId");
             Random emamtaRandom = new Random();
             int emamId = emamtaRandom.nextInt(900) + 100;
@@ -173,6 +187,13 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
 
         DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
         member = databaseHelper.getPregnantWomenMember(healthId);
+
+        hivStatus=databaseHelper.getMemberHivStatus(healthId);
+        if(hivStatus){
+            ed_high_risk_mom.setText(this.getResources().getText(R.string.hiv_st));
+            ed_high_risk_mom.setTag("7");
+        }
+
         ArrayList<MaritalStatus> ashaWorkerArrayList = databaseHelper.getAshaWorkers(villageId);
         StatusAdapter statusAdapter = new StatusAdapter(thisActivity, ashaWorkerArrayList);
         sp_asha_name.setAdapter(statusAdapter);
@@ -181,6 +202,17 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
 
             txt_anc_name.setText(member.getFirstName() + " " + member.getMiddleName() + " " + member.getLastName());
             ed_Mobile_number.setText(member.getMobileNo());
+            ed_height.setText(member.getHeight());
+
+            String[] strings = thisActivity.getResources().getStringArray(R.array.blood_group_value);
+            if (member.getBloodGroup() != null) {
+                for (int i = 0; i < strings.length; i++) {
+                    if (member.getBloodGroup().equals(strings[i])) {
+                        sp_blood_group_value.setSelection(i);
+                        sp_blood_group_value.setEnabled(false);
+                    }
+                }
+            }
             if (member.getIsBpl() != null) {
                 if (member.getIsBpl().equals("1")) {
                     rdb_yes.setChecked(true);
@@ -210,10 +242,22 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
                 imgUserImage.setVisibility(View.INVISIBLE);
                 txt_take_image.setVisibility(View.VISIBLE);
             }
+
+            /*if(member.getBloodGroup()!=null){
+                String[] bloodGroup=thisActivity.getResources().getStringArray(R.array.blood_group_value);
+                for(int i=0;i<bloodGroup.length;i++){
+                    if(member.getBloodGroup().equals(bloodGroup[i])){
+                        sp_blood_group_value.setSelection(i);
+                    }else{
+                        sp_blood_group_value.setSelection(0);
+                    }
+                }
+            }*/
         }
 
         ArrayList<WomenHighRisk> womenHighRiskArray = databaseHelper.getHighRiskCategory();
         womenHighRiskArrayList = databaseHelper.getHighRiskSymtoms(womenHighRiskArray);
+
 
         ed_anc_regd_date.setOnClickListener(this);
         ed_lmp_date.setOnClickListener(this);
@@ -244,17 +288,14 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            thisActivity.finish();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+        // Handle your other action bar items...
     }
 
     @Override
@@ -298,7 +339,7 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
                 break;
             case R.id.ed_high_risk_mom:
 
-                showValidationDialog(womenHighRiskArrayList, ed_high_risk_mom);
+                showValidationDialog(womenHighRiskArrayList, ed_high_risk_mom,hivStatus);
                 break;
             case R.id.bt_prg_women_reg:
                 if (elapsedDays <= 84) {
@@ -407,7 +448,7 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
                     elapsedDays = different / oneDay;
 //                    Toast.makeText(thisActivity, "elapsedDays=" + elapsedDays, Toast.LENGTH_SHORT).show();
 
-                    if (elapsedDays >= 30) {
+                    if (elapsedDays >= 30 && elapsedDays <= 266 ) {
 
                         ed_lmp_date.setText(String.valueOf(dayOfMonth) + "/" + String.valueOf(monthOfYear + 1)
                                 + "/" + String.valueOf(year));
@@ -582,7 +623,7 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
 
         SharedPreferences sharedPreferences = thisActivity.getSharedPreferences(Constants.USER_LOGIN_PREF, MODE_PRIVATE);
         String userDetail = sharedPreferences.getString(Constants.USER_ID, null);
-        PregnantWomen pregnantWomen = new PregnantWomen();
+
         if (userDetail != null) {
             try {
                 JSONObject jsonObject = new JSONObject(userDetail);
@@ -595,11 +636,32 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
                 pregnantWomen.setAncDate(ed_anc_regd_date.getText().toString());
                 pregnantWomen.setLmpDate(ed_lmp_date.getText().toString());
                 pregnantWomen.setEddDate(ed_edd_date.getText().toString());
-                pregnantWomen.setGravida(Integer.parseInt(sp_anc_gravida.getSelectedItem().toString()));
-                pregnantWomen.setPara(Integer.parseInt(sp_anc_para.getSelectedItem().toString()));
-                pregnantWomen.setAbortion(Integer.parseInt(sp_anc_abortion.getSelectedItem().toString()));
-                pregnantWomen.setMale(Integer.parseInt(sp_live_male.getSelectedItem().toString()));
-                pregnantWomen.setFemale(Integer.parseInt(sp_live_female.getSelectedItem().toString()));
+                if (sp_anc_gravida.getSelectedItemPosition() == 0) {
+                    pregnantWomen.setGravida(0);
+                } else {
+                    pregnantWomen.setGravida(Integer.parseInt(sp_anc_gravida.getSelectedItem().toString()));
+                }
+                if (sp_anc_para.getSelectedItemPosition() == 0) {
+                    pregnantWomen.setPara(0);
+                } else {
+                    pregnantWomen.setPara(Integer.parseInt(sp_anc_para.getSelectedItem().toString()));
+                }
+                if (sp_anc_abortion.getSelectedItemPosition() == 0) {
+                    pregnantWomen.setAbortion(0);
+                } else {
+                    pregnantWomen.setAbortion(Integer.parseInt(sp_anc_abortion.getSelectedItem().toString()));
+                }
+                if (sp_live_male.getSelectedItemPosition() == 0) {
+                    pregnantWomen.setMale(0);
+                } else {
+                    pregnantWomen.setMale(Integer.parseInt(sp_live_male.getSelectedItem().toString()));
+                }
+                if (sp_live_female.getSelectedItemPosition() == 0) {
+                    pregnantWomen.setFemale(0);
+                } else {
+                    pregnantWomen.setFemale(Integer.parseInt(sp_live_female.getSelectedItem().toString()));
+                }
+
                 pregnantWomen.setHighRiskMother(ed_high_risk_mom.getText().toString());
                 pregnantWomen.setIsChiranjivi(isChiranjivi);
                 pregnantWomen.setAshaName(ashaWorkerId);
@@ -608,17 +670,85 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
                 pregnantWomen.setIsEarlyRegd("" + isEarlyRegd);
                 pregnantWomen.setAge(age);
                 pregnantWomen.setEmamtahealthId(healthId);
-                pregnantWomen.setTempTotal(Integer.parseInt(sp_anc_para.getSelectedItem().toString()) + Integer.parseInt(sp_anc_abortion.getSelectedItem().toString()));
-                pregnantWomen.setLiveTotal(Integer.parseInt(sp_live_male.getSelectedItem().toString()) + Integer.parseInt(sp_live_female.getSelectedItem().toString()));
-                if(ed_high_risk_mom.getText().length()!=0){
+
+                /*if(ed_height.getText().toString().length()!=0){
+                    pregnantWomen.setHeight(ed_height.getText().toString());
+                }*/
+
+
+
+               /* if(ed_weight.getText().toString().length()!=0){
+                    pregnantWomen.setWeight(ed_weight.getText().toString());
+                }*/
+
+                if (ed_weight.getText().toString().trim().length() != 0) {
+                    float weight = Float.parseFloat(ed_weight.getText().toString().trim());
+                    if (weight > 25 && weight < 125) {
+                        if (weight < 45) {
+                            pregnantWomen.setWeight(ed_weight.getText().toString());
+                            ed_weight.setBackgroundColor(Color.RED);
+                            
+                        } else {
+                            pregnantWomen.setWeight(ed_weight.getText().toString());
+                            ed_weight.setBackgroundColor(Color.GREEN);
+                        }
+                    } else {
+                        ed_weight.setText("");
+                        pregnantWomen.setWeight(ed_weight.getText().toString());
+                    }
+                }
+
+                if (ed_weight.getText().toString().trim().length() != 0) {
+                    float weight = Float.parseFloat(ed_weight.getText().toString().trim());
+                    if (weight < 45) {
+                        stringBuilderId.append("13");
+                        prefixId = ",";
+                        stringBuilderId.append(prefixId);
+                    }
+                }
+                if(ed_height.getText().toString().trim().length() != 0){
+                    float height = Float.parseFloat(ed_height.getText().toString().trim());
+                    if (height <= 140) {
+                        stringBuilderId.append("22");
+                        prefixId = ",";
+                        stringBuilderId.append(prefixId);
+                    }
+                }
+                
+                if (stringBuilderId.toString().length() >= 2) {
+                    String riskId = stringBuilderId.toString().substring(0, stringBuilderId.toString().length() - 1);
+                    ed_high_risk_mom.setTag(riskId);
                     pregnantWomen.setIsHighRisk("1");
                     pregnantWomen.setSymptomsId(ed_high_risk_mom.getTag().toString().split(","));
-                }else{
+                }
+
+                if (sp_blood_group_value.getSelectedItemPosition() != 0) {
+                    pregnantWomen.setBloodGroup(sp_blood_group_value.getSelectedItem().toString());
+                }
+
+                if (sp_anc_para.getSelectedItemPosition() == 0 || sp_anc_abortion.getSelectedItemPosition() == 0) {
+                    pregnantWomen.setTempTotal(0);
+                } else {
+                    pregnantWomen.setTempTotal(Integer.parseInt(sp_anc_para.getSelectedItem().toString()) + Integer.parseInt(sp_anc_abortion.getSelectedItem().toString()));
+                }
+
+                if (sp_live_male.getSelectedItemPosition() == 0 || sp_live_female.getSelectedItemPosition() == 0) {
+                    pregnantWomen.setLiveTotal(0);
+                } else {
+                    pregnantWomen.setLiveTotal(Integer.parseInt(sp_live_male.getSelectedItem().toString()) + Integer.parseInt(sp_live_female.getSelectedItem().toString()));
+                }
+
+                if (ed_high_risk_mom.getText().length() != 0) {
+                        pregnantWomen.setIsHighRisk("1");
+                        pregnantWomen.setSymptomsId(ed_high_risk_mom.getTag().toString().split(","));
+                } else {
                     pregnantWomen.setIsHighRisk("0");
                 }
-                pregnantWomen.setEmployeeId(ashaWorkerId);
+                if (ashaWorkerId != null) {
+                    pregnantWomen.setEmployeeId(ashaWorkerId);
+                }
                 pregnantWomen.setUserId(jsonObject.getJSONArray("userdetails").getJSONObject(0).getString("userId"));
-                String[] array=new String[]{ancserviceDate1,ancserviceDate2,ancserviceDate3,ancserviceDate4};
+                String[] array = new String[]{ancserviceDate1, ancserviceDate2, ancserviceDate3, ancserviceDate4};
                 pregnantWomen.setAncServices(array);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -628,10 +758,10 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
 
         if (!member.getIsBpl().equals(isAns)) {
             DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
-            boolean isSavePregnantWomanFamily=databaseHelper.updatePregnantWomanFamily(pregnantWomen);
+            boolean isSavePregnantWomanFamily = databaseHelper.updatePregnantWomanFamily(pregnantWomen);
         }
 
-        if(imageRealPath!=null){
+        if (imageRealPath != null) {
             if (!imageRealPath.equals(member.getPhotoValue()) || !member.getMobileNo().equals(pregnantWomen.getMobile())) {
                 if (image_bitmap != null) {
                     pregnantWomen.setPhotoValue(imageRealPath);
@@ -639,33 +769,51 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
                     String Name = new File(uri.getPath()).getName();
                     pregnantWomen.setPhoto(Name);
                     DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
-                    boolean isSavePregnantWomanMember=databaseHelper.updatePregnantWomanMember(pregnantWomen);
+                    boolean isSavePregnantWomanMember = databaseHelper.updatePregnantWomanMember(pregnantWomen);
                 }
             }
-        }else{
-            if (!member.getMobileNo().equals(pregnantWomen.getMobile())) {
+        } else {
+            if(member.getMobileNo()!=null){
+                if (!member.getMobileNo().equals(pregnantWomen.getMobile())) {
+                    DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
+                    boolean isSavePregnantWomanMember = databaseHelper.updatePregnantWomanMember(pregnantWomen);
+                } else {
+                    DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
+                    boolean isSavePregnantWomanMember = databaseHelper.updatePregnantWomanMember(pregnantWomen);
+                }
+            }else{
                 DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
-                boolean isSavePregnantWomanMember=databaseHelper.updatePregnantWomanMember(pregnantWomen);
+                boolean isSavePregnantWomanMember = databaseHelper.updatePregnantWomanMember(pregnantWomen);
             }
+
         }
-
-
-
 
         String validation = FormValidation.pregnantWomenRegister(pregnantWomen, thisActivity);
         if (validation.length() != 0) {
+            stringBuilderId = new StringBuilder();
             CustomLoaderDialog customLoaderDialog = new CustomLoaderDialog(thisActivity);
             customLoaderDialog.showValidationDialog(validation);
         } else {
             DatabaseHelper databaseHelper = new DatabaseHelper(thisActivity);
-            boolean isSavePregWomen=databaseHelper.insertNewPagnentWomen(pregnantWomen);
-            boolean isHighRiskPregnantWomen=databaseHelper.insertHighRiskPregnantWomen(pregnantWomen);
-            boolean isAncServices=databaseHelper.insertAncServices(pregnantWomen);
-            thisActivity.finish();
+            boolean isExist = databaseHelper.checkPregnantWoman(member.getEmamtahealthId());
+            if (isExist) {
+                String str = thisActivity.getResources().getString(R.string.previous_pregnancy);
+                CustomToast customToast = new CustomToast(thisActivity, str);
+                customToast.show();
+                thisActivity.finish();
+            } else {
+                boolean isSavePregWomen = databaseHelper.insertNewPagnentWomen(pregnantWomen);
+                boolean isHighRiskPregnantWomen = databaseHelper.insertHighRiskPregnantWomen(pregnantWomen);
+                boolean isAncServices = databaseHelper.insertAncServices(pregnantWomen);
+                String str = thisActivity.getResources().getString(R.string.thanks_for_pregnancy_reg);
+                CustomToast customToast = new CustomToast(thisActivity, str);
+                customToast.show();
+                thisActivity.finish();
+            }
         }
     }
 
-    public void showValidationDialog(ArrayList<WomenHighRisk> womenHighRiskArrayList, EditText ed_high_risk_mom) {
+    public void showValidationDialog(ArrayList<WomenHighRisk> womenHighRiskArrayList, EditText ed_high_risk_mom, boolean hivStatus) {
 
         progressDialog = new Dialog(thisActivity, R.style.DialogTheme);
         LayoutInflater mInflater = (LayoutInflater) thisActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -674,7 +822,7 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
         ExpandableListView expandableListView = (ExpandableListView) progressView.findViewById(R.id.exp_category);
         Button bt_save_high_risk = (Button) progressView.findViewById(R.id.bt_save_high_risk);
 
-        ExpandablaListAdapter expandablaListAdapter = new ExpandablaListAdapter(thisActivity, womenHighRiskArrayList, ed_high_risk_mom);
+        ExpandablaListAdapter expandablaListAdapter = new ExpandablaListAdapter(thisActivity, womenHighRiskArrayList, ed_high_risk_mom,hivStatus);
         expandableListView.setAdapter(expandablaListAdapter);
 
         Typeface type = Typeface.createFromAsset(thisActivity.getAssets(), "SHRUTI.TTF");
@@ -707,6 +855,7 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
         bt_save_high_risk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 progressDialog.dismiss();
             }
         });
@@ -728,6 +877,67 @@ public class PregnantWomenRegistrationActivity extends AppCompatActivity impleme
         } catch (Exception ex) {
             Log.e(this + "", "cannot take picture " + ex);
         }
+    }
+
+    private class CustomTextWatcher implements TextWatcher {
+        public EditText editText;
+
+        public CustomTextWatcher(EditText meditText) {
+            this.editText = meditText;
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+            if (charSequence.length() != 0) {
+
+                switch (editText.getId()) {
+
+                    case R.id.ed_weight:
+
+                            float weight = Float.parseFloat(ed_weight.getText().toString().trim());
+                            if (weight > 25 && weight < 125) {
+                                if (weight < 45) {
+                                    pregnantWomen.setWeight(ed_weight.getText().toString());
+                                    ed_weight.setBackgroundColor(Color.RED);
+
+                                } else {
+                                    pregnantWomen.setWeight(ed_weight.getText().toString());
+                                    ed_weight.setBackgroundColor(Color.GREEN);
+                                }
+                            } else {
+                                ed_weight.setBackgroundColor(Color.CYAN);
+                                pregnantWomen.setWeight("");
+                            }
+
+                        break;
+                    case R.id.ed_height:
+
+                            float height = Float.parseFloat(ed_height.getText().toString().trim());
+                            if (height >= 75 && height <= 195) {
+                                if (height <= 140) {
+                                    ed_height.setBackgroundColor(Color.RED);
+                                    pregnantWomen.setHeight(ed_height.getText().toString());
+
+                                } else if (height > 140) {
+                                    pregnantWomen.setHeight(ed_height.getText().toString());
+                                    ed_height.setBackgroundColor(Color.GREEN);
+                                }
+                            } else {
+                                ed_height.setBackgroundColor(Color.CYAN);
+                                pregnantWomen.setHeight("");
+                            }
+
+                        break;
+                }
+            }
+        }
+
+        public void afterTextChanged(Editable s) {
+
+        }
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

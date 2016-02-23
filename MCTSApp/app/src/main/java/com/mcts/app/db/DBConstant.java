@@ -15,5 +15,14 @@ public class DBConstant {
     public static final String TABLE_EMPLOYEE_PROFILE="tbl_employeeprofile";
     public static final String TABLE_HIGH_RISK_MOTHER="tbl_highriskMother";
     public static final String TABLE_ANC_SERVICES="tbl_ancService";
+    public static final String TABLE_STATE="tbl_state";
+    public static final String TABLE_HISTORY="tbl_history";
+    public static final String TABLE_ANCTETANUSTOXOID="tbl_anctetanustoxoid";
+    public static final String TABLE_PREGNANCYOUTCOMEREGD="tbl_pregnancyoutcomeregd";
+    public static final String TABLE_PREGNANCYOUTCOMETREATMENT="tbl_pregnancyoutcomeTreatment";
+    public static final String TABLE_POSTNATALSERVICES="tbl_postnatalService";
+    public static final String TABLE_CHILDREG="tbl_childregistration";
+    public static final String TABLE_CHILDIMMUNIZATION="tbl_childimmunization";
+    public static final String TABLE_ADOPTEDMETHOD="tbl_adoptedfpmethod";
 
 }

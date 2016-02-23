@@ -40,6 +40,60 @@ public class PregnantWomen {
     String[] ancServices;
     int tempTotal=0;
     int liveTotal=0;
+    String pregnantwomanregdDate;
+    String ancServiceDate;
+    String ancServiceDueDate;
+    String height;
+    String weight;
+    String bloodGroup;
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
+    }
+
+    public String getAncServiceDate() {
+        return ancServiceDate;
+    }
+
+    public void setAncServiceDate(String ancServiceDate) {
+        this.ancServiceDate = ancServiceDate;
+    }
+
+    public String getAncServiceDueDate() {
+        return ancServiceDueDate;
+    }
+
+    public void setAncServiceDueDate(String ancServiceDueDate) {
+        this.ancServiceDueDate = ancServiceDueDate;
+    }
+
+    public String getPregnantwomanregdDate() {
+        return pregnantwomanregdDate;
+    }
+
+    public void setPregnantwomanregdDate(String pregnantwomanregdDate) {
+        this.pregnantwomanregdDate = pregnantwomanregdDate;
+    }
 
     public int getLiveTotal() {
         return liveTotal;

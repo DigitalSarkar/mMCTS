@@ -57,6 +57,7 @@ public class ReligionAdapter extends BaseAdapter {
         }
 
         viewHolder.txt_value.setText(religionArrayList.get(position).getName());
+        viewHolder.txt_value.setTag(religionArrayList.get(position).getIsRisky());
         return convertView;
     }
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_vaccine_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/scale_5"
+    android:orientation="horizontal">
+
+    <com.mcts.app.customview.MyTextView
+        android:id="@+id/txt_vaccine_name"
+        style="@style/ValueText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/scale_5"
+        android:layout_weight="1"
+        android:text="@string/village_name"></com.mcts.app.customview.MyTextView>
+
+    <com.mcts.app.customview.MyTextView
+        android:id="@+id/txt_vaccine_duedate"
+        style="@style/ValueText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/scale_5"
+        android:layout_weight="1"
+        android:text="@string/village_name"></com.mcts.app.customview.MyTextView>
+
+    <EditText
+        android:id="@+id/ed_vaccine_givendate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="@string/Birth_date"/>
+</LinearLayout>

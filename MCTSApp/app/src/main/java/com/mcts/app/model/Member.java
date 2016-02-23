@@ -57,6 +57,69 @@ public class Member {
     String anganwadiId;
     String photoValue;
     int ageDifference;
+    String bankName;
+    String branchName;
+    String accountNo;
+    String IfscCode;
+    String aadharNo;
+    String bloodGroup;
+    String height;
+
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getBranchName() {
+        return branchName;
+    }
+
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
+    }
+
+    public String getAccountNo() {
+        return accountNo;
+    }
+
+    public void setAccountNo(String accountNo) {
+        this.accountNo = accountNo;
+    }
+
+    public String getIfscCode() {
+        return IfscCode;
+    }
+
+    public void setIfscCode(String ifscCode) {
+        IfscCode = ifscCode;
+    }
+
+    public String getAadharNo() {
+        return aadharNo;
+    }
+
+    public void setAadharNo(String aadharNo) {
+        this.aadharNo = aadharNo;
+    }
 
     public int getAgeDifference() {
         return ageDifference;

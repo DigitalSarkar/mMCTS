@@ -9,12 +9,14 @@
 
     <CheckBox
         android:id="@+id/chk_symptoms"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <com.mcts.app.customview.MyTextView
         android:id="@+id/lblListItem"
         style="@style/ValueText"
+        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="dshjbsjb"

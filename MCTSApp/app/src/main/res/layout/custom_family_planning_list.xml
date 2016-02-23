@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_search_member"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical">
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.mcts.app.customview.MyTextView
+            android:id="@+id/txt_number"
+            style="@style/ListText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/scale_5"
+            android:text="@string/number" />
+
+        <com.mcts.app.customview.MyTextView
+            android:id="@+id/txt_adopted_fp"
+            style="@style/ListText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_3"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="@string/adopted_fp" />
+
+        <com.mcts.app.customview.MyTextView
+            android:id="@+id/txt_fm_walfare_date"
+            style="@style/ListText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_3"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="@string/adopted_fp_date" />
+
+        <com.mcts.app.customview.MyTextView
+            android:id="@+id/txt_discontinue_date"
+            style="@style/ListText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_3"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="@string/discontinue_date" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_fp_edit"
+            style="@style/ValueText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bg"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/scale_10"
+            android:layout_margin="@dimen/scale_5"
+            android:text="@string/edit" />
+
+
+
+    </LinearLayout>
+</LinearLayout>

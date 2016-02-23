@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:id="@+id/ll_health_seva"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,309 +8,6 @@
     android:orientation="vertical">
 
     <include layout="@layout/custom_toolbar"></include>
-
-    <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_health_servey"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/health_servey"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_sagarbha_seva"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/sagarbha_seva"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_prasuti_seva"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/prasuti_seva"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_bal_seva"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/bal_seva"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_bal_rasikaran_seva"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/bal_rasikaran_seva"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_kutumnb_kalyan_seva"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/kutumnb_kalyan_seva"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_death_register"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/death_register"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_rog_sarvey"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/rog_sarvey"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_aasha"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/aasha"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <Button
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/death_register"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_staff_detail"
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/staff_detail"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/scale_5"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <Button
-                    android:layout_width="@dimen/circule"
-                    android:layout_height="@dimen/circule"
-                    android:background="@drawable/health_selector_bg"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="@string/aasha"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/menu_font" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -323,20 +21,51 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/scale_5"
+                android:background="@drawable/shadow_bottom"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <com.mcts.app.customview.CircleImageView
+                    android:id="@+id/img_user"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
                     android:layout_margin="@dimen/scale_10"
                     android:src="@drawable/ic_launcher" />
 
-                <ImageView
-                    android:id="@+id/img_pic"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_launcher"
-                    android:visibility="gone" />
+                    android:orientation="vertical">
+
+                    <com.mcts.app.customview.MyTextView
+                        android:id="@+id/txt_user_name"
+                        style="@style/ListText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/scale_3"
+                        android:layout_weight="1"
+                        android:text="@string/Name" />
+
+                    <com.mcts.app.customview.MyTextView
+                        android:id="@+id/txt_user_subcentre"
+                        style="@style/ListText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/scale_3"
+                        android:layout_weight="1"
+                        android:text="@string/aadhar_no" />
+
+                    <com.mcts.app.customview.MyTextView
+                        android:id="@+id/txt_user_mob"
+                        style="@style/ListText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/scale_3"
+                        android:layout_weight="1"
+                        android:text="@string/Mobile_number" />
+                </LinearLayout>
+
             </LinearLayout>
 
 
@@ -364,6 +93,7 @@
                         android:src="@drawable/upload_data" />
 
                     <com.mcts.app.customview.MyTextView
+                        android:id="@+id/txt_last_data_send"
                         style="@style/ValueText_Home"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -390,6 +120,7 @@
                         android:src="@drawable/download_data" />
 
                     <com.mcts.app.customview.MyTextView
+                        android:id="@+id/txt_last_data_get"
                         style="@style/ValueText_Home"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

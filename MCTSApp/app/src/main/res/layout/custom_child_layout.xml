@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_custom_child"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/scale_8"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <com.mcts.app.customview.MyTextView
+            android:id="@+id/txt_child_id"
+            style="@style/ListText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_3"
+            android:layout_weight="1"
+            android:text="@string/child_regd_number" />
+
+        <com.mcts.app.customview.MyTextView
+            android:id="@+id/txt_mother_name"
+            style="@style/ListText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_3"
+            android:layout_weight="1"
+            android:text="@string/Name" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.mcts.app.customview.MyTextView
+                android:id="@+id/txt_child_birth_date"
+                style="@style/ListText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/scale_3"
+                android:layout_weight="1"
+                android:text="@string/anc_regd_date" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/scale_5"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_edit"
+            style="@style/ValueText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/scale_5"
+            android:background="@drawable/button_bg"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/scale_10"
+            android:text="@string/add" />
+
+
+    </LinearLayout>
+
+</LinearLayout>
